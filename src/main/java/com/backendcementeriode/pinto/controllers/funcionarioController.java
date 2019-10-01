@@ -77,7 +77,7 @@ public class funcionarioController {
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
         }
         try {
-            funcionarioActual.setId(funcionario.getId());
+//            funcionarioActual.setId(funcionario.getId());
             funcionarioActual.setNombre(funcionario.getNombre());
             funcionarioActual.setApellido(funcionario.getApellido());
             funcionarioActual.setCargo(funcionario.getCargo());

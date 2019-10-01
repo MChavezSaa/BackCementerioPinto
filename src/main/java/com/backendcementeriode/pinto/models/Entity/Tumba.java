@@ -14,10 +14,10 @@ public class Tumba {
 
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    /*@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_occiso"),
             name = "id_occiso", referencedColumnName = "id_occiso")
-    private Occiso id_occiso;
+    private Occiso id_occiso;*/
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_terreno"),
