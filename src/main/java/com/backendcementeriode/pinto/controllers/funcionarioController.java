@@ -27,7 +27,7 @@ public class funcionarioController {
         List<Funcionario> all = funcionarioService.findAll();
         return all;
     }
-    @PostMapping(value= "/save")
+    @PostMapping(value= "/saveFuncionario")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Funcionario funcionario){
 

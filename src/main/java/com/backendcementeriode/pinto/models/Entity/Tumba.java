@@ -10,16 +10,18 @@ import javax.persistence.*;
 public class Tumba {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id_tumba;
 
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(unique = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_occiso"),
+            name = "id_occiso", referencedColumnName = "id_occiso")
     private Occiso id_occiso;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(unique = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_terreno"),
+            name = "id_terreno", referencedColumnName = "id_terreno")
     private Terreno id_terreno;
 
     private String estado;//puede  ser ocupado o libre

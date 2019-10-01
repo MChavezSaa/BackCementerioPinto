@@ -8,10 +8,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Funcionario")
 public class Funcionario {
-
+//para hacer commit
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id_funcionario;
 
     private String nombre;
     private String apellido ;
