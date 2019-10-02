@@ -13,7 +13,12 @@ public class Terreno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_terreno;
-    //tumbas seria la cantidad de patios pero para probar rapido lo dejare asi
-    //luego hay que crear el de patio que contenga las tumbas
-    private int tumbas;
+
+    private int capacidad_Terreno;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_Cementerio"),
+            name = "id_Cementerio", referencedColumnName = "id_Cementerio")
+    private Cementerio cementerio;
+
 }

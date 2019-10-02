@@ -12,10 +12,10 @@ public class Funcionario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_funcionario;
 
-    private String nombre;
-    private String apellido ;
-    private String cargo;
-
-
+    private String rut_Funcionario;
+    private String nombres_Funcionario;
+    private String apellidoP_Funcionario;
+    private String apellidoM_Funcionario;
+    private String cargo_Funcionario;
 
 }
