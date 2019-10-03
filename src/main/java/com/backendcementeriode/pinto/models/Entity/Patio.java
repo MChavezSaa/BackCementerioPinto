@@ -12,7 +12,7 @@ public class Patio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_Patio;
 
-    private int cantidad_Patio;
+    private int capacidad_Patio;
     private String nombre_Patio;
 
     @ManyToOne(cascade = CascadeType.ALL)

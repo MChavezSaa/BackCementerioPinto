@@ -18,7 +18,9 @@ public class Tumba {
     private int valor_Tumba;
     private int estado_Tumba;
     private int orientacion_Tumba;
-    private String detalle_Tumba;
+    private int largo;
+    private int ancho;
+
 
 
     @ManyToOne
