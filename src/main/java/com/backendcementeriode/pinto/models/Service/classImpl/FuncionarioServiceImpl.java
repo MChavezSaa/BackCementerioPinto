@@ -26,6 +26,7 @@ public  class FuncionarioServiceImpl  implements IFuncionarioService {
 
     @Transactional
     public Funcionario save(Funcionario funcionario) {
+
         return funcionarioDao.save(funcionario);
     }
 

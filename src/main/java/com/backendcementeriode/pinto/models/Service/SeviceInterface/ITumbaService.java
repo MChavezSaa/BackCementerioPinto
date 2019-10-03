@@ -6,10 +6,10 @@ import com.backendcementeriode.pinto.models.Entity.Tumba;
 import java.util.List;
 import java.util.Optional;
 
-public interface ITumbaDao {
+public interface ITumbaService {
 
     List<Tumba> findAll();
-    Derecho save(Tumba derecho);
+    Tumba save(Tumba tumba);
     Optional<Tumba> findOne(long id);
    // void delete(Derecho derecho);
    // void deletebyID(long id);
