@@ -22,7 +22,6 @@ public class Difunto {
     private int genero_Difunto;
     private Date fecha_Nacimiento_Difunto;
     private Date fecha_Defuncion;
-    private Date fecha_Entierro;
     private Date fecha_Inscripcion_Difunto;
     private String nombreC_Padre;
     private String nombreC_Madre;
@@ -34,6 +33,8 @@ public class Difunto {
 
     private String certificado_Defuncion;
     private String fotocopia_Carnet;
+
+    private boolean estadoDifunto;
 
     @OneToMany(mappedBy = "difunto")
     Set<Tumba_Difunto> tumba_difunto;
