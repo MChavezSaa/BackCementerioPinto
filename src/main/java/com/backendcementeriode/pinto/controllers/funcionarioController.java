@@ -2,7 +2,7 @@ package com.backendcementeriode.pinto.controllers;
 
 
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
-import com.backendcementeriode.pinto.models.Service.FuncionarioServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.FuncionarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -78,9 +78,9 @@ public class funcionarioController {
         }
         try {
 //            funcionarioActual.setId(funcionario.getId());
-            funcionarioActual.setNombre(funcionario.getNombre());
-            funcionarioActual.setApellido(funcionario.getApellido());
-            funcionarioActual.setCargo(funcionario.getCargo());
+//            funcionarioActual.setNombre(funcionario.getNombre());
+//            funcionarioActual.setApellido(funcionario.getApellido());
+//            funcionarioActual.setCargo(funcionario.getCargo());
 
 
             funcionarioUpdated=funcionarioService.save(funcionarioActual);

@@ -1,8 +1,9 @@
-package com.backendcementeriode.pinto.models.Service;
+package com.backendcementeriode.pinto.models.Service.classImpl;
 
 
 import com.backendcementeriode.pinto.models.Dao.IFuncionarioDao;
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
+import com.backendcementeriode.pinto.models.Service.SeviceInterface.IFuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public  class FuncionarioServiceImpl  implements IFuncionarioService{
+public  class FuncionarioServiceImpl  implements IFuncionarioService {
 
     @Autowired
     public IFuncionarioDao funcionarioDao;
