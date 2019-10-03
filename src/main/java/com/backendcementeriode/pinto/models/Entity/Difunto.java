@@ -35,6 +35,8 @@ public class Difunto {
     private String certificado_Defuncion;
     private String fotocopia_Carnet;
 
+    private boolean estadoDifunto;
+
     @OneToMany(mappedBy = "difunto")
     Set<Tumba_Difunto> tumba_difunto;
 }
