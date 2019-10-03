@@ -27,7 +27,7 @@ public class Cliente {
     private String apellidoM_Familiar;
     private int telefono_Familiar;
 
-    private boolean estado_Cliente;
+    private boolean estadoCliente;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"),
