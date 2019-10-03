@@ -35,12 +35,17 @@ public class DechoServiceImpl implements IDerechoService {
 
     @Transactional
     public void delete(Derecho derecho) {
-        derechoDao.delete(derecho);
+        Derecho derechoADesactivar = derecho;
+        derechoADesactivar.setEstadoDerecho(false);
+        derechoDao.save(derechoADesactivar);
     }
 
     @Transactional
     public void deletebyID(long id) {
-        derechoDao.deleteById(id);
+        Optional<Derecho> derechoADesactivar = derechoDao.findById(id);
+        Derecho derechoADesactivar2 = null;
+
+
     }
 
     @Transactional
