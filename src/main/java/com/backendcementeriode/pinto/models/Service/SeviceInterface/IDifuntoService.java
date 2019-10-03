@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface IDifuntoService {
     List<Difunto> findAll();
-    Derecho save(Difunto difunto);
+    Difunto save(Difunto difunto);
     Optional<Difunto> findOne(long id);
     void delete(Difunto difunto);//deshabilitar difunto
     void deletebyID(long id);//deshabilitar difunto

@@ -19,6 +19,7 @@ public class Derecho {
     private Date fecha_Vencimiento_Derecho;
     private int valor_Cuota_Derecho;
     private int numero_Cuotas_Derecho;
+    private boolean estadoDerecho;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Cliente"),
