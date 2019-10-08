@@ -5,6 +5,7 @@ import com.backendcementeriode.pinto.models.Entity.Terreno;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.ITerrenoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,25 +17,33 @@ public  class TerrenoServiceImpl implements ITerrenoService {
     public ITerrenoDao terrenoDao;
 
 
-    @Override
+    @Transactional
     public List<Terreno> findAll() {
 
         return terrenoDao.findAll();
     }
 
-    @Override
-    public void save(Terreno terreno) {
-        terrenoDao.save(terreno);
+    @Transactional
+    public Terreno save(Terreno terreno) {
+        return terrenoDao.save(terreno);
     }
 
-    @Override
+    @Transactional
     public Optional<Terreno> findOne(long id) {
 
         return terrenoDao.findById(id);
     }
 
-    @Override
+    @Transactional
     public void delete(Terreno terreno) {
-        terrenoDao.delete(terreno);
+        terreno.setEstado_Terreno(false);
+        terrenoDao.save(terreno);
+    }
+
+    @Transactional
+    public void deletebyID(long id) {
+        Optional<Terreno> terreno = terrenoDao.findById(id);
+        terreno.get().setEstado_Terreno(false);
+        terrenoDao.save(terreno.get());
     }
 }

@@ -41,28 +41,8 @@ public class ClienteServiceImpl implements IClienteService {
     @Transactional
     public void deletebyID(long id) {
         Optional<Cliente> clienteBuscado = clienteDao.findById(id);
-        Cliente clienteADesactivar = null;
-        if (clienteBuscado != null) {
-            //datos cliente
-        clienteADesactivar.setId_Cliente(clienteBuscado.get().getId_Cliente());
-        clienteADesactivar.setNombres_Cliente(clienteBuscado.get().getNombres_Cliente());
-        clienteADesactivar.setApellidoP_Cliente(clienteBuscado.get().getApellidoP_Cliente());
-        clienteADesactivar.setApellidoM_Cliente(clienteBuscado.get().getApellidoM_Cliente());
-        clienteADesactivar.setGenero_Cliente(clienteBuscado.get().getGenero_Cliente());
-        clienteADesactivar.setRut_Cliente(clienteBuscado.get().getRut_Cliente());
-        clienteADesactivar.setTelefono_Cliente(clienteBuscado.get().getTelefono_Cliente());
-        clienteADesactivar.setDireccion_Cliente(clienteBuscado.get().getDireccion_Cliente());
-        clienteADesactivar.setEstadoCliente(false);
-        clienteADesactivar.setDerecho(clienteBuscado.get().getDerecho());
-        //datos familiar cliente
-        clienteADesactivar.setNombres_Familiar(clienteBuscado.get().getNombres_Familiar());
-        clienteADesactivar.setApellidoP_Cliente(clienteBuscado.get().getApellidoP_Cliente());
-        clienteADesactivar.setApellidoM_Cliente(clienteBuscado.get().getApellidoM_Cliente());
-        clienteADesactivar.setTelefono_Familiar(clienteBuscado.get().getTelefono_Familiar());
-        clienteADesactivar.setRut_Familiar(clienteBuscado.get().getRut_Familiar());
-
-        clienteDao.save(clienteADesactivar);
-        }
+        clienteBuscado.get().setEstadoCliente(false);
+        clienteDao.save(clienteBuscado.get());
     }
 
     @Transactional

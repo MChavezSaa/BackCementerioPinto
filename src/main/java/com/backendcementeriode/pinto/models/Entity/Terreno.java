@@ -15,10 +15,12 @@ public class Terreno {
     private long id_terreno;
 
     private int capacidad_Terreno;
+    private boolean estado_Terreno;//lleno o ocupable...
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Cementerio"),
             name = "id_Cementerio", referencedColumnName = "id_Cementerio")
     private Cementerio cementerio;
+
 
 }

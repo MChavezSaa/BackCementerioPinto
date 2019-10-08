@@ -8,8 +8,9 @@ import java.util.Optional;
 public interface ITerrenoService {
 
     List<Terreno> findAll();
-    void save(Terreno terreno);
+    Terreno save(Terreno terreno);
     Optional<Terreno> findOne(long id);
     void delete(Terreno terreno);
+    void deletebyID(long id);
 
 }
