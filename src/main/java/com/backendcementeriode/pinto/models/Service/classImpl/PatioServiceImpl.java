@@ -31,6 +31,19 @@ public class PatioServiceImpl implements IPatioService {
         return patioDao.findById(id);
     }
 
+    @Override
+    public void delete(Patio patio) {
+        patio.setEstado_Patio(false);
+        patioDao.save(patio);
+    }
+
+    @Override
+    public void deletebyID(long id) {
+        Optional<Patio> patio = patioDao.findById(id);
+        patio.get().setEstado_Patio(false);
+        patioDao.save(patio.get());
+    }
+
     @Transactional
     public Optional<Patio> findById(long id) {
         return patioDao.findById(id);

@@ -10,8 +10,8 @@ public interface IPatioService {
     List<Patio> findAll();
     Patio save(Patio patio);
     Optional<Patio> findOne(long id);
-    //void delete(Patio patio);
-    //void deletebyID(long id);
+    void delete(Patio patio);
+    void deletebyID(long id);
     Optional<Patio> findById(long id);
 
 }

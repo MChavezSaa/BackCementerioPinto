@@ -14,6 +14,7 @@ public class Patio {
 
     private int capacidad_Patio;
     private String nombre_Patio;
+    private boolean estado_Patio;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Terreno"),
