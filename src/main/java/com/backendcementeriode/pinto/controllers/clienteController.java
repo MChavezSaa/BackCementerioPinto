@@ -31,7 +31,7 @@ public class clienteController {
 
     ////-------------- Guardar Clientes ---------------------////
 
-    @PostMapping(value = "saveCliente")
+    @PostMapping(value = "/saveCliente")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Cliente cliente){
 
