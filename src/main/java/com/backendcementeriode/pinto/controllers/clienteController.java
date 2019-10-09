@@ -55,6 +55,7 @@ public class clienteController {
     }
 
 
+    ////-------------- Eliminar Clientes ---------------------////
     @RequestMapping(value = "/DeleteCliente/{id}",  method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
 
