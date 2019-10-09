@@ -27,12 +27,12 @@ public class Tumba {
     @JoinColumn(name = "id_Cliente")
     private Cliente cliente;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Funcionario"),
             name = "id_Funcionario", referencedColumnName = "id_Funcionario")
     private Funcionario funcionario;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Patio"),
             name = "id_Patio", referencedColumnName = "id_Patio")
     private Patio patio;
