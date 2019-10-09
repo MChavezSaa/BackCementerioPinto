@@ -29,10 +29,4 @@ public class Cliente {
 
     private boolean estadoCliente;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"),
-            name = "id_Derecho", referencedColumnName = "id_Derecho")
-    private Derecho derecho;
-
-
 }
