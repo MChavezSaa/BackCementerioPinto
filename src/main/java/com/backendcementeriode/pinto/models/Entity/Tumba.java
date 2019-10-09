@@ -41,20 +41,4 @@ public class Tumba {
     @OneToMany(mappedBy = "tumba")
     Set<Tumba_Difunto> tumba_difunto;
 
-
-
- /*tabla intermedia entre tumba difunto*/
-    /* falta la fecha del entierro*/
-    /*
-    *
-    * @ManyToMany
- @JoinTable(name="Tumba_Difunto",joinColumns=@JoinColumn(name="id_Tumba"),
-         inverseJoinColumns = @JoinColumn(name="id_Difunto"),
-         uniqueConstraints = {@UniqueConstraint(columnNames = {"id_Tumba","id_Difunto"})})
- private List<Difunto> difuntoList;
-    *
-    * */
-
-
-
 }
