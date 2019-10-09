@@ -1,9 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.Patio;
-import com.backendcementeriode.pinto.models.Entity.Terreno;
 import com.backendcementeriode.pinto.models.Service.classImpl.PatioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
