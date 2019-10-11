@@ -11,5 +11,5 @@ public interface IPagosDerechoService {
     List<PagosDerecho> findAll();
     PagosDerecho save(PagosDerecho pagosDerecho);
     Optional<PagosDerecho> findById(long id);
-
+    List<PagosDerecho> findByDerecho(long id);
 }

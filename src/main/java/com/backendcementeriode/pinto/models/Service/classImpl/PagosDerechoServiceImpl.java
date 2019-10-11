@@ -28,4 +28,10 @@ public class PagosDerechoServiceImpl implements IPagosDerechoService {
     public Optional<PagosDerecho> findById(long id) {
         return pagosDerechoDao.findById(id);
     }
+
+    @Override
+    public List<PagosDerecho> findByDerecho(long id) {
+        return (List<PagosDerecho>) pagosDerechoDao.findByDerecho(id);
+    }
+
 }

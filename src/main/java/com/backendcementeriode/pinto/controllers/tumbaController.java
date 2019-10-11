@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-public class  tumbaController {
+public class    tumbaController {
 
     @Autowired
     public TumbaServiceImpl tumbaService;

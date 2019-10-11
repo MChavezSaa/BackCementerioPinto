@@ -4,12 +4,14 @@ import com.backendcementeriode.pinto.models.Dao.ITipoTumbaDao;
 import com.backendcementeriode.pinto.models.Entity.TipoTumba;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.ITipoTumbaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public class TIpoTumbaServiceImpl implements ITipoTumbaService {
+@Service
+public class TipoTumbaServiceImpl implements ITipoTumbaService {
     @Autowired
     public ITipoTumbaDao tipoTumbaDao;
 

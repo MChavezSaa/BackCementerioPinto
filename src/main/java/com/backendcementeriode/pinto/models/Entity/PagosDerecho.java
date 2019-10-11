@@ -20,7 +20,6 @@ public class PagosDerecho {
     private boolean estadoCuota_Derecho;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"),
-            name = "id_Derecho", referencedColumnName = "id_Derecho")
+    @JoinColumn(name = "id_Derecho")
     private Derecho Derecho;
 }
