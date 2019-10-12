@@ -62,6 +62,6 @@ public class DechoServiceImpl implements IDerechoService {
 
     @Transactional
     public Derecho findById(long id) {
-        return derechoDao.findById(id).orElse(null);
+        return derechoDao.findById(id).get();
     }
 }
