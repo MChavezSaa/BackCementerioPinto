@@ -17,6 +17,7 @@ public class Funcionario {
     private String apellidoP_Funcionario;
     private String apellidoM_Funcionario;
     private String cargo_Funcionario;
+    private String genero_Funcionario;
     private boolean estado_funcionario;
 
 }

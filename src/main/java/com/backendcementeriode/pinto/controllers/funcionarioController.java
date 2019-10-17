@@ -30,7 +30,7 @@ public class funcionarioController {
     @PostMapping(value= "/saveFuncionario")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Funcionario funcionario){
-
+        funcionario.setEstado_funcionario(true);
         Funcionario funcionario1=null;
         Map<String,Object> response =new HashMap<String, Object>();
 
