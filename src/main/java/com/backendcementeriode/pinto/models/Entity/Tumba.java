@@ -12,6 +12,7 @@ public class Tumba {
     private long id_tumba;
 
    //front funciona con un option que trae valores numericos al rescatar el campo
+     private int numero_Tumba;
      private int valor_Tumba;
      private int estado_Disponible;//cumplio o no su capacidad TRUE para 100% o//0: Disponible - 1: Vendido-sinOcupar -2: Vendido-Ocupadocupada y false aun pueden enterrar difuntos
      private int estado_Tumba;//0: Disponible -1: Vendido-sinOcupar -2: Vendido-Ocupado

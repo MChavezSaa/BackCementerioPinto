@@ -63,6 +63,7 @@ public class    tumbaController {
         }
         try {
             tumba1.setId_tumba(tumba.getId_tumba());
+            tumba1.setNumero_Tumba(tumba.getNumero_Tumba());
             tumba1.setAncho(tumba.getAncho());
             tumba1.setCliente(tumba.getCliente());
             tumba1.setEstado_Tumba(tumba.getEstado_Tumba());
