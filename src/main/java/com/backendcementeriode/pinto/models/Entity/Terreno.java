@@ -14,6 +14,7 @@ public class Terreno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_terreno;
 
+    private String nombre_Terreno;
     private int capacidad_Terreno;
     private boolean estado_Terreno;//lleno o ocupable...
 
