@@ -33,7 +33,7 @@ public class tipoTumbaController {
         @PostMapping(value = "/saveTipoTumba")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody TipoTumba tipotumba) {
-
+        tipotumba.setEstado_tipo_tumba(true);
         TipoTumba tipoTumba = null;
         Map<String, Object> response = new HashMap<String, Object>();
 
