@@ -27,14 +27,14 @@ public class TipoTumbaServiceImpl implements ITipoTumbaService {
 
     @Transactional
     public void delete(TipoTumba tipoTumba) {
-        tipoTumba.setEstado_TipoTumba(false);
+        tipoTumba.setEstado_tipo_tumba(false);
         tipoTumbaDao.save(tipoTumba);
     }
 
     @Transactional
     public void deletebyID(long id) {
         Optional<TipoTumba> tipoTumbaBuscado = tipoTumbaDao.findById(id);
-        tipoTumbaBuscado.get().setEstado_TipoTumba(false);
+        tipoTumbaBuscado.get().setEstado_tipo_tumba(false);
         tipoTumbaDao.save(tipoTumbaBuscado.get());
     }
 

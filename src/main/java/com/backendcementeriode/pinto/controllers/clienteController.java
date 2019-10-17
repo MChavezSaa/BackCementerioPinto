@@ -2,6 +2,7 @@ package com.backendcementeriode.pinto.controllers;
 
 
 import com.backendcementeriode.pinto.models.Entity.Cliente;
+import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Service.classImpl.ClienteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -72,5 +73,6 @@ public class clienteController {
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
     }
+
 
 }

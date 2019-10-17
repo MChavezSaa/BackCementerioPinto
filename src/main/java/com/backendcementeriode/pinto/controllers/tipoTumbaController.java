@@ -64,7 +64,7 @@ public class tipoTumbaController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            tipoTumbaActual.setId_tipo_tumba(tipoTumba.getId_tipo_tumba());
+            tipoTumbaActual.setId_TipoTumba(tipoTumba.getId_TipoTumba());
             tipoTumbaActual.setCapacidad_tipo_tumba(tipoTumba.getCapacidad_tipo_tumba());
             tipoTumbaActual.setNombre_tipo_tumba(tipoTumba.getNombre_tipo_tumba());
             tipoTumbaActual.setEstado_tipo_tumba(tipoTumba.isEstado_tipo_tumba());

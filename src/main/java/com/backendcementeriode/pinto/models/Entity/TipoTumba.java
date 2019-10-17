@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class TipoTumba {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_tipo_tumba;
+    private long id_TipoTumba;
 
     private String nombre_tipo_tumba;
     private int capacidad_tipo_tumba;
