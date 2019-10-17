@@ -65,8 +65,8 @@ public class tipoTumbaController {
         }
         try {
             tipoTumbaActual.setId_TipoTumba(tipoTumba.getId_TipoTumba());
-            tipoTumbaActual.setCapacidad(tipoTumba.getCapacidad());
-            tipoTumbaActual.setNombre(tipoTumba.getNombre());
+            tipoTumbaActual.setCapacidad_TipoTumba(tipoTumba.getCapacidad_TipoTumba());
+            tipoTumbaActual.setNombre_TipoTumba(tipoTumba.getNombre_TipoTumba());
             tipoTumbaActual.setEstado_TipoTumba(tipoTumba.isEstado_TipoTumba());
             tipoTumbaUpdated=tipoTumbaService.save(tipoTumbaActual);
         }catch(DataAccessException e) {
