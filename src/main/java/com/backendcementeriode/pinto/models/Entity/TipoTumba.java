@@ -12,10 +12,10 @@ import javax.persistence.Id;
 public class TipoTumba {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_TipoTumba;
+    private long id_tipo_tumba;
 
-    private String nombre_TipoTumba;
-    private int capacidad_TipoTumba;
-    private boolean estado_TipoTumba;
+    private String nombre_tipo_tumba;
+    private int capacidad_tipo_tumba;
+    private boolean estado_tipo_tumba;
 
 }

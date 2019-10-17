@@ -64,10 +64,10 @@ public class tipoTumbaController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            tipoTumbaActual.setId_TipoTumba(tipoTumba.getId_TipoTumba());
-            tipoTumbaActual.setCapacidad_TipoTumba(tipoTumba.getCapacidad_TipoTumba());
-            tipoTumbaActual.setNombre_TipoTumba(tipoTumba.getNombre_TipoTumba());
-            tipoTumbaActual.setEstado_TipoTumba(tipoTumba.isEstado_TipoTumba());
+            tipoTumbaActual.setId_tipo_tumba(tipoTumba.getId_tipo_tumba());
+            tipoTumbaActual.setCapacidad_tipo_tumba(tipoTumba.getCapacidad_tipo_tumba());
+            tipoTumbaActual.setNombre_tipo_tumba(tipoTumba.getNombre_tipo_tumba());
+            tipoTumbaActual.setEstado_tipo_tumba(tipoTumba.isEstado_tipo_tumba());
             tipoTumbaUpdated=tipoTumbaService.save(tipoTumbaActual);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el funcionario en la base de datos");
