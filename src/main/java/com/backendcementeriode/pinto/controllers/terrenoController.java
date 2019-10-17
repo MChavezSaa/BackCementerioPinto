@@ -1,6 +1,5 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.Terreno;
 import com.backendcementeriode.pinto.models.Service.classImpl.TerrenoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class terrenoController {
     @PostMapping(value = "/saveTerrenos")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Terreno terreno) {
-
+        terreno.setEstado_Terreno(true);
         Terreno terreno1 = null;
         Map<String, Object> response = new HashMap<String, Object>();
 

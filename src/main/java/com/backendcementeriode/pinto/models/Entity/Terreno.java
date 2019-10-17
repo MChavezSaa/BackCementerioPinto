@@ -14,14 +14,15 @@ public class Terreno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_terreno;
 
-    private String nombre_Terreno;
     private int capacidad_Terreno;
-    private boolean estado_Terreno;//lleno o ocupable...
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Cementerio"),
             name = "id_Cementerio", referencedColumnName = "id_Cementerio")
     private Cementerio cementerio;
+    private boolean estado_Terreno;//lleno o ocupable...
+    private String nombre_Terreno;
+
+
 
 
 }

@@ -21,7 +21,7 @@ public class Derecho {
     private int numero_Cuotas_Derecho;
     private boolean estadoDerecho;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Cliente cliente;
 
 
