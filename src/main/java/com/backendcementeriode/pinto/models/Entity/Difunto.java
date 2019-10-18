@@ -19,7 +19,7 @@ public class Difunto {
     private String nombres_Difunto;
     private String apellidoP_Difunto;
     private String apellidoM_Difunto;
-    private int genero_Difunto;
+    private String genero_Difunto;
     private Date fecha_Nacimiento_Difunto;
     private Date fecha_Defuncion;
     private Date fecha_Inscripcion_Difunto;
