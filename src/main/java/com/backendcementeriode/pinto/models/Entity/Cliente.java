@@ -17,7 +17,7 @@ public class Cliente {
     private String nombres_Cliente;
     private String apellidoP_Cliente;
     private String apellidoM_Cliente;
-    private int genero_Cliente;
+    private String genero_Cliente;
     private int telefono_Cliente;
     private String direccion_Cliente;
     /*----------FAMILIAR---------*/

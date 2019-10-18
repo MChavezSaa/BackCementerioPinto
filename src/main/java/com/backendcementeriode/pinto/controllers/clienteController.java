@@ -35,7 +35,7 @@ public class clienteController {
     @PostMapping(value = "/saveCliente")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Cliente cliente){
-
+        cliente.setEstadoCliente(true);
         Cliente cliente1= null;
         Map<String,Object> response =new HashMap<String, Object>();
 
