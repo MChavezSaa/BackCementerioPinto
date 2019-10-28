@@ -24,5 +24,7 @@ public class Derecho {
     @ManyToOne(cascade = CascadeType.MERGE)
     private Cliente cliente;
 
+    private String medioPago_Derecho;
+
 
 }

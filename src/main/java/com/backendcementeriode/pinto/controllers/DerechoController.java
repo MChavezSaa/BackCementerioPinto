@@ -71,6 +71,7 @@ public class DerechoController {
             derecho1.setFecha_Vencimiento_Derecho(derecho.getFecha_Vencimiento_Derecho());
             derecho1.setNumero_Cuotas_Derecho(derecho.getNumero_Cuotas_Derecho());
             derecho1.setValor_Cuota_Derecho(derecho.getValor_Cuota_Derecho());
+            derecho1.setMedioPago_Derecho(derecho.getMedioPago_Derecho());
 
 
             derecho2=derechoService.save(derecho1);

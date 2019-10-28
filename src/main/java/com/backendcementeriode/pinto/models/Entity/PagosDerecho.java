@@ -21,5 +21,5 @@ public class PagosDerecho {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_Derecho")
-    private Derecho Derecho;
+    private Derecho derecho;
 }

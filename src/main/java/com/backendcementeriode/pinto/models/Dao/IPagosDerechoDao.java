@@ -9,7 +9,7 @@ import java.util.List;
 public interface IPagosDerechoDao extends JpaRepository<PagosDerecho, Long> {
 
 
-    @Query("select c from PagosDerecho c where c.Derecho.id_Derecho = ?1")
+    @Query("select c from PagosDerecho c where c.derecho.id_Derecho = ?1")
     List<PagosDerecho> findByDerecho(long id);
 
 }

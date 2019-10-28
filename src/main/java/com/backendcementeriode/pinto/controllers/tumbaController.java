@@ -28,25 +28,33 @@ public class    tumbaController {
     }
 
 
-    @PostMapping(value = "/saveTumba")
+    @PostMapping(value = "/saveTumbas")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Tumba tumba) {
+        if(tumba!= null){
+            tumba.setEstado_Tumba(true);
+            Tumba tumba1 = null;
+            Map<String, Object> response = new HashMap<String, Object>();
 
-        Tumba tumba1 = null;
-        Map<String, Object> response = new HashMap<String, Object>();
+            try {
+                tumba1 = tumbaService.save(tumba);
+            } catch (DataAccessException e) {
+                response.put("mensaje", "Error al realizar el insert en la base de datos");
+                response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+                return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
+            }
 
-        try {
-            tumba1 = tumbaService.save(tumba);
-        } catch (DataAccessException e) {
-            response.put("mensaje", "Error al realizar el insert en la base de datos");
-            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            response.put("mensaje", "La tumba ha sido creado con éxito!");
+            response.put("Funcionario", tumba1);
+
+            return new ResponseEntity<Map<String, Object>>(response, OK);
+        }else{
+            Map<String, Object> response = new HashMap<String, Object>();
+
+            response.put("Mensaje", "tumba nula");
             return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
         }
 
-        response.put("mensaje", "La tumba ha sido creado con éxito!");
-        response.put("Funcionario", tumba1);
-
-        return new ResponseEntity<Map<String, Object>>(response, OK);
     }
 
 
@@ -66,8 +74,8 @@ public class    tumbaController {
             tumba1.setNumero_Tumba(tumba.getNumero_Tumba());
             tumba1.setAncho(tumba.getAncho());
             tumba1.setCliente(tumba.getCliente());
-            tumba1.setEstado_Tumba(tumba.getEstado_Tumba());
-            tumba1.setFuncionario(tumba.getFuncionario());
+            tumba1.setEstado_Tumba(tumba.isEstado_Tumba());
+            //tumba1.setFuncionario(tumba.getFuncionario());
             tumba1.setLargo(tumba.getLargo());
             tumba1.setOrientacion_Tumba(tumba.getOrientacion_Tumba());
             tumba1.setPatio(tumba.getPatio());

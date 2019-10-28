@@ -2,7 +2,9 @@ package com.backendcementeriode.pinto.controllers;
 
 
 import com.backendcementeriode.pinto.models.Entity.Patio;
+import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Service.classImpl.PatioServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.TumbaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ public class patioController {
 
     @Autowired
     public PatioServiceImpl patioService;
+    @Autowired
+    public TumbaServiceImpl tumbaService;
 
     @RequestMapping(value = "/listPatios", method = RequestMethod.GET )
     public List<Patio> findAll() {
@@ -37,6 +41,20 @@ public class patioController {
 
         try {
             patio1 = patioService.save(patio);
+            Tumba tumba;
+            for (int i = 1; i <=patio.getCapacidad_Patio() ; i++) {
+                tumba = new Tumba();
+                tumba.setNumero_Tumba(i);
+                tumba.setValor_Tumba(0);
+                tumba.setOrientacion_Tumba(null);
+                tumba.setLargo(0);
+                tumba.setAncho(0);
+                tumba.setPatio(patio);
+                tumba.setTipo_Tumba(null);
+                tumba.setCliente(null);
+                tumba.setEstado_Tumba(false);
+                tumbaService.save(tumba);
+            }
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar el insert en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

@@ -69,8 +69,7 @@ public class PagoDerechoController {
         }
         try {
             pagosDerecho1.setId_PagosDerecho(pagosDerecho.getId_PagosDerecho());
-            pagosDerecho1.setDerecho(pagosDerecho.getDerecho());
-
+            pagosDerecho1.setDerecho(pagosDerecho.getDerecho());//lalalalala
             pagosDerecho1.setEstadoCuota_Derecho(true);
             pagosDerecho1.setFechaPago_Derecho(pagosDerecho.getFechaPago_Derecho());
             pagosDerecho1.setFechaVencimiento_Derecho(pagosDerecho.getFechaVencimiento_Derecho());
@@ -145,7 +144,7 @@ public class PagoDerechoController {
 
         nuevaCuota.setFechaPago_Derecho(fechaP2);
         nuevaCuota.setEstadoCuota_Derecho(false);
-        nuevaCuota.setDerecho(pagosDerecho.getDerecho());
+        nuevaCuota.setDerecho(pagosDerecho.getDerecho());//lalalalal
         pagosDerechoService.save(nuevaCuota);
     }
 }
