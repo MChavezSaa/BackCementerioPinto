@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,13 +25,15 @@ public class tipoTumbaController {
     @Autowired
     public TipoTumbaServiceImpl tipoTumbaService;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listTipotumbas", method = RequestMethod.GET )
     public List<TipoTumba> findAll() {
         List<TipoTumba> all = tipoTumbaService.findAll();
         return all;
     }
 
-        @PostMapping(value = "/saveTipoTumba")
+    @Secured("ROLE_ADMIN")
+    @PostMapping(value = "/saveTipoTumba")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody TipoTumba tipotumba) {
         tipotumba.setEstado_tipo_tumba(true);
@@ -51,6 +54,7 @@ public class tipoTumbaController {
         return new ResponseEntity<Map<String, Object>>(response, OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(value = "/updateTipoTumba/{id}")
     @ResponseStatus(value = CREATED)
     public  ResponseEntity<?> update(@RequestBody TipoTumba tipoTumba, @PathVariable Long id){

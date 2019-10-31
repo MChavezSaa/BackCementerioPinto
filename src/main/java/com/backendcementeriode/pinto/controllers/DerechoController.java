@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,13 +23,14 @@ public class DerechoController {
     @Autowired
     private DechoServiceImpl derechoService;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listDerechos", method = RequestMethod.GET )
     public List<Derecho> findAll() {
         List<Derecho> all = derechoService.findAll();
         return all;
     }
 
-
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveDerecho")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Derecho derecho) {
@@ -51,6 +53,7 @@ public class DerechoController {
     }
 
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateDerecho/{id}")
     public ResponseEntity<?> update(@RequestBody Derecho derecho, @PathVariable Long id) {
         Derecho derecho1=derechoService.findById(id);

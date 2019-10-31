@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,13 +21,14 @@ public class CementerioController {
     @Autowired
     private CementerioServiceImpl cementerioService;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listCementerios", method = RequestMethod.GET )
     public List<Cementerio> findAll() {
         List<Cementerio> all = cementerioService.findAll();
         return all;
     }
 
-
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveCementerio")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Cementerio cementerio) {
@@ -48,7 +50,7 @@ public class CementerioController {
         return new ResponseEntity<Map<String, Object>>(response, OK);
     }
 
-
+    @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateCementerio/{id}")
     public ResponseEntity<?> update(@RequestBody Cementerio cementerio, @PathVariable Long id) {
         Cementerio cementerio1=cementerioService.findById(id).get();

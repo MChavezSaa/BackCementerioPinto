@@ -1,8 +1,13 @@
 package com.backendcementeriode.pinto.models.Entity;
 
 import lombok.Data;
+import org.hibernate.annotations.*;
+
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import java.util.Date;
 
 @Data
@@ -22,7 +27,7 @@ public class PagosMantencion {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Cuotas_Mantencion"),
             name = "id_Cuotas_Mantencion", referencedColumnName = "id_Cuotas_Mantencion")
-    private CuotasMantencion cuotasMantencion;
+    public CuotasMantencion cuotasMantencion;
 
 }
 

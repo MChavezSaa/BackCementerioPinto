@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ContratoController {
     private ContratoServiceImpl contratoService;
 
     ////-------------- Listar Clientes ---------------------////
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listContratos", method = RequestMethod.GET)
     public List<Contrato> findAll(){
         List<Contrato> all = contratoService.findAll();
@@ -28,7 +30,7 @@ public class ContratoController {
     }
 
     ////-------------- Guardar Clientes ---------------------////
-
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveContrato")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Contrato contrato){
@@ -49,6 +51,8 @@ public class ContratoController {
         return new ResponseEntity<Map<String,Object>>(response, OK);
     }
 
+
+    @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateContrato/{id}")
     public ResponseEntity<?> update(@RequestBody Contrato contrato, @PathVariable Long id) {
         Contrato contrato1=contratoService.findOne(id).get();

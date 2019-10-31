@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,11 +23,14 @@ public class funcionarioController {
     @Autowired
     private FuncionarioServiceImpl funcionarioService;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listFuncionarios", method = RequestMethod.GET )
     public List<Funcionario> findAll() {
         List<Funcionario> all = funcionarioService.findAll();
         return all;
     }
+
+    @Secured("ROLE_ADMIN")
     @PostMapping(value= "/saveFuncionario")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Funcionario funcionario){
@@ -48,7 +52,7 @@ public class funcionarioController {
         return new ResponseEntity<Map<String,Object>>(response, OK);
     }
 
-
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteFuncionario/{id}",  method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
 
@@ -65,6 +69,8 @@ public class funcionarioController {
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
     }
+
+    @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateFuncionario/{id}")
     public ResponseEntity<?> update(@RequestBody Funcionario funcionario, @PathVariable Long id) {
         Funcionario funcionarioActual=funcionarioService.findById(id);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class    tumbaController {
     }
 
 
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveTumbas")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Tumba tumba) {
@@ -58,6 +60,7 @@ public class    tumbaController {
     }
 
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateTumba/{id}")
     public ResponseEntity<?> update(@RequestBody Tumba tumba, @PathVariable Long id) {
         Tumba tumba1=tumbaService.findById(id);

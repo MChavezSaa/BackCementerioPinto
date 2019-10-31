@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class clienteController {
     private ClienteServiceImpl clienteService;
 
     ////-------------- Listar Clientes ---------------------////
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listClientes", method = RequestMethod.GET)
     public List<Cliente> findAll(){
         List<Cliente> all = clienteService.findAll();
@@ -31,7 +33,7 @@ public class clienteController {
     }
 
     ////-------------- Guardar Clientes ---------------------////
-
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveCliente")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Cliente cliente){
@@ -57,6 +59,7 @@ public class clienteController {
 
 
     ////-------------- Eliminar Clientes ---------------------////
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteCliente/{id}",  method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
 

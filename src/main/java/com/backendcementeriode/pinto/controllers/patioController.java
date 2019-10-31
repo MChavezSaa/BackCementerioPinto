@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -26,12 +27,14 @@ public class patioController {
     @Autowired
     public TumbaServiceImpl tumbaService;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listPatios", method = RequestMethod.GET )
     public List<Patio> findAll() {
         List<Patio> all = patioService.findAll();
         return all;
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/savePatio")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Patio patio) {
@@ -66,7 +69,7 @@ public class patioController {
 
         return new ResponseEntity<Map<String, Object>>(response, OK);
     }
-
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeletePatio/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class terrenoController {
         return all;
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveTerrenos")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Terreno terreno) {
@@ -49,6 +51,7 @@ public class terrenoController {
     }
 
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteTerreno/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
 
