@@ -1,6 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.Cementerio;
+import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Service.classImpl.CementerioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -26,6 +27,29 @@ public class CementerioController {
     public List<Cementerio> findAll() {
         List<Cementerio> all = cementerioService.findAll();
         return all;
+    }
+
+
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/findCementerio/{id}")
+    public ResponseEntity<?> findOne(@PathVariable Long id) {
+        Cementerio cementerio=null;
+        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+
+        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+            cementerio=cementerioService.findById(id).get();
+        }catch(DataAccessException e){
+            response.put("mensaje","Error al realizar la consulta en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+        }
+
+        if(cementerio==null) {
+            response.put("mensaje","El cementerio con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(cementerio,HttpStatus.OK);
     }
 
     @Secured("ROLE_ADMIN")
