@@ -3,6 +3,7 @@ package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.Cliente;
 import com.backendcementeriode.pinto.models.Entity.Difunto;
+import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Service.classImpl.DifuntoServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +73,29 @@ public class DifuntoController {
 
 
     }
+
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/findDifunto/{id}")
+    public ResponseEntity<?> findOne(@PathVariable Long id) {
+        Difunto difunto=null;
+        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+
+        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+            difunto=difuntoService.findById(id);
+        }catch(DataAccessException e){
+            response.put("mensaje","Error al realizar la consulta en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+        }
+
+        if(difunto==null) {
+            response.put("mensaje","El difunto con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(difunto,HttpStatus.OK);
+    }
+
 
     ////-------------- Subir Certificado Defuncion ---------------------////
     @PostMapping("/DifuntoUpload")

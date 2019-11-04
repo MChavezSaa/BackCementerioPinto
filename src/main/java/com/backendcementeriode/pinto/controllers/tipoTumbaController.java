@@ -32,6 +32,29 @@ public class tipoTumbaController {
         return all;
     }
 
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/findTipoTumba/{id}")
+    public ResponseEntity<?> findOne(@PathVariable Long id) {
+        TipoTumba tipoTumba=null;
+        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+
+        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+            tipoTumba=tipoTumbaService.findById(id).get();
+        }catch(DataAccessException e){
+            response.put("mensaje","Error al realizar la consulta en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+        }
+
+        if(tipoTumba==null) {
+            response.put("mensaje","El tipo de tumba con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(tipoTumba,HttpStatus.OK);
+    }
+
+
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveTipoTumba")
     @ResponseStatus(value = CREATED)

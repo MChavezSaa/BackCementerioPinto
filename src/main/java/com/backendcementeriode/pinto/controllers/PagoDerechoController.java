@@ -1,5 +1,6 @@
 package com.backendcementeriode.pinto.controllers;
 
+import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.PagosDerecho;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -84,9 +86,7 @@ public class PagoDerechoController {
                 }else{
                     break;
                 }
-
             }
-
         }catch (ParseException ex) {
             response.put("mensaje","Error al actualizar el funcionario en la base de datos");
             response.put("error",ex.getMessage().concat(": ").concat(ex.getMessage()));
@@ -94,17 +94,14 @@ public class PagoDerechoController {
             response.put("mensaje","Error al actualizar el funcionario en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-
-
     }
-
-
         response.put("mensaje","El pago ha sido actualizado con éxito!");
         response.put("Tipo Tumba",PagosUpdated);
 
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
-
     }
+
+
     void crearNuevaCuota(PagosDerecho pagosDerecho) throws ParseException {
         //se crea cuota siguiente
         PagosDerecho nuevaCuota = new PagosDerecho();
@@ -147,4 +144,27 @@ public class PagoDerechoController {
         nuevaCuota.setDerecho(pagosDerecho.getDerecho());//lalalalal
         pagosDerechoService.save(nuevaCuota);
     }
+
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/findPD/{id}")
+    public ResponseEntity<?> findOne(@PathVariable Long id) {
+        PagosDerecho pagosDerecho=null;
+        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+
+        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+            pagosDerecho=pagosDerechoService.findById(id).get();
+        }catch(DataAccessException e){
+            response.put("mensaje","Error al realizar la consulta en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+        }
+
+        if(pagosDerecho==null) {
+            response.put("mensaje","El pago del derecho con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(pagosDerecho,HttpStatus.OK);
+    }
+
 }
