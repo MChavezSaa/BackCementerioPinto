@@ -39,7 +39,7 @@ public class patioController {
     @PostMapping(value = "/savePatio")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Patio patio) {
-
+        patio.setEstado_Patio(true);
         Patio patio1 = null;
         Map<String, Object> response = new HashMap<String, Object>();
 
