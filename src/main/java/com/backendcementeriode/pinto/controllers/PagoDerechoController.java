@@ -71,7 +71,7 @@ public class PagoDerechoController {
         }
         try {
             pagosDerecho1.setId_PagosDerecho(pagosDerecho.getId_PagosDerecho());
-            pagosDerecho1.setDerecho(pagosDerecho.getDerecho());//lalalalala
+            pagosDerecho1.setDerecho(pagosDerecho.getDerecho());
             pagosDerecho1.setEstadoCuota_Derecho(true);
             pagosDerecho1.setFechaPago_Derecho(pagosDerecho.getFechaPago_Derecho());
             pagosDerecho1.setFechaVencimiento_Derecho(pagosDerecho.getFechaVencimiento_Derecho());
@@ -102,49 +102,6 @@ public class PagoDerechoController {
     }
 
 
-    void crearNuevaCuota(PagosDerecho pagosDerecho) throws ParseException {
-        //se crea cuota siguiente
-        PagosDerecho nuevaCuota = new PagosDerecho();
-        nuevaCuota.setValorCuota_Derecho(pagosDerecho.getValorCuota_Derecho());
-        /*manejo de la fecha de vencimiento*//*revisar fecha vencimiento de nueva cuota*/
-        Date fechaV = pagosDerecho.getFechaVencimiento_Derecho();
-        int dia = fechaV.getDay();
-        int mes = fechaV.getMonth();
-        int anio = fechaV.getYear();
-        if (mes == 12){
-            mes =1;
-            anio= anio+1;
-        }else{
-            mes = mes+1;
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = dia+"-"+mes+"-"+anio;
-        Date fechaV2 = sdf.parse(dateString);
-        /*Fin manejo de fecha venciminento*/
-
-        nuevaCuota.setFechaVencimiento_Derecho(fechaV2);
-        /*manejo de la fecha de pago*/
-        Date fechaP = pagosDerecho.getFechaPago_Derecho();
-        int diaP = fechaP.getDay();
-        int mesP = fechaP.getMonth();
-        int anioP = fechaP.getYear();
-        if (mesP == 12){
-            mesP = 1;
-            anioP= anioP+1;
-        }else{
-            mesP = mesP+1;
-        }
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString2 = diaP+"-"+mesP+"-"+anioP;
-        Date fechaP2 = sdf2.parse(dateString2);
-        /*Fin manejo de fecha venciminento*/
-
-        nuevaCuota.setFechaPago_Derecho(fechaP2);
-        nuevaCuota.setEstadoCuota_Derecho(false);
-        nuevaCuota.setDerecho(pagosDerecho.getDerecho());//lalalalal
-        pagosDerechoService.save(nuevaCuota);
-    }
-
     @Secured({"ROLE_ADMIN"})
     @GetMapping("/findPD/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
@@ -166,5 +123,46 @@ public class PagoDerechoController {
 
         return new ResponseEntity(pagosDerecho,HttpStatus.OK);
     }
+    void crearNuevaCuota(PagosDerecho pagosDerecho) throws ParseException {
+        //se crea cuota siguiente
+        PagosDerecho nuevaCuota = new PagosDerecho();
+        nuevaCuota.setValorCuota_Derecho(pagosDerecho.getValorCuota_Derecho());
+        /*manejo de la fecha de vencimiento*//*revisar fecha vencimiento de nueva cuota*/
+        Date fechaV = pagosDerecho.getFechaVencimiento_Derecho();
+        int dia = fechaV.getDay();
+        int mes = fechaV.getMonth();
+        int anio = fechaV.getYear();
+        if (mes == 12){
+            mes =1;
+            anio= anio+1;
+        }else{
+            mes = mes+1;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = anio+"-"+mes+"-"+dia;
+        Date fechaV2 = sdf.parse(dateString);
+        /*Fin manejo de fecha venciminento*/
 
+        nuevaCuota.setFechaVencimiento_Derecho(fechaV2);
+        /*manejo de la fecha de pago*/
+        Date fechaP = pagosDerecho.getFechaPago_Derecho();
+        int diaP = fechaP.getDay();
+        int mesP = fechaP.getMonth();
+        int anioP = fechaP.getYear();
+        if (mesP == 12){
+            mesP = 1;
+            anioP= anioP+1;
+        }else{
+            mesP = mesP+1;
+        }
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString2 = anioP+"-"+mesP+"-"+diaP;
+        Date fechaP2 = sdf2.parse(dateString2);
+        /*Fin manejo de fecha venciminento*/
+
+        nuevaCuota.setFechaPago_Derecho(fechaP2);
+        nuevaCuota.setEstadoCuota_Derecho(false);
+        nuevaCuota.setDerecho(pagosDerecho.getDerecho());//lalalalal
+        pagosDerechoService.save(nuevaCuota);
+    }
 }

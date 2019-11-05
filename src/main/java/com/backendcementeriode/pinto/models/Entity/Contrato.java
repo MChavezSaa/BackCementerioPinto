@@ -3,6 +3,7 @@ package com.backendcementeriode.pinto.models.Entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
@@ -40,19 +41,9 @@ public class Contrato {
     private TipoTumba tipoTumba;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"),
-            name = "id_Derecho", referencedColumnName = "id_Derecho")
-    private Derecho derecho;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Cliente"),
             name = "id_Cliente", referencedColumnName = "id_Cliente")
     private Cliente cliente;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_PagosDerecho"),
-            name = "id_PagosDerecho", referencedColumnName = "id_PagosDerecho")
-    private PagosDerecho pagosDerecho;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Funcionario"),
@@ -60,4 +51,29 @@ public class Contrato {
     private Funcionario funcionario;
 
 
+    //atributos para armar contrato, pago derecho y pago mantencion
+
+    private Date fecha_Ingreso_Venta;
+    private String medio_Pago;
+    private int valor_Terreno;
+    private int pagoInicial;
+    private int nCuotas;
+    private int VCuotas;
+    private Date fecha_Pago;
+
 }
+
+
+/*
+  *
+   @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"),
+            name = "id_Derecho", referencedColumnName = "id_Derecho")
+    private Derecho derecho;
+    *
+    *
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_PagosDerecho"),
+            name = "id_PagosDerecho", referencedColumnName = "id_PagosDerecho")
+    private PagosDerecho pagosDerecho;
+  * */

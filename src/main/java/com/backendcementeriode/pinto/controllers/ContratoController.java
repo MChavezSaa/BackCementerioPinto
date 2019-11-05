@@ -1,10 +1,9 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Cliente;
-import com.backendcementeriode.pinto.models.Entity.Contrato;
-import com.backendcementeriode.pinto.models.Entity.Derecho;
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
+import com.backendcementeriode.pinto.models.Entity.*;
 import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,10 @@ import static org.springframework.http.HttpStatus.*;
 public class ContratoController {
     @Autowired
     private ContratoServiceImpl contratoService;
+    @Autowired
+    private DechoServiceImpl derechoService;
+    @Autowired
+    private PagosDerechoServiceImpl pagosDerechoService;
 
     ////-------------- Listar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
@@ -34,12 +40,13 @@ public class ContratoController {
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveContrato")
     @ResponseStatus(value = CREATED)
-    public ResponseEntity<?> create(@RequestBody Contrato contrato){
+    public ResponseEntity<?> create(@RequestBody Contrato contrato) throws ParseException {
         Contrato contrato1= null;
         Map<String,Object> response =new HashMap<String, Object>();
 
         try {
             contrato1= contratoService.save(contrato);
+
         }catch(DataAccessException e) {
             response.put("mensaje","Error al realizar el insert en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -50,6 +57,7 @@ public class ContratoController {
         response.put("Contrato",contrato1);
 
         return new ResponseEntity<Map<String,Object>>(response, OK);
+
     }
 
 
@@ -72,9 +80,9 @@ public class ContratoController {
             contrato1.setPatio(contrato.getPatio());
             contrato1.setTumba(contrato.getTumba());
             contrato1.setTipoTumba(contrato.getTipoTumba());
-            contrato1.setDerecho(contrato.getDerecho());
+           // contrato1.setDerecho(contrato.getDerecho());
             contrato1.setCliente(contrato.getCliente());
-            contrato1.setPagosDerecho(contrato.getPagosDerecho());
+           // contrato1.setPagosDerecho(contrato.getPagosDerecho());
 
             contrato2=contratoService.save(contrato1);
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
@@ -112,5 +120,53 @@ public class ContratoController {
 
         return new ResponseEntity(contrato,HttpStatus.OK);
     }
+    private Date crearFechaVencimientoDerecho(Date fechaIngreso) throws ParseException {
+        int dia = fechaIngreso.getDay();
+        int mes = fechaIngreso.getMonth();
+        int anio = fechaIngreso.getYear();
+        anio = anio+20;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = anio+"-"+mes+"-"+dia;
+        Date fechaVencimientoDerecho = sdf.parse(dateString);
+        return fechaVencimientoDerecho;
+    }
+
+    private Date crearFechaVencimientoPagoDerecho(Date fecha_pago) throws ParseException {
+        int dia = fecha_pago.getDay();
+        int mes = fecha_pago.getMonth();
+        int anio = fecha_pago.getYear();
+        mes = mes+1;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = anio+"-"+mes+"-"+dia;
+        Date fechaVencimientoDerecho = sdf.parse(dateString);
+        return fechaVencimientoDerecho;
+    }
 
 }
+/*contrato antiguo...
+*
+*creamos el derecho
+        Derecho derecho = new Derecho();
+        derecho.setFecha_Inscripcion_Derecho(contrato.getFecha_Ingreso_Venta());
+        derecho.setFecha_Pago_Derecho(contrato.getFecha_Pago());
+        derecho.setFecha_Vencimiento_Derecho(crearFechaVencimientoDerecho(contrato.getFecha_Ingreso_Venta()));
+        derecho.setValor_Cuota_Derecho(contrato.getVCuotas());
+        derecho.setNumero_Cuotas_Derecho(contrato.getNCuotas());
+        derecho.setEstadoDerecho(true);
+        derecho.setCliente(derecho.getCliente());
+        derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
+        derechoService.save(derecho);
+
+        //creamos las cuotas del derecho
+        PagosDerecho pagosDerecho = new PagosDerecho();
+        pagosDerecho.setFechaPago_Derecho(contrato.getFecha_Pago());
+        pagosDerecho.setFechaVencimiento_Derecho(crearFechaVencimientoPagoDerecho(contrato.getFecha_Pago()));
+        pagosDerecho.setValorCuota_Derecho(contrato.getVCuotas());
+        pagosDerecho.setEstadoCuota_Derecho(false);
+        pagosDerecho.setDerecho(derecho);
+        pagosDerechoService.save(pagosDerecho);
+*
+*
+* */
