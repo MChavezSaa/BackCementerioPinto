@@ -4,6 +4,7 @@ import com.backendcementeriode.pinto.models.Entity.*;
 import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +22,8 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
 public class ContratoController {
     @Autowired
     private ContratoServiceImpl contratoService;
@@ -36,11 +40,18 @@ public class ContratoController {
         return all;
     }
 
-    ////-------------- Guardar Clientes ---------------------////
+    ////-------------- Guardar contrato ---------------------////
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveContrato")
     @ResponseStatus(value = CREATED)
-    public ResponseEntity<?> create(@RequestBody Contrato contrato) throws ParseException {
+    public ResponseEntity<?> create(@RequestBody Contrato contrato){
+        //seteamos el valor de la cuota
+        float nC = contrato.getN_Cuotas();
+        float vT = contrato.getValor_Terreno();
+        float pie = contrato.getPagoInicial();
+        float valCuota = (vT-pie)/nC;
+        contrato.setVCuotas(valCuota);
+
         Contrato contrato1= null;
         Map<String,Object> response =new HashMap<String, Object>();
 
@@ -49,7 +60,7 @@ public class ContratoController {
 
         }catch(DataAccessException e) {
             response.put("mensaje","Error al realizar el insert en la base de datos");
-            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            response.put("error",e.getMessage().concat(": ").concat(e.getCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, INTERNAL_SERVER_ERROR);
         }
 
@@ -59,6 +70,9 @@ public class ContratoController {
         return new ResponseEntity<Map<String,Object>>(response, OK);
 
     }
+
+
+
 
 
     @Secured("ROLE_ADMIN")
@@ -120,6 +134,9 @@ public class ContratoController {
 
         return new ResponseEntity(contrato,HttpStatus.OK);
     }
+
+
+
     private Date crearFechaVencimientoDerecho(Date fechaIngreso) throws ParseException {
         int dia = fechaIngreso.getDay();
         int mes = fechaIngreso.getMonth();
@@ -148,25 +165,59 @@ public class ContratoController {
 /*contrato antiguo...
 *
 *creamos el derecho
-        Derecho derecho = new Derecho();
-        derecho.setFecha_Inscripcion_Derecho(contrato.getFecha_Ingreso_Venta());
-        derecho.setFecha_Pago_Derecho(contrato.getFecha_Pago());
-        derecho.setFecha_Vencimiento_Derecho(crearFechaVencimientoDerecho(contrato.getFecha_Ingreso_Venta()));
-        derecho.setValor_Cuota_Derecho(contrato.getVCuotas());
-        derecho.setNumero_Cuotas_Derecho(contrato.getNCuotas());
-        derecho.setEstadoDerecho(true);
-        derecho.setCliente(derecho.getCliente());
-        derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
-        derechoService.save(derecho);
 
-        //creamos las cuotas del derecho
-        PagosDerecho pagosDerecho = new PagosDerecho();
-        pagosDerecho.setFechaPago_Derecho(contrato.getFecha_Pago());
-        pagosDerecho.setFechaVencimiento_Derecho(crearFechaVencimientoPagoDerecho(contrato.getFecha_Pago()));
-        pagosDerecho.setValorCuota_Derecho(contrato.getVCuotas());
-        pagosDerecho.setEstadoCuota_Derecho(false);
-        pagosDerecho.setDerecho(derecho);
-        pagosDerechoService.save(pagosDerecho);
+*Derecho derecho = new Derecho();
+            derecho.setFecha_Inscripcion_Derecho(contrato.getFecha_Ingreso_Venta());
+            derecho.setFecha_Pago_Derecho(contrato.getFecha_Pago());
+            derecho.setFecha_Vencimiento_Derecho(crearFechaVencimientoDerecho(contrato.getFecha_Ingreso_Venta()));
+            derecho.setValor_Cuota_Derecho(contrato.getVCuotas());
+            derecho.setNumero_Cuotas_Derecho(contrato.getNCuotas());
+            derecho.setEstadoDerecho(true);
+            derecho.setCliente(derecho.getCliente());
+            derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
+            derechoService.save(derecho);
+
+            //creamos las cuotas del derecho
+            PagosDerecho pagosDerecho = new PagosDerecho();
+            pagosDerecho.setFechaPago_Derecho(contrato.getFecha_Pago());
+            pagosDerecho.setFechaVencimiento_Derecho(crearFechaVencimientoPagoDerecho(contrato.getFecha_Pago()));
+            pagosDerecho.setValorCuota_Derecho(contrato.getVCuotas());
+            pagosDerecho.setEstadoCuota_Derecho(false);
+            pagosDerecho.setDerecho(derecho);
+            pagosDerechoService.save(pagosDerecho);
 *
+* */
+
+/*
 *
+* ////-------------- Guardar contrato ---------------------////
+
+*@Secured("ROLE_ADMIN")
+    @PostMapping(value = "/saveContratoPorString")
+    @ResponseStatus(value = CREATED)
+    public ResponseEntity<?> createDesdeString(@RequestBody String JSONcontrato){
+        ObjectMapper JSON_MAPPER = new ObjectMapper();
+        Contrato contrato = JSON_MAPPER.readValue(new File(JSONcontrato+".json", Contrato.class));
+        System.out.println(contrato.getFecha_Ingreso_Venta());
+        System.out.println(contrato.getFecha_Pago());
+
+
+        Contrato contrato1= null;
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        try {
+            contrato1= contratoService.save(contrato);
+
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al realizar el insert en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response, INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","El contrato ha sido creado con éxito!");
+        response.put("Contrato",contrato1);
+
+        return new ResponseEntity<Map<String,Object>>(response, OK);
+
+    }
 * */
