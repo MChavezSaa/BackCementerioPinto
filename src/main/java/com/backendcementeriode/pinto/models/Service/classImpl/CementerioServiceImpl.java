@@ -31,8 +31,14 @@ public class CementerioServiceImpl implements ICementerioService {
         return cementerioDao.findById(id);
     }
 
-    @Transactional
-    public Optional<Cementerio> findById(long id) {
-        return cementerioDao.findById(id);
+    @Transactional(readOnly=true)
+    public Cementerio findById(long id) {
+        return cementerioDao.findById(id).orElse(null);
     }
+
+   @Transactional(readOnly=true)
+    public Cementerio forceFind(long id) {
+        return cementerioDao.forceFind(id);
+    }
+
 }

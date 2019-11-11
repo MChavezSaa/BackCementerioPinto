@@ -14,5 +14,6 @@ public interface ITumbaService {
    // void delete(Derecho derecho);
    // void deletebyID(long id);
     Tumba findById(long id);
+    List<Tumba>findFreetumbs();
 
 }

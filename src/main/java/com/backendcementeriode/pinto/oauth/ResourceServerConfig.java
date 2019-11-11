@@ -21,6 +21,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/listTerrenos").permitAll()
+                .antMatchers(HttpMethod.GET,"/listFreeTumbas").permitAll()
                 /*.antMatchers(HttpMethod.POST,"/saveTerrenos").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/deleteTerreno/**").hasRole("ADMIN")
                 //agregar todas las rutas faltantes...

@@ -1,6 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 
+import com.backendcementeriode.pinto.models.Entity.Cementerio;
 import com.backendcementeriode.pinto.models.Entity.Patio;
 import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Service.classImpl.PatioServiceImpl;
@@ -108,7 +109,41 @@ public class patioController {
         return new ResponseEntity(patio,HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value ="/updatePatio/{id}")
+    public ResponseEntity<?> update(@RequestBody Patio patio, @PathVariable Long id) {
+        Patio patio1=patioService.findById(id).get();
+        Patio patio2=null;
 
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        if(patio1==null) {
+            response.put("mensaje","No se pudo editar, el patio con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+        try {
+            //patio1.setId_Cementerio(patio.getId_Cementerio());
+            patio1.setCapacidad_Patio(patio.getCapacidad_Patio());
+            patio1.setNombre_Patio(patio.getNombre_Patio());
+            patio1.setTerreno(patio.getTerreno());
+            //patio1.setEstado_Patio(patio.isEstado_Patio());
+
+
+
+            patio2=patioService.save(patio1);
+            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al actualizar la patio en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","La patio ha sido actualizado con éxito!");
+        response.put("patio",patio2);
+
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
 
 
 

@@ -12,5 +12,6 @@ public interface ICementerioService {
     Optional<Cementerio> findOne(long id);
     //void delete(Cementerio cementerio);
     //void deletebyID(long id);
-    Optional<Cementerio> findById(long id);
+    Cementerio findById(long id);
+    Cementerio forceFind(long id);
 }

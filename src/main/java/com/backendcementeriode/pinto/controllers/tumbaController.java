@@ -29,6 +29,11 @@ public class    tumbaController {
         return all;
     }
 
+    @RequestMapping(value = "/listFreeTumbas", method = RequestMethod.GET )
+    public List<Tumba> findFreeTumbs() {
+        List<Tumba> all = tumbaService.findFreetumbs();
+        return all;
+    }
 
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveTumbas")

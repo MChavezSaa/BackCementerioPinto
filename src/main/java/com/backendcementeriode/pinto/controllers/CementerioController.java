@@ -1,7 +1,6 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.Cementerio;
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Service.classImpl.CementerioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -31,13 +30,14 @@ public class CementerioController {
 
 
     @Secured({"ROLE_ADMIN"})
-    @GetMapping("/findCementerio/{id}")
+    @GetMapping("/Cementerio/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Cementerio cementerio=null;
         Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
 
         try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
-            cementerio=cementerioService.findById(id).get();
+            cementerio=cementerioService.forceFind(id);
+            System.out.println(cementerio.toString());
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -75,10 +75,10 @@ public class CementerioController {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping(value ="/updateCementerio/{id}")
+    @PutMapping(value ="/update/{id}")
     public ResponseEntity<?> update(@RequestBody Cementerio cementerio, @PathVariable Long id) {
-        Cementerio cementerio1=cementerioService.findById(id).get();
-        Cementerio tumba2=null;
+        Cementerio cementerio1=cementerioService.forceFind(id);
+        Cementerio cementerio2=null;
 
         Map<String,Object> response =new HashMap<String, Object>();
 
@@ -87,14 +87,14 @@ public class CementerioController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            cementerio1.setId_Cementerio(cementerio.getId_Cementerio());
+            //cementerio1.setId_Cementerio(cementerio.getId_Cementerio());
             cementerio1.setCapacidad_Terrenos(cementerio.getCapacidad_Terrenos());
             cementerio1.setDireccion_Cementerio(cementerio.getDireccion_Cementerio());
             cementerio1.setNombre_Cementerio(cementerio.getNombre_Cementerio());
             cementerio1.setTelefono_Cementerio(cementerio.getTelefono_Cementerio());
 
 
-            tumba2=cementerioService.save(cementerio1);
+            cementerio2=cementerioService.save(cementerio1);
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar la cementerio en la base de datos");
@@ -103,7 +103,7 @@ public class CementerioController {
         }
 
         response.put("mensaje","La cementerio ha sido actualizado con éxito!");
-        response.put("cementerio",tumba2);
+        response.put("cementerio",cementerio2);
 
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 

@@ -37,4 +37,9 @@ public class TumbaServiceImpl implements ITumbaService {
     public Tumba findById(long id) {
         return tumbaDao.findById(id).orElse(null);
     }
+
+    @Transactional
+    public List<Tumba> findFreetumbs() {
+        return tumbaDao.findFreetumbs();
+    }
 }
