@@ -1,6 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
+import com.backendcementeriode.pinto.models.Entity.Patio;
 import com.backendcementeriode.pinto.models.Entity.Terreno;
 import com.backendcementeriode.pinto.models.Service.classImpl.TerrenoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +93,42 @@ public class terrenoController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value ="/updateTerreno/{id}")
+    public ResponseEntity<?> update(@RequestBody Terreno terreno, @PathVariable Long id) {
+        Terreno terreno1=terrenoService.findOne(id).get();
+        Terreno terreno2=null;
+
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        if(terreno1==null) {
+            response.put("mensaje","No se pudo editar, el terreno con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+        try {
+            //terreno1.setId_Cementerio(terreno.getId_Cementerio());
+            terreno1.setCapacidad_Terreno(terreno.getCapacidad_Terreno());
+            terreno1.setCementerio(terreno.getCementerio());
+            terreno1.setNombre_Terreno(terreno.getNombre_Terreno());
+            //terreno1.setEstado_Patio(terreno.isEstado_Patio());
+
+
+
+            terreno2=terrenoService.save(terreno1);
+            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al actualizar el terreno en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","El terreno ha sido actualizado con éxito!");
+        response.put("terreno",terreno2);
+
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
+
 
 }
