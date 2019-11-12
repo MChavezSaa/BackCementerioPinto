@@ -57,6 +57,50 @@ public class clienteController {
 
     }
 
+    ////---------------Actualizar Clientes -------------------////
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value ="/updateCliente/{id}")
+    public ResponseEntity<?> update(@RequestBody Cliente cliente, @PathVariable Long id) {
+        Cliente clienteActual=clienteService.findById(id).get();
+        Cliente clienteUpdated=null;
+
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        if(clienteActual==null) {
+            response.put("mensaje","No se pudo editar, el cliente con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+        try {
+            // clienteActual.setId_Cliente(cliente.getId_Cliente());
+            clienteActual.setRut_Cliente(cliente.getRut_Cliente());
+            clienteActual.setNombres_Cliente(cliente.getNombres_Cliente());
+            clienteActual.setApellidoP_Cliente(cliente.getApellidoP_Cliente());
+            clienteActual.setApellidoM_Cliente(cliente.getApellidoM_Cliente());
+            clienteActual.setGenero_Cliente(cliente.getGenero_Cliente());
+            clienteActual.setTelefono_Cliente(cliente.getTelefono_Cliente());
+            clienteActual.setDireccion_Cliente(cliente.getDireccion_Cliente());
+
+            /////Familiar
+            clienteActual.setRut_Familiar(cliente.getRut_Familiar());
+            clienteActual.setNombres_Familiar(cliente.getNombres_Familiar());
+            clienteActual.setApellidoP_Familiar(cliente.getApellidoP_Familiar());
+            clienteActual.setApellidoM_Familiar(cliente.getApellidoM_Familiar());
+            clienteActual.setTelefono_Familiar(cliente.getTelefono_Familiar());
+            //clienteActual.setEstadoCliente(cliente.isEstadoCliente());
+            clienteUpdated=clienteService.save(clienteActual);
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al actualizar el cliente en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","El cliente ha sido actualizado con éxito!");
+        response.put("cliente",clienteUpdated);
+
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
+
 
     ////-------------- Eliminar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
