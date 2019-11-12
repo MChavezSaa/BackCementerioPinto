@@ -2,12 +2,17 @@ package com.backendcementeriode.pinto.controllers;
 
 
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
+import com.backendcementeriode.pinto.models.Entity.Role;
+import com.backendcementeriode.pinto.models.Entity.Usuario;
 import com.backendcementeriode.pinto.models.Service.classImpl.FuncionarioServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.RoleServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,6 +28,20 @@ public class funcionarioController {
     @Autowired
     private FuncionarioServiceImpl funcionarioService;
 
+    @Autowired
+    private RoleServiceImpl roleService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
+   List<Role> rolesList ;
+   List<Role> rolParaUsuario ;
+
+
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listFuncionarios", method = RequestMethod.GET )
     public List<Funcionario> findAll() {
@@ -36,10 +55,17 @@ public class funcionarioController {
     public ResponseEntity<?> create(@RequestBody Funcionario funcionario){
         funcionario.setEstado_funcionario(true);
         Funcionario funcionario1=null;
+        rolesList = roleService.findAll();
+
+
         Map<String,Object> response =new HashMap<String, Object>();
 
         try {
+
             funcionario1=funcionarioService.save(funcionario);
+            crearUsuario(funcionario, rolesList);
+
+
         }catch(DataAccessException e) {
             response.put("mensaje","Error al realizar el insert en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -50,6 +76,47 @@ public class funcionarioController {
         response.put("Funcionario",funcionario1);
 
         return new ResponseEntity<Map<String,Object>>(response, OK);
+    }
+
+    private void crearUsuario(@RequestBody Funcionario funcionario , List<Role> rolesList1) {
+
+        String expression = funcionario.getCargo_Funcionario();
+        if(expression.equalsIgnoreCase("Secretaria") ){
+            Usuario us2 = new Usuario();
+            us2.setUsername(funcionario.getRut_Funcionario());
+            String pass1 ="12345";
+            String psEncoder2 = passwordEncoder.encode(pass1);
+            us2.setPassword(psEncoder2);
+            us2.setEnable(true);
+            usuarioService.save(us2);//se guarda usuario sin roles
+            usuarioService.saveUsuario_Roles(us2.getId_Usuario(),
+                    rolesList1.get(0).getId_Role());//se guarda en tabla intermedia rol del usuario
+        }
+
+        if(expression.equalsIgnoreCase("Párroco") ){
+            Usuario us2 = new Usuario();
+            us2.setUsername(funcionario.getRut_Funcionario());
+            String pass1 ="12345";
+            String psEncoder2 = passwordEncoder.encode(pass1);
+            us2.setPassword(psEncoder2);
+            us2.setEnable(true);
+            usuarioService.save(us2);//se guarda usuario sin roles
+            usuarioService.saveUsuario_Roles(us2.getId_Usuario(),
+                    rolesList1.get(0).getId_Role());//se guarda en tabla intermedia rol del usuario
+        }
+        if(expression.equalsIgnoreCase("Consejo Económico") ){
+            Usuario us2 = new Usuario();
+            us2.setUsername(funcionario.getRut_Funcionario());
+            String pass1 ="12345";
+            String psEncoder2 = passwordEncoder.encode(pass1);
+            us2.setPassword(psEncoder2);
+            us2.setEnable(true);
+            usuarioService.save(us2);//se guarda usuario sin roles
+            usuarioService.saveUsuario_Roles(us2.getId_Usuario(),
+                    rolesList1.get(2).getId_Role());//se guarda en tabla intermedia rol del usuario
+        }
+
+
     }
 
     @Secured("ROLE_ADMIN")
@@ -165,3 +232,41 @@ public class funcionarioController {
 
 
 }
+/*
+*else{
+                if(funcionario.getCargo_Funcionario().toLowerCase() == "párroco"){
+                    Usuario us = new Usuario();
+                    us.setUsername(funcionario.getRut_Funcionario());
+                    String pass ="12345";
+                    String psEncoder = passwordEncoder.encode(pass);
+                    us.setPassword(psEncoder);
+                    us.setEnable(true);
+                    for (int i = 0; i <rolesList.size()-1 ; i++) {
+                        if(rolesList.get(i).getNombre() =="ROLE_ADMIN"){
+                            rolParaUsuario.add(rolesList.get(i));
+                            us.setRoles(rolParaUsuario);
+                            break;
+                        }
+                    }
+                    Usuario us2 = usuarioService.save(us);
+                }else{
+                    if(funcionario.getCargo_Funcionario().toLowerCase() == "consejo económico"){
+                        Usuario us = new Usuario();
+                        us.setUsername(funcionario.getRut_Funcionario());
+                        String pass ="12345";
+                        String psEncoder = passwordEncoder.encode(pass);
+                        us.setPassword(psEncoder);
+                        us.setEnable(true);
+                        for (int i = 0; i <rolesList.size()-1 ; i++) {
+                            if(rolesList.get(i).getNombre() =="ROLE_EMPLEADO"){
+                                rolParaUsuario.add(rolesList.get(i));
+                                us.setRoles(rolParaUsuario);
+                                break;
+                            }
+                        }
+                        Usuario us2 = usuarioService.save(us);
+                    }
+                }
+            }
+*
+* */

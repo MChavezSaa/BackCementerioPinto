@@ -1,6 +1,7 @@
 package com.backendcementeriode.pinto.models.Service.classImpl;
 
 import com.backendcementeriode.pinto.models.Dao.IUsuarioDao;
+import com.backendcementeriode.pinto.models.Entity.Role;
 import com.backendcementeriode.pinto.models.Entity.Usuario;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.IUsuarioService;
 import org.slf4j.Logger;
@@ -52,4 +53,18 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
     public Usuario findByUsername(String username) {
         return usuarioDao.findByUsername(username);
     }
+
+    @Override
+    @Transactional
+    public void save(Usuario us) {
+        usuarioDao.save(us);
+    }
+
+    @Override
+    @Transactional
+    public void saveUsuario_Roles(Long id_User, Long id_Rol) {
+        usuarioDao.saveUsuario_Roles(id_User, id_Rol);
+
+    }
+
 }

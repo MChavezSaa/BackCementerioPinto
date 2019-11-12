@@ -2,6 +2,7 @@ INSERT INTO `usuarios` (username, password, enable) VALUES('admin', '$2a$10$Ifb0
 INSERT INTO `usuarios` (username, password, enable) VALUES('maty', '$2a$10$S1mR//oZGi00l9zmZppC8e5ENoMNoNcK0fiKiCa0vNUK/3lEGCTPe', 1);
 INSERT INTO `roles` (nombre) VALUES ('ROLE_ADMIN');
 INSERT INTO `roles` (nombre) VALUES ('ROLE_CLIENT');
+INSERT INTO `roles` (nombre) VALUES ('ROLE_EMPLEADO');
 
 INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (1,1);
 INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (2,2);

@@ -3,12 +3,17 @@ package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.Cliente;
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
+import com.backendcementeriode.pinto.models.Entity.Role;
+import com.backendcementeriode.pinto.models.Entity.Usuario;
 import com.backendcementeriode.pinto.models.Service.classImpl.ClienteServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.RoleServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,7 +28,15 @@ public class clienteController {
 
     @Autowired
     private ClienteServiceImpl clienteService;
+    @Autowired
+    private UsuarioService usuarioService;
+    @Autowired
+    private RoleServiceImpl roleService;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    List<Role> rolesList ;
     ////-------------- Listar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listClientes", method = RequestMethod.GET)
@@ -37,12 +50,25 @@ public class clienteController {
     @PostMapping(value = "/saveCliente")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Cliente cliente){
+        rolesList = roleService.findAll();
         cliente.setEstadoCliente(true);
         Cliente cliente1= null;
         Map<String,Object> response =new HashMap<String, Object>();
 
         try {
             cliente1=clienteService.save(cliente);
+            Usuario us = new Usuario();
+            String pass1 ="12345";
+            String psEncoder2 = passwordEncoder.encode(pass1);
+            us.setPassword(psEncoder2);
+            us.setUsername(cliente.getRut_Cliente());
+            us.setEnable(true);
+            System.out.println(us.toString());
+            System.out.println(rolesList.get(1).toString());
+            usuarioService.save(us);
+            usuarioService.saveUsuario_Roles(us.getId_Usuario(),rolesList.get(1).getId_Role() );
+
+
         }catch(DataAccessException e) {
             response.put("mensaje","Error al realizar el insert en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
