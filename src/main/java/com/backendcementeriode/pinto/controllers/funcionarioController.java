@@ -83,13 +83,13 @@ public class funcionarioController {
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
         }
         try {
-            funcionarioActual.setId_funcionario(funcionario.getId_funcionario());
+           // funcionarioActual.setId_funcionario(funcionario.getId_funcionario());
             funcionarioActual.setRut_Funcionario(funcionario.getRut_Funcionario());
             funcionarioActual.setNombres_Funcionario(funcionario.getNombres_Funcionario());
             funcionarioActual.setApellidoP_Funcionario(funcionario.getApellidoP_Funcionario());
             funcionarioActual.setApellidoM_Funcionario(funcionario.getApellidoM_Funcionario());
             funcionarioActual.setCargo_Funcionario(funcionario.getCargo_Funcionario());
-            funcionarioActual.setEstado_funcionario(funcionario.isEstado_funcionario());
+            //funcionarioActual.setEstado_funcionario(funcionario.isEstado_funcionario());
             funcionarioUpdated=funcionarioService.save(funcionarioActual);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el funcionario en la base de datos");
