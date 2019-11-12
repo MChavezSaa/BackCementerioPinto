@@ -25,14 +25,12 @@ public class Tumba {
     private Funcionario funcionario;
     * */
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Patio"),
-            name = "id_Patio", referencedColumnName = "id_Patio")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_Patio")
     private Patio patio;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_TipoTumba"),
-            name = "id_TipoTumba", referencedColumnName = "id_TipoTumba")
+    @JoinColumn(name = "id_TipoTumba")
     private TipoTumba tipo_Tumba;
 
 
