@@ -45,11 +45,11 @@ public  class FuncionarioServiceImpl  implements IFuncionarioService {
         funcionarioDao.save(funcionarioADesactivar);
     }
 
-    @Override
-    public void deletebyID(long id) {
-        Optional<Funcionario> funcionarioBuscado = funcionarioDao.findById(id);
-        funcionarioBuscado.get().setEstado_funcionario(false);
-        funcionarioDao.save(funcionarioBuscado.get());
+    @Transactional
+        public void deletebyID(long id) {
+        Funcionario funcionarioBuscado = funcionarioDao.findById(id).get();
+        funcionarioBuscado.setEstado_funcionario(false);
+        funcionarioDao.save(funcionarioBuscado);
     }
 
     @Transactional

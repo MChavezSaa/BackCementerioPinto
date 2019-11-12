@@ -55,10 +55,14 @@ public class funcionarioController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteFuncionario/{id}",  method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        Funcionario funcionarioBuscado = funcionarioService.findById(id);
+        Funcionario funcionario2 = null;
 
         Map<String,Object> response =new HashMap<String, Object>();
         try {
-            funcionarioService.deletebyID(id);
+            funcionarioBuscado.setEstado_funcionario(false);
+            funcionario2= funcionarioService.save(funcionarioBuscado);
+            //funcionarioService.deletebyID(id);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al eliminar el funcionario de la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -66,9 +70,42 @@ public class funcionarioController {
         }
 
         response.put("mensaje", "El funcionario fue eliminado con éxito!");
+        response.put("Funcionario: ", funcionario2);
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
     }
+
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value ="/darAlta/{id}")
+    public ResponseEntity<?> darAlta(@RequestBody Funcionario funcionario, @PathVariable Long id) {
+        Funcionario funcionarioActual=funcionarioService.findById(id);
+        funcionarioActual.setEstado_funcionario(true);
+        Funcionario funcionarioUpdated=null;
+
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        if(funcionarioActual==null) {
+            response.put("mensaje","No se pudo dar de alta, el funcionario con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+        try {
+            funcionarioUpdated=funcionarioService.save(funcionarioActual);
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al dar de alta el funcionario en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","El funcionario ha sido dado de alta con éxito!");
+        response.put("funcionario",funcionarioUpdated);
+
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
+
+
+
 
     @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateFuncionario/{id}")
