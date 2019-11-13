@@ -40,7 +40,7 @@ public class    tumbaController {
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Tumba tumba) {
         if(tumba!= null){
-            tumba.setEstado_Tumba(true);
+            tumba.setEstado_Tumba("Disponible");
             Tumba tumba1;
             Map<String, Object> response = new HashMap<>();
 
@@ -83,7 +83,7 @@ public class    tumbaController {
             tumba1.setNumero_Tumba(tumba.getNumero_Tumba());
             tumba1.setAncho(tumba.getAncho());
             tumba1.setCliente(tumba.getCliente());
-            tumba1.setEstado_Tumba(tumba.isEstado_Tumba());
+            tumba1.setEstado_Tumba(tumba.getEstado_Tumba());
             //tumba1.setFuncionario(tumba.getFuncionario());
             tumba1.setLargo(tumba.getLargo());
             tumba1.setOrientacion_Tumba(tumba.getOrientacion_Tumba());

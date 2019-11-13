@@ -30,7 +30,6 @@ public class Tumba {
     private Patio patio;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "id_TipoTumba")
     private TipoTumba tipo_Tumba;
 
 
@@ -39,7 +38,7 @@ public class Tumba {
     private Cliente cliente;
 
     // private int estado_Disponible;//cumplio o no su capacidad TRUE para 100% o//0: Disponible - 1: Vendido-sinOcupar -2: Vendido-Ocupadocupada y false aun pueden enterrar difuntos
-     private boolean estado_Tumba;//0: libre - 1:ocupado
+     private String estado_Tumba;//0: libre - 1:ocupado
 
 
 

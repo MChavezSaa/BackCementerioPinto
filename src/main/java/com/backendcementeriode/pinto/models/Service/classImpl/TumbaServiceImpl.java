@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class TumbaServiceImpl implements ITumbaService {
 
-    @Autowired
+    @Autowired(required = true)
     public ITumbaDao tumbaDao;
 
     @Transactional

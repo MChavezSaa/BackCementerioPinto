@@ -14,7 +14,7 @@ public class TipoTumba {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_TipoTumba;
 
-    private String nombre_tipo_tumba;
+    private String nombretipo_tumba;
     private int capacidad_tipo_tumba;
     private boolean estado_tipo_tumba;
 

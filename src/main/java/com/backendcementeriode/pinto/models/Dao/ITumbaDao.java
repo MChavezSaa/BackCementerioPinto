@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ITumbaDao extends JpaRepository<Tumba, Long> {
-    @Query("select t from Tumba t where t.estado_Tumba=false")
+    @Query("select t from Tumba t where t.estado_Tumba= 'Disponible' ")
     public List<Tumba> findFreetumbs();
 }

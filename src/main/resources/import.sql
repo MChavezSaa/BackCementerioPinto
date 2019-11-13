@@ -17,7 +17,7 @@ INSERT INTO `terreno` (id_terreno, capacidad_terreno, estado_terreno, nombre_ter
 
 
 
-INSERT INTO `tipo_tumba` (id_tipo_tumba, capacidad_tipo_tumba, estado_tipo_tumba, nombre_tipo_tumba) VALUES (1, 3, b'1', 'simple');
+INSERT INTO `tipo_tumba` (id_tipo_tumba, capacidad_tipo_tumba, estado_tipo_tumba, nombretipo_tumba) VALUES (1, 3, b'1', 'simple');
 
 
 INSERT INTO `cliente` (id_cliente, apellidom_cliente, apellidom_familiar, apellidop_cliente, apellidop_familiar, direccion_cliente, estado_cliente, genero_cliente, nombres_cliente, nombres_familiar, rut_cliente, rut_familiar, telefono_cliente, telefono_familiar) VALUES (1, 'cea', 'saavedra', 'rivas', 'chavez', 'asdadsaa', b'1', 'Femenino', 'francisca', 'matias', '187701694', '194154003', 987654321, 876543211);

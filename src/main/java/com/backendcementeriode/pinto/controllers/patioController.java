@@ -56,7 +56,7 @@ public class patioController {
                 tumba.setPatio(patio);
                 tumba.setTipo_Tumba(null);
                 tumba.setCliente(null);
-                tumba.setEstado_Tumba(false);
+                tumba.setEstado_Tumba("Disponible");
                 tumbaService.save(tumba);
             }
         } catch (DataAccessException e) {
