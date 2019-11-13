@@ -35,6 +35,18 @@ public class    tumbaController {
         return all;
     }
 
+    @RequestMapping(value = "/listOcupadoTumbas", method = RequestMethod.GET )
+    public List<Tumba> findOcupadoTumbs() {
+        List<Tumba> all = tumbaService.findOcupadotumbs();
+        return all;
+    }
+
+    @RequestMapping(value = "/listReservadoTumbas", method = RequestMethod.GET )
+    public List<Tumba> findReservadoTumbs() {
+        List<Tumba> all = tumbaService.findReservadotumbs();
+        return all;
+    }
+
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveTumbas")
     @ResponseStatus(value = CREATED)
