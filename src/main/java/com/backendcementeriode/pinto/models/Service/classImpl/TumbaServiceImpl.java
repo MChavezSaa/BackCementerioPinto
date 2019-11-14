@@ -42,4 +42,14 @@ public class TumbaServiceImpl implements ITumbaService {
     public List<Tumba> findFreetumbs() {
         return tumbaDao.findFreetumbs();
     }
+
+    @Transactional
+    public List<Tumba> findOcupadotumbs() {
+        return tumbaDao.findOcupadotumbs();
+    }
+
+    @Transactional
+    public List<Tumba> findReservadotumbs(){
+        return tumbaDao.findReservadotumbs();
+    }
 }

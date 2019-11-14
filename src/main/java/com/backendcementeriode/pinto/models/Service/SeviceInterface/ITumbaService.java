@@ -15,5 +15,7 @@ public interface ITumbaService {
    // void deletebyID(long id);
     Tumba findById(long id);
     List<Tumba>findFreetumbs();
+    List<Tumba>findOcupadotumbs();
+    List<Tumba>findReservadotumbs();
 
 }
