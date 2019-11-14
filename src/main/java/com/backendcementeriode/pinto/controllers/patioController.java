@@ -50,7 +50,7 @@ public class patioController {
                 tumba = new Tumba();
                 tumba.setNumero_Tumba(i);
                 tumba.setValor_Tumba(0);
-                tumba.setOrientacion_Tumba(null);
+                tumba.setOrientacion_Tumba("Por Definir");
                 tumba.setLargo(0);
                 tumba.setAncho(0);
                 tumba.setPatio(patio);

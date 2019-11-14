@@ -98,7 +98,7 @@ public class DifuntoController {
 
 
     ////-------------- Subir Certificado Defuncion ---------------------////
-    @PostMapping("/DifuntoUpload")
+    /*@PostMapping("/DifuntoUpload")
     public ResponseEntity<?>upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") Long id) throws IOException {
         Map<String, Object> response = new HashMap<>();
         Difunto difunto = difuntoService.findById(id);
@@ -157,7 +157,8 @@ public class DifuntoController {
 
 
         return new ResponseEntity<Resource> (recurso, cabecera, HttpStatus.OK);
-    }
+    }*/
+
 
 
 }

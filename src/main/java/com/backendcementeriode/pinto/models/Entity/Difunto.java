@@ -23,6 +23,7 @@ public class Difunto {
     private Date fecha_Nacimiento_Difunto;
     private Date fecha_Defuncion;
     private Date fecha_Inscripcion_Difunto;
+    private Date fecha_Entierro;
     private String nombreC_Padre;
     private String nombreC_Madre;
 
@@ -31,8 +32,8 @@ public class Difunto {
     private boolean sacramento3;
     private boolean sacramento4;
 
-    private String certificado_Defuncion;
-    private String fotocopia_Carnet;
+    private boolean certificado_Defuncion;
+    private boolean fotocopia_Carnet;
 
     private boolean estadoDifunto;
 
