@@ -79,10 +79,14 @@ public class terrenoController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteTerreno/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        Terreno terrenoB = terrenoService.findById(id);
+        Terreno terreno2 = null;
 
         Map<String, Object> response = new HashMap<String, Object>();
         try {
-            terrenoService.deletebyID(id);
+            terrenoB.setEstado_Terreno(false);
+            terreno2= terrenoService.save(terrenoB);
+            //terrenoService.deletebyID(id);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al deshabilitar el terreno de la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -90,9 +94,39 @@ public class terrenoController {
         }
 
         response.put("mensaje", "El Terreno fue deshabilitado con éxito!");
+        response.put("Terreno: ", terreno2);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value ="/CambiaEstadoTerreno/{id}")
+    public ResponseEntity<?> darAlta(@RequestBody Terreno terreno, @PathVariable Long id) {
+        Terreno terrenoActual= terrenoService.findById(id);
+        terrenoActual.setEstado_Terreno(true);
+        Terreno terrenoUpdated=null;
+
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        if(terrenoActual==null) {
+            response.put("mensaje","No se pudo cambiar el estado del Terreno con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+        try {
+            terrenoUpdated= terrenoService.save(terrenoActual);
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error alcambiar el estado del terreno en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","El terreno ha cambiado de estado con éxito!");
+        response.put("Terreno: ",terrenoUpdated);
+
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
+
 
     @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateTerreno/{id}")

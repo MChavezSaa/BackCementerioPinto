@@ -12,5 +12,6 @@ public interface ITerrenoService {
     Optional<Terreno> findOne(long id);
     void delete(Terreno terreno);
     void deletebyID(long id);
+    Terreno findById(long id);
 
 }
