@@ -1,9 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.*;
-import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
-import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
-import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -12,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +32,12 @@ public class ContratoController {
     private DechoServiceImpl derechoService;
     @Autowired
     private PagosDerechoServiceImpl pagosDerechoService;
+    /*CUOTAS MANTENCION*/
+    @Autowired
+    private CuotasMantencionServiceImpl cuotasMantencionService;
+    @Autowired
+    private PagosMantencionServiceImpl pagosMantencionService;
+
 
     ////-------------- Listar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
@@ -57,8 +64,35 @@ public class ContratoController {
 
         try {
             contrato1= contratoService.save(contrato);
+            /*CREAMOS DERECHO*/
+            Derecho derecho = new Derecho();
+            derecho.setFecha_Inscripcion_Derecho(contrato.getFecha_Ingreso_Venta());
+            derecho.setFecha_Pago_Derecho(contrato.getFecha_Pago());
+            derecho.setFecha_Vencimiento_Derecho(crearFechaVencimientoDerecho(contrato.getFecha_Ingreso_Venta()));
+            derecho.setValor_Cuota_Derecho(contrato.getVCuotas());
+            derecho.setNumero_Cuotas_Derecho((int)nC);
+            derecho.setEstadoDerecho(true);
+            derecho.setCliente(contrato.getCliente());
+            derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
+            derechoService.save(derecho);
+            /*CREAMOS REGISTRO PARA PAGOS DE DERECHO*/
+            /*for (int i = 0; i <(int)nC ; i++) {
+                PagosDerecho pagosDerecho = new PagosDerecho();
+                pagosDerecho.setFechaPago_Derecho(fechaVencimientoPD(i+1,
+                        contrato.getFecha_Ingreso_Venta()));
+                pagosDerecho.setFechaVencimiento_Derecho();
 
-        }catch(DataAccessException e) {
+            }*/
+            /*CREAMOS LAS CUOTAS MANTENCION*/
+            CuotasMantencion cuotasMantencion = new CuotasMantencion();
+            cuotasMantencion.setFecha_Pago_CM(contrato.getFecha_Pago());
+            cuotasMantencion.setFecha_Vencimiento_CM(crearFechaVencimientoCM(contrato.getFecha_Ingreso_Venta()));//misma fecha pero año+1
+            cuotasMantencion.setNumero_Cuotas_CM(12);
+            cuotasMantencion.setValor_Cuota_CM(500);
+            cuotasMantencion.setCliente(contrato.getCliente());
+            cuotasMantencionService.save(cuotasMantencion);
+
+        }catch(DataAccessException | ParseException e) {
             response.put("mensaje","Error al realizar el insert en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, INTERNAL_SERVER_ERROR);
@@ -70,7 +104,6 @@ public class ContratoController {
         return new ResponseEntity<Map<String,Object>>(response, OK);
 
     }
-
 
 
 
@@ -136,6 +169,34 @@ public class ContratoController {
     }
 
 
+    private Date fechaVencimientoPD(int numeroCuota, Date fecha) throws ParseException {
+        //FALTAN CASOS
+        int dia = fecha.getDay();
+        int mes = fecha.getMonth();
+        int anio = fecha.getYear();
+        if(mes+numeroCuota == 13){
+            mes =1;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = anio+"-"+mes+"-"+dia;
+            Date fechaVencimientoCM = sdf.parse(dateString);
+            return fechaVencimientoCM;
+        }
+
+        return null;
+    }
+
+
+    private Date crearFechaVencimientoCM(Date fechaIngreso) throws ParseException {
+        int dia = fechaIngreso.getDay();
+        int mes = fechaIngreso.getMonth();
+        int anio = fechaIngreso.getYear();
+        anio = anio+1;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = anio+"-"+mes+"-"+dia;
+        Date fechaVencimientoCM = sdf.parse(dateString);
+        return fechaVencimientoCM;
+    }
 
     private Date crearFechaVencimientoDerecho(Date fechaIngreso) throws ParseException {
         int dia = fechaIngreso.getDay();
@@ -145,79 +206,9 @@ public class ContratoController {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = anio+"-"+mes+"-"+dia;
-        Date fechaVencimientoDerecho = sdf.parse(dateString);
-        return fechaVencimientoDerecho;
+        Date fechaVencimientoD = sdf.parse(dateString);
+        return fechaVencimientoD;
     }
 
-    private Date crearFechaVencimientoPagoDerecho(Date fecha_pago) throws ParseException {
-        int dia = fecha_pago.getDay();
-        int mes = fecha_pago.getMonth();
-        int anio = fecha_pago.getYear();
-        mes = mes+1;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = anio+"-"+mes+"-"+dia;
-        Date fechaVencimientoDerecho = sdf.parse(dateString);
-        return fechaVencimientoDerecho;
-    }
 
 }
-/*contrato antiguo...
-*
-*creamos el derecho
-
-*Derecho derecho = new Derecho();
-            derecho.setFecha_Inscripcion_Derecho(contrato.getFecha_Ingreso_Venta());
-            derecho.setFecha_Pago_Derecho(contrato.getFecha_Pago());
-            derecho.setFecha_Vencimiento_Derecho(crearFechaVencimientoDerecho(contrato.getFecha_Ingreso_Venta()));
-            derecho.setValor_Cuota_Derecho(contrato.getVCuotas());
-            derecho.setNumero_Cuotas_Derecho(contrato.getNCuotas());
-            derecho.setEstadoDerecho(true);
-            derecho.setCliente(derecho.getCliente());
-            derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
-            derechoService.save(derecho);
-
-            //creamos las cuotas del derecho
-            PagosDerecho pagosDerecho = new PagosDerecho();
-            pagosDerecho.setFechaPago_Derecho(contrato.getFecha_Pago());
-            pagosDerecho.setFechaVencimiento_Derecho(crearFechaVencimientoPagoDerecho(contrato.getFecha_Pago()));
-            pagosDerecho.setValorCuota_Derecho(contrato.getVCuotas());
-            pagosDerecho.setEstadoCuota_Derecho(false);
-            pagosDerecho.setDerecho(derecho);
-            pagosDerechoService.save(pagosDerecho);
-*
-* */
-
-/*
-*
-* ////-------------- Guardar contrato ---------------------////
-
-*@Secured("ROLE_ADMIN")
-    @PostMapping(value = "/saveContratoPorString")
-    @ResponseStatus(value = CREATED)
-    public ResponseEntity<?> createDesdeString(@RequestBody String JSONcontrato){
-        ObjectMapper JSON_MAPPER = new ObjectMapper();
-        Contrato contrato = JSON_MAPPER.readValue(new File(JSONcontrato+".json", Contrato.class));
-        System.out.println(contrato.getFecha_Ingreso_Venta());
-        System.out.println(contrato.getFecha_Pago());
-
-
-        Contrato contrato1= null;
-        Map<String,Object> response =new HashMap<String, Object>();
-
-        try {
-            contrato1= contratoService.save(contrato);
-
-        }catch(DataAccessException e) {
-            response.put("mensaje","Error al realizar el insert en la base de datos");
-            response.put("error",e.getMessage().concat(": ").concat(e.getCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response, INTERNAL_SERVER_ERROR);
-        }
-
-        response.put("mensaje","El contrato ha sido creado con éxito!");
-        response.put("Contrato",contrato1);
-
-        return new ResponseEntity<Map<String,Object>>(response, OK);
-
-    }
-* */

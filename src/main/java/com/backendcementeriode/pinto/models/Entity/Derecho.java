@@ -17,7 +17,7 @@ public class Derecho {
     private Date fecha_Inscripcion_Derecho;
     private Date fecha_Pago_Derecho;
     private Date fecha_Vencimiento_Derecho;
-    private int valor_Cuota_Derecho;
+    private float valor_Cuota_Derecho;
     private int numero_Cuotas_Derecho;
     private boolean estadoDerecho;
 
