@@ -5,10 +5,10 @@ INSERT INTO `roles` (nombre) VALUES ('ROLE_CLIENT');
 INSERT INTO `roles` (nombre) VALUES ('ROLE_EMPLEADO');
 
 INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (1,1);
-INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (2,2);
+INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (2,3);
 
 
-INSERT INTO `funcionario` (id_funcionario, apellidom_funcionario, apellidop_funcionario, cargo_funcionario, estado_funcionario, genero_funcionario, nombres_funcionario, rut_funcionario) VALUES (1, 'saavedra', 'chavez', 'Párroco', b'1', 'Masculino', 'matias', '194154003');
+INSERT INTO `funcionario` (id_funcionario, apellidom_funcionario, apellidop_funcionario, cargo_funcionario, estado_funcionario, genero_funcionario, nombres_funcionario, rut_funcionario) VALUES (1, 'saavedra', 'chavez', 'Consejo Económico', b'1', 'Masculino', 'matias', '194154003');
 
 INSERT INTO `cementerio` (id_cementerio, capacidad_terrenos, direccion_cementerio, nombre_cementerio, telefono_cementerio) VALUES (1, 22, 'Juan Zuñiga sin numero', 'Parroquial pinto', 987654321);
 INSERT INTO `terreno` (id_terreno, capacidad_terreno, estado_terreno, nombre_terreno, id_cementerio) VALUES (1, 12, b'1', 'terreno 1', 1);

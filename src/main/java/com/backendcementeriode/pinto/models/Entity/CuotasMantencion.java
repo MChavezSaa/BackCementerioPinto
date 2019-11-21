@@ -19,7 +19,6 @@ public class CuotasMantencion {
     private int valor_Cuota_CM;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Cliente"),
-            name = "id_Cliente", referencedColumnName = "id_Cliente")
+    @JoinColumn(name = "id_Cliente")
     private Cliente cliente;
 }
