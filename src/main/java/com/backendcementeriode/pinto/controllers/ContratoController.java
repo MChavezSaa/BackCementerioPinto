@@ -76,21 +76,52 @@ public class ContratoController {
             derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
             derechoService.save(derecho);
             /*CREAMOS REGISTRO PARA PAGOS DE DERECHO*/
-            /*for (int i = 0; i <(int)nC ; i++) {
+            for (int i = 0; i <(int)nC ; i++) {
                 PagosDerecho pagosDerecho = new PagosDerecho();
-                pagosDerecho.setFechaPago_Derecho(fechaVencimientoPD(i+1,
+                //fecha de pago derecho alusion a cuando pago la persona.
+                pagosDerecho.setFechaPago_Derecho(null);
+                //fecha estimada de pago
+                pagosDerecho.setFechaVencimiento_Derecho(fechaVencimientoPD(i+1,
                         contrato.getFecha_Ingreso_Venta()));
-                pagosDerecho.setFechaVencimiento_Derecho();
+                //valor de la cuota del derecho viene del calculo anterior
+                pagosDerecho.setValorCuota_Derecho(derecho.getValor_Cuota_Derecho());
+                //false para sin pagar true pagado
+                pagosDerecho.setEstadoCuota_Derecho(false);
+                pagosDerecho.setDerecho(derecho);
+                pagosDerechoService.save(pagosDerecho);
 
-            }*/
+            }
+
             /*CREAMOS LAS CUOTAS MANTENCION*/
             CuotasMantencion cuotasMantencion = new CuotasMantencion();
-            cuotasMantencion.setFecha_Pago_CM(contrato.getFecha_Pago());
-            cuotasMantencion.setFecha_Vencimiento_CM(crearFechaVencimientoCM(contrato.getFecha_Ingreso_Venta()));//misma fecha pero año+1
+            //revisar como va fecha pago cm
+            cuotasMantencion.setFecha_Pago_CM(null);
+            //fecha estimada de termino de pago (anio +1)
+            cuotasMantencion.setFecha_Vencimiento_CM(crearFechaVencimientoCM(contrato.getFecha_Ingreso_Venta()));
             cuotasMantencion.setNumero_Cuotas_CM(12);
             cuotasMantencion.setValor_Cuota_CM(500);
             cuotasMantencion.setCliente(contrato.getCliente());
+            //guardamos cuota
             cuotasMantencionService.save(cuotasMantencion);
+
+            /*CREAMOS LOS REGISTROS PARA LOS PAGOS DE CM*/
+            for (int i = 0; i <12 ; i++) {
+                PagosMantencion pagosMantencion = new PagosMantencion();
+                //inicia null por que no se ha pagado
+                pagosMantencion.setFechaPago_Mantencion(null);
+                //fecha estimada de pago de mantencion (mes+1)
+                pagosMantencion.setFechaVencimiento_Mantencion(
+                        fechaVencimientoPD(i+1,
+                        contrato.getFecha_Ingreso_Venta()));
+                pagosMantencion.setValorCuota_Mantencion(500);
+                //false no pago true pago...
+                pagosMantencion.setEstadoCuota_Mantencion(false);
+                pagosMantencion.setCuotasMantencion(cuotasMantencion);
+                //se guarda el registro
+                pagosMantencionService.save(pagosMantencion);
+
+            }
+
 
         }catch(DataAccessException | ParseException e) {
             response.put("mensaje","Error al realizar el insert en la base de datos");
@@ -170,19 +201,33 @@ public class ContratoController {
 
 
     private Date fechaVencimientoPD(int numeroCuota, Date fecha) throws ParseException {
-        //FALTAN CASOS
         int dia = fecha.getDay();
         int mes = fecha.getMonth();
         int anio = fecha.getYear();
-        if(mes+numeroCuota == 13){
-            mes =1;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = anio+"-"+mes+"-"+dia;
-            Date fechaVencimientoCM = sdf.parse(dateString);
-            return fechaVencimientoCM;
+        if(mes+numeroCuota < 13){
+            if(mes+numeroCuota == 12){
+                mes= 1;
+                anio=anio+1;
+                SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
+                String dateString3 = anio+"-"+mes+"-"+dia;
+                Date fechaVencimientoCM3 = sdf3.parse(dateString3);
+                return fechaVencimientoCM3;
+            }else {
+                mes = mes + 1;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String dateString = anio + "-" + mes + "-" + dia;
+                Date fechaVencimientoCM = sdf.parse(dateString);
+                return fechaVencimientoCM;
+            }
+        }else{
+            int aux = (mes+numeroCuota)-12;
+            mes = aux;
+            anio = anio+1;
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString2 = anio+"-"+mes+"-"+dia;
+            Date fechaVencimientoCM2 = sdf2.parse(dateString2);
+            return fechaVencimientoCM2;
         }
-
-        return null;
     }
 
 

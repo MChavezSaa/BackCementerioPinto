@@ -2,6 +2,7 @@ package com.backendcementeriode.pinto.models.Entity;
 
 import lombok.Data;
 import org.hibernate.annotations.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 import javax.persistence.*;
@@ -19,8 +20,15 @@ public class PagosMantencion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_PagosMantencion;
 
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date fechaPago_Mantencion;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date fechaVencimiento_Mantencion;
+
+
     private int valorCuota_Mantencion;
     private boolean estadoCuota_Mantencion;
 
