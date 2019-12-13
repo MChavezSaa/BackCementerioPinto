@@ -5,7 +5,7 @@ INSERT INTO `roles` (nombre) VALUES ('ROLE_CLIENT');
 INSERT INTO `roles` (nombre) VALUES ('ROLE_EMPLEADO');
 
 INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (1,1);
-INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (2,3);
+INSERT INTO `usuario_roles` (usuario_id, role_id) VALUES  (2,1);
 
 
 INSERT INTO `funcionario` (id_funcionario, apellidom_funcionario, apellidop_funcionario, cargo_funcionario, estado_funcionario, genero_funcionario, nombres_funcionario, rut_funcionario) VALUES (1, 'saavedra', 'chavez', 'Consejo Económico', b'1', 'Masculino', 'matias', '194154003');
