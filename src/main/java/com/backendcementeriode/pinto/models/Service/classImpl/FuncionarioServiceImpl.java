@@ -57,4 +57,9 @@ public  class FuncionarioServiceImpl  implements IFuncionarioService {
         return funcionarioDao.findById(id).orElse(null);
     }
 
+    @Override
+    public Funcionario findByRut(String Rut) {
+        return funcionarioDao.findByRut(Rut);
+    }
+
 }

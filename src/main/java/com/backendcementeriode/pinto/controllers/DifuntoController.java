@@ -54,7 +54,7 @@ public class DifuntoController {
     @PostMapping(value = "/saveDifunto")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Difunto difunto){
-        difunto.setEstadoDifunto(true);
+        difunto.setEstadoDifunto("Activo");
         Difunto difunto1= null;
         Map<String,Object> response =new HashMap<String, Object>();
 
@@ -95,9 +95,27 @@ public class DifuntoController {
 
         return new ResponseEntity(difunto,HttpStatus.OK);
     }
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/DeleteDifunto/{id}",  method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable Long id) {
 
+        Map<String,Object> response =new HashMap<String, Object>();
+        try {
+            difuntoService.deletebyID(id);
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al reduccir el difunto de la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-    ////-------------- Subir Certificado Defuncion ---------------------////
+        response.put("mensaje", "El difunto fue reduccido con éxito!");
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
+
+}
+
+////-------------- Subir Certificado Defuncion ---------------------////
     /*@PostMapping("/DifuntoUpload")
     public ResponseEntity<?>upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") Long id) throws IOException {
         Map<String, Object> response = new HashMap<>();
@@ -160,5 +178,3 @@ public class DifuntoController {
     }*/
 
 
-
-}

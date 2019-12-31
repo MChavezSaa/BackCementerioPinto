@@ -32,17 +32,17 @@ public class DifuntoServiceImpl implements IDifuntoService {
         return difuntoDao.findById(id);
     }
 
-    @Transactional
+    @Transactional//delete sera para reduccion
     public void delete(Difunto difunto) {
         Difunto difuntoADesactivar = difunto;
-        difuntoADesactivar.setEstadoDifunto(false);
+        difuntoADesactivar.setEstadoDifunto("Reduccion");
         difuntoDao.save(difuntoADesactivar);
     }
 
     @Transactional
     public void deletebyID(long id) {
         Optional<Difunto> difuntoADesactivar = difuntoDao.findById(id);
-        difuntoADesactivar.get().setEstadoDifunto(false);
+        difuntoADesactivar.get().setEstadoDifunto("Reduccion");
         difuntoDao.save(difuntoADesactivar.get());
     }
 
