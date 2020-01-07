@@ -2,6 +2,7 @@ package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.TipoTumba;
 import com.backendcementeriode.pinto.models.Entity.Traslado;
+import com.backendcementeriode.pinto.models.Service.classImpl.DifuntoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.TrasladoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -22,6 +23,8 @@ public class TrasladoController {
 
     @Autowired
     private TrasladoServiceImpl trasladoService;
+    @Autowired
+    private DifuntoServiceImpl difuntoService;
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listTraslados", method = RequestMethod.GET )
@@ -61,6 +64,7 @@ public class TrasladoController {
         Map<String, Object> response = new HashMap<String, Object>();
 
         try {
+            difuntoService.save(traslado.getDifunto());
             traslado1 = this.trasladoService.save(traslado);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar el insert en la base de datos");
