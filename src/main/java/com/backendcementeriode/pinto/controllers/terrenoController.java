@@ -115,7 +115,7 @@ public class terrenoController {
         try {
             terrenoUpdated= terrenoService.save(terrenoActual);
         }catch(DataAccessException e) {
-            response.put("mensaje","Error alcambiar el estado del terreno en la base de datos");
+            response.put("mensaje","Error al cambiar el estado del terreno en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }

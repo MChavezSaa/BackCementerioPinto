@@ -12,6 +12,6 @@ public interface IPatioService {
     Optional<Patio> findOne(long id);
     void delete(Patio patio);
     void deletebyID(long id);
-    Optional<Patio> findById(long id);
+    Patio findById(long id);
 
 }

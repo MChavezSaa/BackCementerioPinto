@@ -70,13 +70,18 @@ public class patioController {
 
         return new ResponseEntity<Map<String, Object>>(response, OK);
     }
+
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeletePatio/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        Patio patioB = patioService.findById(id);
+        Patio patio2 = null;
 
         Map<String, Object> response = new HashMap<String, Object>();
         try {
-            patioService.deletebyID(id);
+            patioB.setEstado_Patio(false);
+            patio2 = patioService.save(patioB);
+            //patioService.deletebyID(id);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al deshabilitar el patio de la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -84,9 +89,39 @@ public class patioController {
         }
 
         response.put("mensaje", "El patio fue deshabilitado con éxito!");
+        response.put("Patio: ", patio2);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value="/CambiaEstadoPatio/{id}")
+    public ResponseEntity<?>darAlta(@RequestBody Patio patio, @PathVariable Long id){
+        Patio patioActual = patioService.findById(id);
+        patioActual.setEstado_Patio(true);
+        Patio patioUpdate = null;
+
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        if(patioActual==null) {
+            response.put("mensaje","No se pudo cambiar el estado del Patio con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+        try {
+            patioUpdate= patioService.save(patioActual);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al cambiar el estado del patio de la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El patio ha cambiado de estado con éxito!");
+        response.put("Patio: ", patioUpdate);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+
+    }
+
+
     @Secured({"ROLE_ADMIN"})
     @GetMapping("/findPatio/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
@@ -94,7 +129,7 @@ public class patioController {
         Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
 
         try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
-            patio=patioService.findById(id).get();
+            patio=patioService.findOne(id).get();
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -112,7 +147,7 @@ public class patioController {
     @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updatePatio/{id}")
     public ResponseEntity<?> update(@RequestBody Patio patio, @PathVariable Long id) {
-        Patio patio1=patioService.findById(id).get();
+        Patio patio1=patioService.findOne(id).get();
         Patio patio2=null;
 
         Map<String,Object> response =new HashMap<String, Object>();

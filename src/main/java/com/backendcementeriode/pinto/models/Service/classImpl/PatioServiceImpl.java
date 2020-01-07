@@ -45,7 +45,7 @@ public class PatioServiceImpl implements IPatioService {
     }
 
     @Transactional
-    public Optional<Patio> findById(long id) {
-        return patioDao.findById(id);
+    public Patio findById(long id) {
+        return patioDao.findById(id).orElse(null);
     }
 }
