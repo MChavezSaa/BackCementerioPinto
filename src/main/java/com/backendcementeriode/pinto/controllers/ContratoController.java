@@ -38,6 +38,9 @@ public class ContratoController {
     @Autowired
     private PagosMantencionServiceImpl pagosMantencionService;
 
+    /*Arreglucho*/
+    private contratov2ServiceImpl contratov2Service;
+
 
     ////-------------- Listar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
@@ -75,6 +78,29 @@ public class ContratoController {
             derecho.setCliente(contrato.getCliente());
             derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
             derechoService.save(derecho);
+
+
+            //creamos arregluchox
+            contratov2 c2 = new contratov2();
+            c2.setCementerio(contrato.getCementerio());
+            c2.setCliente(contrato.getCliente());
+            c2.setDerecho(derecho);
+            c2.setFecha_Ingreso_Venta(contrato.getFecha_Ingreso_Venta());
+            c2.setFecha_Pago(contrato.getFecha_Pago());
+            c2.setFuncionario(contrato.getFuncionario());
+            c2.setMedio_Pago(contrato.getMedio_Pago());
+            c2.setN_Cuotas(contrato.getN_Cuotas());
+            c2.setPagoInicial(contrato.getPagoInicial());
+            c2.setPatio(contrato.getPatio());
+            c2.setTerreno(contrato.getTerreno());
+            c2.setValor_Terreno(contrato.getValor_Terreno());
+            c2.setTipoTumba(contrato.getTipoTumba());
+            c2.setTumba(contrato.getTumba());
+            c2.setVCuotas(contrato.getVCuotas());
+            contratov2Service.save(c2);
+
+
+
             /*CREAMOS REGISTRO PARA PAGOS DE DERECHO*/
             for (int i = 0; i <(int)nC ; i++) {
                 PagosDerecho pagosDerecho = new PagosDerecho();
