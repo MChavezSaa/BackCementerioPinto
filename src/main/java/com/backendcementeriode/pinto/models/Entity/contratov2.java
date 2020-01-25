@@ -53,28 +53,23 @@ public class contratov2 {
     private Patio patio;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Tumba"),
-            name = "id_Tumba", referencedColumnName = "id_Tumba")
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_Tumba"))
     private Tumba tumba;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_TipoTumba"),
-            name = "id_TipoTumba", referencedColumnName = "id_TipoTumba")
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_TipoTumba"))
     private TipoTumba tipoTumba;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Cliente"),
-            name = "id_Cliente", referencedColumnName = "id_Cliente")
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_Cliente"))
     private Cliente cliente;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Funcionario"),
-            name = "id_Funcionario", referencedColumnName = "id_Funcionario")
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_Funcionario"))
     private Funcionario funcionario;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"),
-            name = "id_Derecho", referencedColumnName = "id_Derecho")
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"))
     private Derecho derecho;
 
 

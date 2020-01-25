@@ -28,7 +28,7 @@ INSERT INTO `patio` (`id_patio`, `capacidad_patio`, `estado_patio`, `nombre_pati
 INSERT INTO `patio` (`id_patio`, `capacidad_patio`, `estado_patio`, `nombre_patio`, `id_terreno`) VALUES (3, 124, b'1', 'patio 3', 1);
 INSERT INTO `patio` (`id_patio`, `capacidad_patio`, `estado_patio`, `nombre_patio`, `id_terreno`) VALUES  (4, 96, b'1', 'patio 4', 1);
 INSERT INTO `patio` (`id_patio`, `capacidad_patio`, `estado_patio`, `nombre_patio`, `id_terreno`) VALUES  (5, 110, b'1', 'patio 5', 1);
-INSERT INTO `patio` (`id_patio`, `capacidad_patio`, `estado_patio`, `nombre_patio`, `id_terreno`) VALUES  (6, 116, b'1', 'patio 6', 1);
+INSERT INTO `patio` (`id_patio`, `capacidad_patio`, `estado_patio`, `nombre_patio`, `id_terreno`) VALUES  (6, 124, b'1', 'patio 6', 1);
 
 INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (1, 0, 'Disponible', 0, 1, 'Por Definir', 0, NULL, 1, NULL);
 INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES  (2, 0, 'Disponible', 0, 2, 'Por Definir', 0, NULL, 1, NULL);
@@ -716,7 +716,14 @@ INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba
 INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (684, 0, 'Disponible', 0, 114, 'Por Definir', 0, NULL, 6, NULL);
 INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (685, 0, 'Disponible', 0, 115, 'Por Definir', 0, NULL, 6, NULL);
 INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (686, 0, 'Disponible', 0, 116, 'Por Definir', 0, NULL, 6, NULL);
-
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (687, 0, 'Disponible', 0, 117, 'Por Definir', 0, NULL, 6, NULL);
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (688, 0, 'Disponible', 0, 118, 'Por Definir', 0, NULL, 6, NULL);
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (689, 0, 'Disponible', 0, 119, 'Por Definir', 0, NULL, 6, NULL);
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (690, 0, 'Disponible', 0, 120, 'Por Definir', 0, NULL, 6, NULL);
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (691, 0, 'Disponible', 0, 121, 'Por Definir', 0, NULL, 6, NULL);
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (692, 0, 'Disponible', 0, 122, 'Por Definir', 0, NULL, 6, NULL);
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (693, 0, 'Disponible', 0, 123, 'Por Definir', 0, NULL, 6, NULL);
+INSERT INTO `tumba` (`id_tumba`, `ancho`, `estado_tumba`, `largo`, `numero_tumba`, `orientacion_tumba`, `valor_tumba`, `id_cliente`, `id_patio`, `tipo_tumba_id_tipo_tumba`) VALUES (694, 0, 'Disponible', 0, 124, 'Por Definir', 0, NULL, 6, NULL);
 
 
 
