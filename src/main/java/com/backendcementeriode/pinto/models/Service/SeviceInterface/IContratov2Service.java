@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface IContratov2Service {
     List<contratov2> findAll();
-    contratov2 save(contratov2 contrato);
+    void save(contratov2 contratov2);
     Optional<contratov2> findOne(long id);
 
 }

@@ -39,7 +39,11 @@ public class ContratoController {
     private PagosMantencionServiceImpl pagosMantencionService;
 
     /*Arreglucho*/
+    @Autowired
     private contratov2ServiceImpl contratov2Service;
+
+    @Autowired
+    private TumbaServiceImpl tumbaService;
 
 
     ////-------------- Listar Clientes ---------------------////
@@ -79,8 +83,6 @@ public class ContratoController {
             derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
             derechoService.save(derecho);
 
-
-            //creamos arregluchox
             contratov2 c2 = new contratov2();
             c2.setCementerio(contrato.getCementerio());
             c2.setCliente(contrato.getCliente());
@@ -98,8 +100,6 @@ public class ContratoController {
             c2.setTumba(contrato.getTumba());
             c2.setVCuotas(contrato.getVCuotas());
             contratov2Service.save(c2);
-
-
 
             /*CREAMOS REGISTRO PARA PAGOS DE DERECHO*/
             for (int i = 0; i <(int)nC ; i++) {
@@ -147,6 +147,11 @@ public class ContratoController {
                 pagosMantencionService.save(pagosMantencion);
 
             }
+            //creamos arregluchox
+            Tumba tumba = contrato.getTumba();
+            tumba.setEstado_Tumba("Reservado");
+            tumba.setTipo_Tumba(contrato.getTipoTumba());
+            tumbaService.save(tumba);
 
 
         }catch(DataAccessException | ParseException e) {
