@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Query;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,6 +54,14 @@ public class ContratoController {
         List<Contrato> all = contratoService.findAll();
         return all;
     }
+    /*------------------------------------*/
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/listCuotasPorIDClienteEnContrato/{id}", method = RequestMethod.GET)
+    public List<CuotasMantencion> findCuotasPorContratoPorIdCliente(@PathVariable Long id){
+        List<CuotasMantencion> all = contratoService.cuotasPorIdClienteEnContrato(id);
+        return all;
+    }
+    /*------------------------------------*/
 
     ////-------------- Guardar contrato ---------------------////
     @Secured("ROLE_ADMIN")
@@ -166,8 +175,6 @@ public class ContratoController {
         return new ResponseEntity<Map<String,Object>>(response, OK);
 
     }
-
-
 
 
     @Secured("ROLE_ADMIN")
