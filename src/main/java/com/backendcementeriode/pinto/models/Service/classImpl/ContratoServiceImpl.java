@@ -3,6 +3,7 @@ package com.backendcementeriode.pinto.models.Service.classImpl;
 import com.backendcementeriode.pinto.models.Dao.IContratoDao;
 import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.CuotasMantencion;
+import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.IContratoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,11 +36,7 @@ public class ContratoServiceImpl implements IContratoService {
         return contratoDao.findById(id);
     }
 
-    @Override
-    public List<CuotasMantencion> cuotasPorIdClienteEnContrato(long id) {
 
-        return contratoDao.cuotasPorIdClienteEnContrato(id);
-    }
 
 
 }

@@ -5,6 +5,7 @@ import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.IPagosMantencionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,5 +28,12 @@ public class PagosMantencionServiceImpl implements IPagosMantencionService {
     @Override
     public Optional<PagosMantencion> findById(long id) {
         return pagosMantencionDao.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public List<PagosMantencion> cuotasPorIdClienteEnContrato(long id) {
+
+        return pagosMantencionDao.cuotasPorIdClienteEnContrato(id);
     }
 }

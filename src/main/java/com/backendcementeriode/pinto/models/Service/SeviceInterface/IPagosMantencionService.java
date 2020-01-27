@@ -10,5 +10,6 @@ public interface IPagosMantencionService {
     List<PagosMantencion> findAll();
     PagosMantencion save(PagosMantencion pagosMantencion);
     Optional<PagosMantencion> findById(long id);
+    List<PagosMantencion> cuotasPorIdClienteEnContrato(long id);
 
 }

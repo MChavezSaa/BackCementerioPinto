@@ -54,14 +54,7 @@ public class ContratoController {
         List<Contrato> all = contratoService.findAll();
         return all;
     }
-    /*------------------------------------*/
-    @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/listCuotasPorIDClienteEnContrato/{id}", method = RequestMethod.GET)
-    public List<CuotasMantencion> findCuotasPorContratoPorIdCliente(@PathVariable Long id){
-        List<CuotasMantencion> all = contratoService.cuotasPorIdClienteEnContrato(id);
-        return all;
-    }
-    /*------------------------------------*/
+
 
     ////-------------- Guardar contrato ---------------------////
     @Secured("ROLE_ADMIN")

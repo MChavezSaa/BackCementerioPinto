@@ -1,9 +1,11 @@
 package com.backendcementeriode.pinto.controllers;
 
 
+import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 import com.backendcementeriode.pinto.models.Entity.TipoTumba;
+import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosMantencionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -29,6 +31,8 @@ public class PagoMantencionController {
 
     @Autowired
     public PagosMantencionServiceImpl pagosMantencionService;
+    @Autowired
+    public ContratoServiceImpl contratoService;
 
     @RequestMapping(value = "/listPagosMantencion", method = RequestMethod.GET )
     public List<PagosMantencion> findAll() {
@@ -133,6 +137,21 @@ public class PagoMantencionController {
 
         return new ResponseEntity(pagosMantencion,HttpStatus.OK);
     }
+
+    /*------------------------------------*/
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/listCuotasPorIDClienteEnContrato/{id}", method = RequestMethod.GET)
+    public List<PagosMantencion> findCuotasPorContratoPorIdCliente(@PathVariable Long id){
+        Contrato c1 = contratoService.findOne(id).get();
+
+        List<PagosMantencion> all = pagosMantencionService.cuotasPorIdClienteEnContrato(c1.getCliente().getId_Cliente());
+        for (int i = 0; i <all.size() ; i++) {
+            System.out.println(all.get(i).getId_PagosMantencion());
+            System.out.println(all.get(i).getValorCuota_Mantencion());
+        }
+        return all;
+    }
+    /*------------------------------------*/
 
 
 
