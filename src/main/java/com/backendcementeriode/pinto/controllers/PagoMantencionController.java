@@ -84,8 +84,9 @@ public class PagoMantencionController {
             PagosActual.setFechaPago_Mantencion(pagosMantencion.getFechaPago_Mantencion());
             /*manejo de la fecha de vencimiento*/
             LocalDate fechaV = pagosMantencion.getFechaVencimiento_Mantencion();
-            int dia = fechaV.getDayOfMonth();
-            int mes = fechaV.getMonthValue();
+            Date d1 = convertToDateViaSqlDate(fechaV);
+            int dia = d1.getDay();
+            int mes = d1.getMonth();
             int anio = fechaV.getYear();
             if (mes == 12){
                 mes =1;
@@ -158,6 +159,10 @@ public class PagoMantencionController {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+    }
+
+    public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
     }
 
 }

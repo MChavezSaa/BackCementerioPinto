@@ -106,7 +106,7 @@ public class ContratoController {
                 pagosDerecho.setFechaPago_Derecho(null);
                 //fecha estimada de pago
                 pagosDerecho.setFechaVencimiento_Derecho(fechaVencimientoPD(i+1,
-                        contrato.getFecha_Ingreso_Venta()));
+                        contrato.getFecha_Pago()));
                 //valor de la cuota del derecho viene del calculo anterior
                 pagosDerecho.setValorCuota_Derecho(derecho.getValor_Cuota_Derecho());
                 //false para sin pagar true pagado
@@ -232,12 +232,14 @@ public class ContratoController {
 
 
     private LocalDate fechaVencimientoPD(int numeroCuota, LocalDate fecha) throws ParseException {
-        int dia = fecha.getDayOfMonth();
-        int mes = fecha.getMonthValue();
+        Date d1 = convertToDateViaSqlDate(fecha);
+        int dia = d1.getDay();
+        int mes = d1.getMonth();
         int anio = fecha.getYear();
+
         if(mes+numeroCuota < 13){
             if(mes+numeroCuota == 12){
-                mes= 1;
+                mes= mes+numeroCuota;
                 anio=anio+1;
                 SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
                 String dateString3 = anio+"-"+mes+"-"+dia;
@@ -266,10 +268,37 @@ public class ContratoController {
 
 
     private LocalDate crearFechaVencimientoCM(LocalDate fechaIngreso) throws ParseException {
-        int dia = fechaIngreso.getDayOfMonth();
-        int mes = fechaIngreso.getMonthValue();
+        Date d1 = convertToDateViaSqlDate(fechaIngreso);
+        int dia = d1.getDay();
+        int mes = d1.getMonth();
         int anio = fechaIngreso.getYear();
-        anio = anio+1;
+        if (mes == 12){
+            mes =1;
+            anio= anio+1;
+        }else{
+            mes = mes+1;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = anio+"-"+mes+"-"+dia;
+        Date fechaVencimientoCM = sdf.parse(dateString);
+        LocalDate fecha1 = convertToLocalDateViaInstant(fechaVencimientoCM);
+        return fecha1;
+
+
+    }
+
+    private LocalDate crearFechaVencimientoDerecho(LocalDate fechaIngreso) throws ParseException {
+        Date d1 = convertToDateViaSqlDate(fechaIngreso);
+        int dia = d1.getDay();
+        int mes = d1.getMonth();
+        int anio = fechaIngreso.getYear();
+        if (mes == 12){
+            mes =1;
+            anio = anio+20;
+        }else{
+            mes = mes+1;
+        }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = anio+"-"+mes+"-"+dia;
@@ -278,23 +307,12 @@ public class ContratoController {
         return fecha1;
     }
 
-    private LocalDate crearFechaVencimientoDerecho(LocalDate fechaIngreso) throws ParseException {
-        int dia = fechaIngreso.getDayOfMonth();
-        int mes = fechaIngreso.getMonthValue();
-        int anio = fechaIngreso.getYear();
-        anio = anio+20;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = anio+"-"+mes+"-"+dia;
-        Date fechaVencimientoD = sdf.parse(dateString);
-        LocalDate fecha1 = convertToLocalDateViaInstant(fechaVencimientoD);
-        return fecha1;
-    }
-
     public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
-
+    public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
 }
