@@ -1,10 +1,9 @@
 package com.backendcementeriode.pinto.models.Entity;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -16,14 +15,12 @@ public class contratov2 {
     //atributos para armar contrato, pago derecho y pago mantencion
 
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date fecha_Ingreso_Venta;
+
+    private LocalDate fecha_Ingreso_Venta;
 
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date fecha_Pago;
+
+    private LocalDate fecha_Pago;
 
     private String medio_Pago;
 

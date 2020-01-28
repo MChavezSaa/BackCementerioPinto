@@ -7,6 +7,7 @@ import org.springframework.format.annotation.NumberFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -20,14 +21,10 @@ public class Contrato implements Serializable {
     //atributos para armar contrato, pago derecho y pago mantencion
 
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date fecha_Ingreso_Venta;
+    private LocalDate fecha_Ingreso_Venta;
 
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date fecha_Pago;
+    private LocalDate fecha_Pago;
 
     private String medio_Pago;
 

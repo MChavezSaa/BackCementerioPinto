@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,9 +83,9 @@ public class PagoMantencionController {
             PagosActual.setEstadoCuota_Mantencion(true);
             PagosActual.setFechaPago_Mantencion(pagosMantencion.getFechaPago_Mantencion());
             /*manejo de la fecha de vencimiento*/
-            Date fechaV = pagosMantencion.getFechaVencimiento_Mantencion();
-            int dia = fechaV.getDay();
-            int mes = fechaV.getMonth();
+            LocalDate fechaV = pagosMantencion.getFechaVencimiento_Mantencion();
+            int dia = fechaV.getDayOfMonth();
+            int mes = fechaV.getMonthValue();
             int anio = fechaV.getYear();
             if (mes == 12){
                 mes =1;
@@ -92,10 +95,11 @@ public class PagoMantencionController {
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String dateString = dia+"-"+mes+"-"+anio;
-            Date fechaV2 = sdf.parse(dateString);
+            Date fechaV2 =sdf.parse(dateString);
+            LocalDate fechaV3 = convertToLocalDateViaInstant(fechaV2);
             /*Fin manejo de fecha venciminento*/
 
-            PagosActual.setFechaVencimiento_Mantencion(fechaV2);
+            PagosActual.setFechaVencimiento_Mantencion(fechaV3);
             PagosActual.setValorCuota_Mantencion(pagosMantencion.getValorCuota_Mantencion());
             PagosUpdated= pagosMantencionService.save(PagosActual);
         }catch(DataAccessException e) {
@@ -154,6 +158,10 @@ public class PagoMantencionController {
     /*------------------------------------*/
 
 
-
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
 
 }

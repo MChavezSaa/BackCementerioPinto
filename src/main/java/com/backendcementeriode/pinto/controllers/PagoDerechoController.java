@@ -1,6 +1,5 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.PagosDerecho;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -128,9 +129,9 @@ public class PagoDerechoController {
         PagosDerecho nuevaCuota = new PagosDerecho();
         nuevaCuota.setValorCuota_Derecho(pagosDerecho.getValorCuota_Derecho());
         /*manejo de la fecha de vencimiento*//*revisar fecha vencimiento de nueva cuota*/
-        Date fechaV = pagosDerecho.getFechaVencimiento_Derecho();
-        int dia = fechaV.getDay();
-        int mes = fechaV.getMonth();
+        LocalDate fechaV = pagosDerecho.getFechaVencimiento_Derecho();
+        int dia = fechaV.getDayOfMonth();
+        int mes = fechaV.getMonthValue();
         int anio = fechaV.getYear();
         if (mes == 12){
             mes =1;
@@ -141,13 +142,14 @@ public class PagoDerechoController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = anio+"-"+mes+"-"+dia;
         Date fechaV2 = sdf.parse(dateString);
+        LocalDate fv3 = convertToLocalDateViaInstant(fechaV2);
         /*Fin manejo de fecha venciminento*/
 
-        nuevaCuota.setFechaVencimiento_Derecho(fechaV2);
+        nuevaCuota.setFechaVencimiento_Derecho(fv3);
         /*manejo de la fecha de pago*/
-        Date fechaP = pagosDerecho.getFechaPago_Derecho();
-        int diaP = fechaP.getDay();
-        int mesP = fechaP.getMonth();
+        LocalDate fechaP = pagosDerecho.getFechaPago_Derecho();
+        int diaP = fechaP.getDayOfMonth();
+        int mesP = fechaP.getMonthValue();
         int anioP = fechaP.getYear();
         if (mesP == 12){
             mesP = 1;
@@ -158,11 +160,18 @@ public class PagoDerechoController {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         String dateString2 = anioP+"-"+mesP+"-"+diaP;
         Date fechaP2 = sdf2.parse(dateString2);
+        LocalDate fv4 = convertToLocalDateViaInstant(fechaP2);
         /*Fin manejo de fecha venciminento*/
 
-        nuevaCuota.setFechaPago_Derecho(fechaP2);
+        nuevaCuota.setFechaPago_Derecho(fv4);
         nuevaCuota.setEstadoCuota_Derecho(false);
         nuevaCuota.setDerecho(pagosDerecho.getDerecho());//lalalalal
         pagosDerechoService.save(nuevaCuota);
+    }
+
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 }

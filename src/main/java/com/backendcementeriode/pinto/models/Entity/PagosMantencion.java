@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -20,13 +21,11 @@ public class PagosMantencion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_PagosMantencion;
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date fechaPago_Mantencion;
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date fechaVencimiento_Mantencion;
+    private LocalDate fechaPago_Mantencion;
+
+
+    private LocalDate fechaVencimiento_Mantencion;
 
 
     private int valorCuota_Mantencion;
