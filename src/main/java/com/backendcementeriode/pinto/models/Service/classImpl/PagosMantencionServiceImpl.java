@@ -1,6 +1,7 @@
 package com.backendcementeriode.pinto.models.Service.classImpl;
 
 import com.backendcementeriode.pinto.models.Dao.IPagosMantencionDao;
+import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.IPagosMantencionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,6 @@ public class PagosMantencionServiceImpl implements IPagosMantencionService {
 
         return pagosMantencionDao.cuotasPorIdClienteEnContrato(id);
     }
+
+
 }

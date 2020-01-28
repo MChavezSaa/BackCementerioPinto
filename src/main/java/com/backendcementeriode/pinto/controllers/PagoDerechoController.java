@@ -1,6 +1,9 @@
 package com.backendcementeriode.pinto.controllers;
 
+import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.PagosDerecho;
+import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
+import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class PagoDerechoController {
     public PagosDerechoServiceImpl pagosDerechoService;
     @Autowired
     public DechoServiceImpl derechoService;
+
+    @Autowired
+    public ContratoServiceImpl contratoService;
 
     @RequestMapping(value = "/listPagosDerecho", method = RequestMethod.GET )
     public List<PagosDerecho> findAll() {
@@ -174,4 +180,16 @@ public class PagoDerechoController {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
+
+    /*------------------------------------*/
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/listCuotasDerecho/{id}", method = RequestMethod.GET)
+    public List<PagosDerecho> findCuotasPorContratoPorIdCliente(@PathVariable Long id){
+        Contrato c1 = contratoService.findOne(id).get();
+
+        List<PagosDerecho> all = pagosDerechoService.cuotasPorIdContrato(c1.getId_contrato());
+
+        return all;
+    }
+    /*------------------------------------*/
 }

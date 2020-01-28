@@ -77,7 +77,7 @@ public class ContratoController {
             derecho.setValor_Cuota_Derecho(contrato.getVCuotas());
             derecho.setNumero_Cuotas_Derecho((int)nC);
             derecho.setEstadoDerecho(true);
-            derecho.setCliente(contrato.getCliente());
+            derecho.setContrato(contrato);
             derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
             derechoService.save(derecho);
 
@@ -125,7 +125,7 @@ public class ContratoController {
             cuotasMantencion.setFecha_Vencimiento_CM(crearFechaVencimientoCM(contrato.getFecha_Ingreso_Venta()));
             cuotasMantencion.setNumero_Cuotas_CM(12);
             cuotasMantencion.setValor_Cuota_CM(500);
-            cuotasMantencion.setCliente(contrato.getCliente());
+            cuotasMantencion.setContrato(contrato);
             //guardamos cuota
             cuotasMantencionService.save(cuotasMantencion);
 

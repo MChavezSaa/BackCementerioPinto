@@ -92,7 +92,7 @@ public class DerechoController {
         }
         try {
             derecho1.setId_Derecho(derecho.getId_Derecho());
-            derecho1.setCliente(derecho.getCliente());
+            derecho1.setContrato(derecho.getContrato());
             derecho1.setEstadoDerecho(derecho.isEstadoDerecho());
             derecho1.setFecha_Inscripcion_Derecho(derecho.getFecha_Inscripcion_Derecho());
             derecho1.setFecha_Pago_Derecho(derecho.getFecha_Pago_Derecho());

@@ -148,11 +148,7 @@ public class PagoMantencionController {
     public List<PagosMantencion> findCuotasPorContratoPorIdCliente(@PathVariable Long id){
         Contrato c1 = contratoService.findOne(id).get();
 
-        List<PagosMantencion> all = pagosMantencionService.cuotasPorIdClienteEnContrato(c1.getCliente().getId_Cliente());
-        for (int i = 0; i <all.size() ; i++) {
-            System.out.println(all.get(i).getId_PagosMantencion());
-            System.out.println(all.get(i).getValorCuota_Mantencion());
-        }
+        List<PagosMantencion> all = pagosMantencionService.cuotasPorIdClienteEnContrato(c1.getId_contrato());
         return all;
     }
     /*------------------------------------*/

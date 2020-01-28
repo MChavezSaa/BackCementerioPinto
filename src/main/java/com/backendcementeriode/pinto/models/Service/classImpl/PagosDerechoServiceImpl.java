@@ -34,4 +34,9 @@ public class PagosDerechoServiceImpl implements IPagosDerechoService {
         return (List<PagosDerecho>) pagosDerechoDao.findByDerecho(id);
     }
 
+    @Override
+    public List<PagosDerecho> cuotasPorIdContrato(long id) {
+        return pagosDerechoDao.cuotasPorIdContrato(id);
+    }
+
 }

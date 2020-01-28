@@ -12,4 +12,5 @@ public interface IPagosDerechoService {
     PagosDerecho save(PagosDerecho pagosDerecho);
     Optional<PagosDerecho> findById(long id);
     List<PagosDerecho> findByDerecho(long id);
+    List<PagosDerecho>cuotasPorIdContrato(long id);
 }

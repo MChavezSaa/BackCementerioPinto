@@ -46,17 +46,10 @@ public class DechoServiceImpl implements IDerechoService {
     @Transactional
     public void deletebyID(long id) {
         Optional<Derecho> derechoADesactivar = derechoDao.findById(id);
-        Derecho derechoADesactivar2 = null;
+        Derecho derechoADesactivar2 = derechoADesactivar.get();
+        derechoADesactivar2.setEstadoDerecho(false);
 
-        if (derechoADesactivar != null){
-            derechoADesactivar2.setId_Derecho(derechoADesactivar.get().getId_Derecho());
-            derechoADesactivar2.setFecha_Inscripcion_Derecho(derechoADesactivar.get().getFecha_Inscripcion_Derecho());
-            derechoADesactivar2.setFecha_Pago_Derecho(derechoADesactivar.get().getFecha_Pago_Derecho());
-            derechoADesactivar2.setFecha_Vencimiento_Derecho(derechoADesactivar.get().getFecha_Vencimiento_Derecho());
-            derechoADesactivar2.setNumero_Cuotas_Derecho(derechoADesactivar.get().getNumero_Cuotas_Derecho());
-            derechoADesactivar2.setValor_Cuota_Derecho(derechoADesactivar.get().getValor_Cuota_Derecho());
-            derechoADesactivar2.setCliente(derechoADesactivar.get().getCliente());
-        }
+
 
     }
 

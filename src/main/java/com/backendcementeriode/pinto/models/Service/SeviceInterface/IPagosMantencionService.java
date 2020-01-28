@@ -1,5 +1,6 @@
 package com.backendcementeriode.pinto.models.Service.SeviceInterface;
 
+import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 
 import java.util.List;
@@ -11,5 +12,6 @@ public interface IPagosMantencionService {
     PagosMantencion save(PagosMantencion pagosMantencion);
     Optional<PagosMantencion> findById(long id);
     List<PagosMantencion> cuotasPorIdClienteEnContrato(long id);
+
 
 }

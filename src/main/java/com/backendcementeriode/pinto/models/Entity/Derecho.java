@@ -30,7 +30,7 @@ public class Derecho {
     private boolean estadoDerecho;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    private Cliente cliente;
+    private Contrato contrato;
 
     private String medioPago_Derecho;
 
