@@ -118,6 +118,7 @@ public class ContratoController {
                 pagosDerecho.setDerecho(derecho);
                 pagosDerechoService.save(pagosDerecho);
 
+
             }
 
             /*CREAMOS LAS CUOTAS MANTENCION*/

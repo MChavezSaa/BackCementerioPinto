@@ -95,6 +95,56 @@ public class DifuntoController {
 
         return new ResponseEntity(difunto,HttpStatus.OK);
     }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value ="/updateDifunto/{id}")
+    public ResponseEntity<?> update(@RequestBody Difunto difunto, @PathVariable Long id) {
+        Difunto difuntoActual=difuntoService.findById(id);
+        Difunto difuntoUpdated=null;
+
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        if(difuntoActual==null) {
+            response.put("mensaje","No se pudo editar, el difunto con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+        try {
+
+            difuntoActual.setRut_Difunto(difunto.getRut_Difunto());
+            difuntoActual.setNombres_Difunto(difunto.getNombres_Difunto());
+            difuntoActual.setApellidoP_Difunto(difunto.getApellidoP_Difunto());
+            difuntoActual.setApellidoM_Difunto(difunto.getApellidoM_Difunto());
+            difuntoActual.setGenero_Difunto(difunto.getGenero_Difunto());
+            difuntoActual.setFecha_Nacimiento_Difunto(difunto.getFecha_Nacimiento_Difunto());
+            difuntoActual.setFecha_Defuncion(difunto.getFecha_Defuncion());
+            difuntoActual.setFecha_Inscripcion_Difunto(difunto.getFecha_Inscripcion_Difunto());
+            difuntoActual.setFecha_Entierro(difunto.getFecha_Entierro());
+            difuntoActual.setNombreC_Padre(difunto.getNombreC_Padre());
+            difuntoActual.setNombreC_Madre(difunto.getNombreC_Madre());
+
+            difuntoActual.setSacramento1(difunto.isSacramento1());
+            difuntoActual.setSacramento2(difunto.isSacramento2());
+            difuntoActual.setSacramento3(difunto.isSacramento3());
+            difuntoActual.setSacramento4(difunto.isSacramento4());
+
+            difuntoActual.setCertificado_Defuncion(difunto.isCertificado_Defuncion());
+            difuntoActual.setFotocopia_Carnet(difunto.isFotocopia_Carnet());
+
+
+            difuntoUpdated = difuntoService.save(difuntoActual);
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al actualizar el difunto en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","El difunto ha sido actualizado con éxito!");
+        response.put("difunto",difuntoUpdated);
+
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
+
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteDifunto/{id}",  method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
