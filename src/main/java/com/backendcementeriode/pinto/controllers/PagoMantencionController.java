@@ -74,43 +74,16 @@ public class PagoMantencionController {
         Map<String,Object> response =new HashMap<String, Object>();
 
         if(PagosActual==null) {
-            response.put("mensaje","No se pudo editar, el tipo de tumba con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            response.put("mensaje","No se pudo editar, el pago con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            PagosActual.setId_PagosMantencion(pagosMantencion.getId_PagosMantencion());
-            PagosActual.setCuotasMantencion(pagosMantencion.getCuotasMantencion());
             PagosActual.setEstadoCuota_Mantencion(true);
-            PagosActual.setFechaPago_Mantencion(pagosMantencion.getFechaPago_Mantencion());
-            /*manejo de la fecha de vencimiento*/
-            LocalDate fechaV = pagosMantencion.getFechaVencimiento_Mantencion();
-            Date d1 = convertToDateViaSqlDate(fechaV);
-            int dia = d1.getDay();
-            int mes = d1.getMonth();
-            int anio = fechaV.getYear();
-            if (mes == 12){
-                mes =1;
-                anio= anio+1;
-            }else{
-                mes = mes+1;
-            }
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = dia+"-"+mes+"-"+anio;
-            Date fechaV2 =sdf.parse(dateString);
-            LocalDate fechaV3 = convertToLocalDateViaInstant(fechaV2);
-            /*Fin manejo de fecha venciminento*/
-
-            PagosActual.setFechaVencimiento_Mantencion(fechaV3);
-            PagosActual.setValorCuota_Mantencion(pagosMantencion.getValorCuota_Mantencion());
             PagosUpdated= pagosMantencionService.save(PagosActual);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el pago en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-        }catch (ParseException i){
-            response.put("mensaje","Error al actualizar el pago en la base de datos");
-            response.put("error",i.getMessage().concat(": ").concat(i.getMessage()));
-
         }
 
 
@@ -154,7 +127,7 @@ public class PagoMantencionController {
     }
     /*------------------------------------*/
 
-    @PostMapping(value = "/pagarPM/{id}")
+    @PutMapping(value = "/pagarPM/{id}")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> pagarCuota(@PathVariable Long id) {
         PagosMantencion pagoPagado = pagosMantencionService.findById(id).get();

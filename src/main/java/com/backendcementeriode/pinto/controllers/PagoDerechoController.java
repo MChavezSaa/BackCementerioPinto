@@ -73,32 +73,15 @@ public class PagoDerechoController {
         Map<String,Object> response =new HashMap<String, Object>();
 
         if(pagosDerecho1==null) {
-            response.put("mensaje","No se pudo editar, el tipo de tumba con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            response.put("mensaje","No se pudo pagar la cuota con id: ".concat(id.toString().concat(" no existe en la base de datos")));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            pagosDerecho1.setId_PagosDerecho(pagosDerecho.getId_PagosDerecho());
-            pagosDerecho1.setDerecho(pagosDerecho.getDerecho());
             pagosDerecho1.setEstadoCuota_Derecho(true);
-            pagosDerecho1.setFechaPago_Derecho(pagosDerecho.getFechaPago_Derecho());
-            pagosDerecho1.setFechaVencimiento_Derecho(pagosDerecho.getFechaVencimiento_Derecho());
-            pagosDerecho1.setValorCuota_Derecho(pagosDerecho.getValorCuota_Derecho());
             PagosUpdated = pagosDerechoService.save(pagosDerecho1);
             List<PagosDerecho> pagosTotales = pagosDerechoService.findByDerecho(pagosDerecho.getDerecho().getId_Derecho());
-            for(int i =0; i<pagosTotales.size(); i++){
-                if (pagosTotales.get(i).isEstadoCuota_Derecho()== true) {
-                    //creamos nueva cuota
-                    crearNuevaCuota(pagosDerecho);
-                    break;
-                }else{
-                    break;
-                }
-            }
-        }catch (ParseException ex) {
-            response.put("mensaje","Error al actualizar el funcionario en la base de datos");
-            response.put("error",ex.getMessage().concat(": ").concat(ex.getMessage()));
-        }catch(DataAccessException e) {
-            response.put("mensaje","Error al actualizar el funcionario en la base de datos");
+        } catch(DataAccessException e) {
+            response.put("mensaje","Error al pagar la cuota");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
     }
