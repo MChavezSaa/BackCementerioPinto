@@ -154,7 +154,27 @@ public class PagoMantencionController {
     }
     /*------------------------------------*/
 
+    @PostMapping(value = "/pagarPM/{id}")
+    @ResponseStatus(value = CREATED)
+    public ResponseEntity<?> pagarCuota(@PathVariable Long id) {
+        PagosMantencion pagoPagado = pagosMantencionService.findById(id).get();
+        pagoPagado.setEstadoCuota_Mantencion(true);
+        PagosMantencion pagosMantencion1 = null;
+        Map<String, Object> response = new HashMap<String, Object>();
 
+        try {
+            pagosMantencion1 = this.pagosMantencionService.save(pagoPagado);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al realizar el insert en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El pago de mantención ha sido pagado con éxito!");
+        response.put("Pago de mantención", pagosMantencion1);
+
+        return new ResponseEntity<Map<String, Object>>(response, OK);
+    }
     public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
