@@ -36,7 +36,10 @@ public class ContratoServiceImpl implements IContratoService {
         return contratoDao.findById(id);
     }
 
-
+    @Transactional
+    public Contrato findById(long id) {
+        return contratoDao.findById(id).orElse(null);
+    }
 
 
 }

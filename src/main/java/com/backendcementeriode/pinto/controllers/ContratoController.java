@@ -173,7 +173,7 @@ public class ContratoController {
     @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateContrato/{id}")
     public ResponseEntity<?> update(@RequestBody Contrato contrato, @PathVariable Long id) {
-        Contrato contrato1=contratoService.findOne(id).get();
+        Contrato contrato1=contratoService.findById(id);
         Contrato contrato2=null;
 
         Map<String,Object> response =new HashMap<String, Object>();
@@ -183,15 +183,22 @@ public class ContratoController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            contrato1.setId_contrato(contrato.getId_contrato());
+           // contrato1.setId_contrato(contrato.getId_contrato());
             contrato1.setCementerio(contrato.getCementerio());
             contrato1.setTerreno(contrato.getTerreno());
             contrato1.setPatio(contrato.getPatio());
             contrato1.setTumba(contrato.getTumba());
             contrato1.setTipoTumba(contrato.getTipoTumba());
-           // contrato1.setDerecho(contrato.getDerecho());
             contrato1.setCliente(contrato.getCliente());
-           // contrato1.setPagosDerecho(contrato.getPagosDerecho());
+            contrato1.setFuncionario(contrato.getFuncionario());
+
+            contrato1.setFecha_Ingreso_Venta(contrato.getFecha_Ingreso_Venta());
+            contrato1.setFecha_Pago(contrato.getFecha_Pago());
+            contrato1.setMedio_Pago(contrato.getMedio_Pago());
+            contrato1.setValor_Terreno(contrato.getValor_Terreno());
+            contrato1.setPagoInicial(contrato.getPagoInicial());
+            contrato1.setN_Cuotas(contrato.getN_Cuotas());
+            contrato1.setVCuotas(contrato.getVCuotas());
 
             contrato2=contratoService.save(contrato1);
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
@@ -215,7 +222,7 @@ public class ContratoController {
         Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
 
         try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
-            contrato=contratoService.findOne(id).get();
+            contrato=contratoService.findById(id);
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

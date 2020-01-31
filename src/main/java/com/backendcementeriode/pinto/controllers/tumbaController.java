@@ -102,7 +102,6 @@ public class    tumbaController {
             tumba1.setPatio(tumba.getPatio());
             tumba1.setTipo_Tumba(tumba.getTipo_Tumba());
             tumba1.setValor_Tumba(tumba.getValor_Tumba());
-            tumba1.setTipo_Tumba(tumba.getTipo_Tumba());
             tumba2=tumbaService.save(tumba1);
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         }catch(DataAccessException e) {
