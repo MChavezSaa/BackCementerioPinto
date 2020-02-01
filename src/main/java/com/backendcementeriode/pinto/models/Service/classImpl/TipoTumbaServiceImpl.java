@@ -39,7 +39,7 @@ public class TipoTumbaServiceImpl implements ITipoTumbaService {
     }
 
     @Transactional
-    public Optional<TipoTumba> findById(long id) {
-        return tipoTumbaDao.findById(id);
+    public TipoTumba findById(long id) {
+        return tipoTumbaDao.findById(id).orElse(null);
     }
 }

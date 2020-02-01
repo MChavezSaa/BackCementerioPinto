@@ -12,5 +12,5 @@ public interface ITipoTumbaService {
     TipoTumba save(TipoTumba tipoTumba);
     void delete(TipoTumba tipoTumba);
     void deletebyID(long id);
-    Optional<TipoTumba> findById(long id);
+    TipoTumba findById(long id);
 }
