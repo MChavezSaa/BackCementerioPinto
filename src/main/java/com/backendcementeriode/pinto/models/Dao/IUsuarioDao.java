@@ -18,3 +18,7 @@ public interface IUsuarioDao extends CrudRepository<Usuario, Long> {
     void saveUsuario_Roles(@Param("usuario_id") Long usuario_id, @Param("role_id") Long id);
 
 }
+
+
+
+

@@ -61,6 +61,11 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
     }
 
     @Override
+    public Usuario findById(Long id) {
+        return usuarioDao.findById(id).get();
+    }
+
+    @Override
     @Transactional
     public void saveUsuario_Roles(Long id_User, Long id_Rol) {
         usuarioDao.saveUsuario_Roles(id_User, id_Rol);

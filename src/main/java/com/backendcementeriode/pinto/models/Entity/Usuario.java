@@ -21,6 +21,11 @@ public class Usuario implements Serializable {
     @Column(length = 60)
     private String password;
 
+    @Column(length = 60)
+    private String nombre;
+
+
+
     private boolean enable;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
