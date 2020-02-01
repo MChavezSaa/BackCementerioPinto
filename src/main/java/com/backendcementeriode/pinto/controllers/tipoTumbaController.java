@@ -1,7 +1,5 @@
 package com.backendcementeriode.pinto.controllers;
 
-
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.TipoTumba;
 import com.backendcementeriode.pinto.models.Service.classImpl.TipoTumbaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,7 @@ public class tipoTumbaController {
         Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
 
         try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
-            tipoTumba=tipoTumbaService.findById(id).get();
+            tipoTumba=tipoTumbaService.findById(id);
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -81,7 +79,7 @@ public class tipoTumbaController {
     @PutMapping(value = "/updateTipoTumba/{id}")
     @ResponseStatus(value = CREATED)
     public  ResponseEntity<?> update(@RequestBody TipoTumba tipoTumba, @PathVariable Long id){
-        TipoTumba tipoTumbaActual=tipoTumbaService.findById(id).get();
+        TipoTumba tipoTumbaActual=tipoTumbaService.findById(id);
         TipoTumba tipoTumbaUpdated=null;
 
         Map<String,Object> response =new HashMap<String, Object>();
@@ -108,5 +106,57 @@ public class tipoTumbaController {
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
     }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/DeleteTipoTumba/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        TipoTumba tipoT1 = tipoTumbaService.findById(id);
+        TipoTumba tipoT2 = null;
+
+        Map<String, Object> response = new HashMap<String, Object>();
+        try {
+            tipoT1.setEstado_tipo_tumba(false);
+            tipoT2= tipoTumbaService.save(tipoT1);
+
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al deshabilitar el tipo de tumba de la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El tipo de tumba fue deshabilitado con éxito!");
+        response.put("Tipo de Tumba: ", tipoT2);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value ="/CambiaEstadoTipoTumba/{id}")
+    public ResponseEntity<?> darAlta(@RequestBody TipoTumba tipoTumba, @PathVariable Long id) {
+        TipoTumba tipoA= tipoTumbaService.findById(id);
+        tipoA.setEstado_tipo_tumba(true);
+        TipoTumba tipoUpdate=null;
+
+        Map<String,Object> response =new HashMap<String, Object>();
+
+        if(tipoA==null) {
+            response.put("mensaje","No se pudo cambiar el estado del Tipo de tumba con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+        try {
+            tipoUpdate= tipoTumbaService.save(tipoA);
+        }catch(DataAccessException e) {
+            response.put("mensaje","Error al cambiar el estado del tipo de tumba en la base de datos");
+            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje","El tipo de tumba ha cambiado de estado con éxito!");
+        response.put("Tipo de Tumba: ",tipoUpdate);
+
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+    }
+
 
 }

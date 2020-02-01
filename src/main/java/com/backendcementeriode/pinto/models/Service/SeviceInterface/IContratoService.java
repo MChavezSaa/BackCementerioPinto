@@ -11,5 +11,5 @@ public interface IContratoService {
     List<Contrato> findAll();
     Contrato save(Contrato contrato);
     Optional<Contrato> findOne(long id);
-
+    Contrato findById(long id);
 }
