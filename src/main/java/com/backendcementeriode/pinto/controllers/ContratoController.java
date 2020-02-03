@@ -13,10 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -46,7 +43,7 @@ public class ContratoController {
     ////-------------- Listar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/listContratos", method = RequestMethod.GET)
-    public List<Contrato> findAll(){
+    public List<Contrato> findAll() {
         List<Contrato> all = contratoService.findAll();
         return all;
     }
@@ -56,26 +53,74 @@ public class ContratoController {
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveContrato")
     @ResponseStatus(value = CREATED)
-    public ResponseEntity<?> create(@RequestBody Contrato contrato){
+    public ResponseEntity<?> create(@RequestBody Contrato contrato) {
         //seteamos el valor de la cuota
         float nC = contrato.getN_Cuotas();
         float vT = contrato.getValor_Terreno();
         float pie = contrato.getPagoInicial();
-        float valCuota = (vT-pie)/nC;
+        float valCuota = (vT - pie) / nC;
         contrato.setVCuotas(valCuota);
 
-        Contrato contrato1= null;
-        Map<String,Object> response =new HashMap<String, Object>();
+        Contrato contrato1 = null;
+        Map<String, Object> response = new HashMap<String, Object>();
+
 
         try {
-            contrato1= contratoService.save(contrato);
+            if (contrato.getTipoTumba().getNombretipo_tumba().equalsIgnoreCase("Doble")) {
+                String tumba[] = contrato.getTumba().split("-");
+                Tumba tumba1 = tumbaService.findById(Integer.parseInt(tumba[0]));
+                Tumba tumba2 = tumbaService.findById(Integer.parseInt(tumba[1]));
+                tumba1.setAncho(3.4F);
+                tumba1.setLargo(5.0F);
+                tumba1.setEstado_Tumba("Reservado");
+
+
+                tumba2.setAncho(3.4F);
+                tumba2.setLargo(5.0F);
+                tumba2.setEstado_Tumba("Reservado");
+
+
+                tumbaService.save(tumba1);
+                tumbaService.save(tumba2);
+
+            } else {
+                if (contrato.getTipoTumba().getNombretipo_tumba().equalsIgnoreCase("Simple") ) {
+                    Tumba tumba1 = tumbaService.findById(Long.parseLong(contrato.getTumba()));
+                    tumba1.setAncho(1.7F);
+                    tumba1.setLargo(2.5F);
+                    tumba1.setEstado_Tumba("Reservado");
+                    tumbaService.save(tumba1);
+
+
+                } else {
+                    if (contrato.getTipoTumba().getNombretipo_tumba().equalsIgnoreCase("Nicho")) {
+                        Tumba tumba1 = tumbaService.findById(Long.parseLong(contrato.getTumba()));
+                        tumba1.setAncho(0.9F);
+                        tumba1.setLargo(2.7F);
+                        tumba1.setEstado_Tumba("Reservado");
+                        tumbaService.save(tumba1);
+
+
+                    } else {
+                        if (contrato.getTipoTumba().getNombretipo_tumba().equalsIgnoreCase("Mausoleos")) {
+                            Tumba tumba1 = tumbaService.findById(Long.parseLong(contrato.getTumba()));
+                            tumba1.setAncho(4F);
+                            tumba1.setLargo(3F);
+                            tumba1.setEstado_Tumba("Reservado");
+                            tumbaService.save(tumba1);
+
+                        }
+                    }
+                }
+            }
+            contrato1 = contratoService.save(contrato);
             /*CREAMOS DERECHO*/
             Derecho derecho = new Derecho();
             derecho.setFecha_Inscripcion_Derecho(contrato.getFecha_Ingreso_Venta());
             derecho.setFecha_Pago_Derecho(contrato.getFecha_Pago());
             derecho.setFecha_Vencimiento_Derecho(crearFechaVencimientoDerecho(contrato.getFecha_Ingreso_Venta()));
             derecho.setValor_Cuota_Derecho(contrato.getVCuotas());
-            derecho.setNumero_Cuotas_Derecho((int)nC);
+            derecho.setNumero_Cuotas_Derecho((int) nC);
             derecho.setEstadoDerecho(true);
             derecho.setContrato(contrato);
             derecho.setMedioPago_Derecho(contrato.getMedio_Pago());
@@ -100,12 +145,12 @@ public class ContratoController {
             contratov2Service.save(c2);
 
             /*CREAMOS REGISTRO PARA PAGOS DE DERECHO*/
-            for (int i = 0; i <(int)nC ; i++) {
+            for (int i = 0; i < (int) nC; i++) {
                 PagosDerecho pagosDerecho = new PagosDerecho();
                 //fecha de pago derecho alusion a cuando pago la persona.
                 pagosDerecho.setFechaPago_Derecho(null);
                 //fecha estimada de pago
-                pagosDerecho.setFechaVencimiento_Derecho(fechaVencimientoPD(i+1,
+                pagosDerecho.setFechaVencimiento_Derecho(fechaVencimientoPD(i + 1,
                         contrato.getFecha_Pago()));
                 //valor de la cuota del derecho viene del calculo anterior
                 pagosDerecho.setValorCuota_Derecho(derecho.getValor_Cuota_Derecho());
@@ -130,17 +175,17 @@ public class ContratoController {
             cuotasMantencionService.save(cuotasMantencion);
 
             /*CREAMOS LOS REGISTROS PARA LOS PAGOS DE CM*/
-            for (int i = 0; i <12 ; i++) {
+            for (int i = 0; i < 12; i++) {
 
-               // Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                // Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
                 PagosMantencion pagosMantencion = new PagosMantencion();
                 //inicia null por que no se ha pagado
                 pagosMantencion.setFechaPago_Mantencion(null);
                 //fecha estimada de pago de mantencion (mes+1)
                 pagosMantencion.setFechaVencimiento_Mantencion(
-                        fechaVencimientoPD(i+1,
-                        contrato.getFecha_Ingreso_Venta()));
+                        fechaVencimientoPD(i + 1,
+                                contrato.getFecha_Ingreso_Venta()));
                 pagosMantencion.setValorCuota_Mantencion(500);
                 //false no pago true pago...
                 pagosMantencion.setEstadoCuota_Mantencion(false);
@@ -149,41 +194,36 @@ public class ContratoController {
                 pagosMantencionService.save(pagosMantencion);
 
             }
-            //creamos arregluchox
-            Tumba tumba = contrato.getTumba();
-            tumba.setEstado_Tumba("Reservado");
-            tumba.setTipo_Tumba(contrato.getTipoTumba());
-            tumbaService.save(tumba);
 
 
-        }catch(DataAccessException | ParseException e) {
-            response.put("mensaje","Error al realizar el insert en la base de datos");
-            response.put("error",e.getMessage().concat(": ").concat(e.getCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response, INTERNAL_SERVER_ERROR);
+        } catch (DataAccessException | ParseException e) {
+            response.put("mensaje", "Error al realizar el insert en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
         }
 
-        response.put("mensaje","El contrato ha sido creado con éxito!");
-        response.put("Contrato",contrato1);
+        response.put("mensaje", "El contrato ha sido creado con éxito!");
+        response.put("Contrato", contrato1);
 
-        return new ResponseEntity<Map<String,Object>>(response, OK);
+        return new ResponseEntity<Map<String, Object>>(response, OK);
 
     }
 
 
     @Secured("ROLE_ADMIN")
-    @PutMapping(value ="/updateContrato/{id}")
+    @PutMapping(value = "/updateContrato/{id}")
     public ResponseEntity<?> update(@RequestBody Contrato contrato, @PathVariable Long id) {
-        Contrato contrato1=contratoService.findById(id);
-        Contrato contrato2=null;
+        Contrato contrato1 = contratoService.findById(id);
+        Contrato contrato2 = null;
 
-        Map<String,Object> response =new HashMap<String, Object>();
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        if(contrato1==null) {
-            response.put("mensaje","No se pudo editar, el contrato con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
-            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        if (contrato1 == null) {
+            response.put("mensaje", "No se pudo editar, el contrato con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-           // contrato1.setId_contrato(contrato.getId_contrato());
+            // contrato1.setId_contrato(contrato.getId_contrato());
             contrato1.setCementerio(contrato.getCementerio());
             contrato1.setTerreno(contrato.getTerreno());
             contrato1.setPatio(contrato.getPatio());
@@ -200,41 +240,41 @@ public class ContratoController {
             contrato1.setN_Cuotas(contrato.getN_Cuotas());
             contrato1.setVCuotas(contrato.getVCuotas());
 
-            contrato2=contratoService.save(contrato1);
+            contrato2 = contratoService.save(contrato1);
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
-        }catch(DataAccessException e) {
-            response.put("mensaje","Error al actualizar el contrato en la base de datos");
-            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al actualizar el contrato en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("mensaje","La contrato ha sido actualizado con éxito!");
-        response.put("Contrato",contrato2);
+        response.put("mensaje", "La contrato ha sido actualizado con éxito!");
+        response.put("Contrato", contrato2);
 
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
 
     @Secured({"ROLE_ADMIN"})
     @GetMapping("/findContrato/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
-        Contrato contrato=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Contrato contrato = null;
+        Map<String, Object> response = new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
 
         try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
-            contrato=contratoService.findById(id);
-        }catch(DataAccessException e){
-            response.put("mensaje","Error al realizar la consulta en la base de datos");
-            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            contrato = contratoService.findById(id);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al realizar la consulta en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
         }
 
-        if(contrato==null) {
-            response.put("mensaje","El contrato con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        if (contrato == null) {
+            response.put("mensaje", "El contrato con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity(contrato,HttpStatus.OK);
+        return new ResponseEntity(contrato, HttpStatus.OK);
     }
 
 
@@ -244,16 +284,16 @@ public class ContratoController {
         int mes = d1.getMonth();
         int anio = fecha.getYear();
 
-        if(mes+numeroCuota < 13){
-            if(mes+numeroCuota == 12){
-                mes= mes+numeroCuota;
-                anio=anio+1;
+        if (mes + numeroCuota < 13) {
+            if (mes + numeroCuota == 12) {
+                mes = mes + numeroCuota;
+                anio = anio + 1;
                 SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
-                String dateString3 = anio+"-"+mes+"-"+dia;
+                String dateString3 = anio + "-" + mes + "-" + dia;
                 Date fechaVencimientoCM3 = sdf3.parse(dateString3);
                 LocalDate fecha1 = convertToLocalDateViaInstant(fechaVencimientoCM3);
                 return fecha1;
-            }else {
+            } else {
                 mes = mes + 1;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String dateString = anio + "-" + mes + "-" + dia;
@@ -261,12 +301,12 @@ public class ContratoController {
                 LocalDate fecha2 = convertToLocalDateViaInstant(fechaVencimientoCM);
                 return fecha2;
             }
-        }else{
-            int aux = (mes+numeroCuota)-12;
+        } else {
+            int aux = (mes + numeroCuota) - 12;
             mes = aux;
-            anio = anio+1;
+            anio = anio + 1;
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString2 = anio+"-"+mes+"-"+dia;
+            String dateString2 = anio + "-" + mes + "-" + dia;
             Date fechaVencimientoCM2 = sdf2.parse(dateString2);
             LocalDate fecha3 = convertToLocalDateViaInstant(fechaVencimientoCM2);
             return fecha3;
@@ -279,15 +319,15 @@ public class ContratoController {
         int dia = d1.getDay();
         int mes = d1.getMonth();
         int anio = fechaIngreso.getYear();
-        if (mes == 12){
-            mes =1;
-            anio= anio+1;
-        }else{
-            mes = mes+1;
+        if (mes == 12) {
+            mes = 1;
+            anio = anio + 1;
+        } else {
+            mes = mes + 1;
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = anio+"-"+mes+"-"+dia;
+        String dateString = anio + "-" + mes + "-" + dia;
         Date fechaVencimientoCM = sdf.parse(dateString);
         LocalDate fecha1 = convertToLocalDateViaInstant(fechaVencimientoCM);
         return fecha1;
@@ -300,15 +340,15 @@ public class ContratoController {
         int dia = d1.getDay();
         int mes = d1.getMonth();
         int anio = fechaIngreso.getYear();
-        if (mes == 12){
-            mes =1;
-            anio = anio+20;
-        }else{
-            mes = mes+1;
+        if (mes == 12) {
+            mes = 1;
+            anio = anio + 20;
+        } else {
+            mes = mes + 1;
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = anio+"-"+mes+"-"+dia;
+        String dateString = anio + "-" + mes + "-" + dia;
         Date fechaVencimientoCM = sdf.parse(dateString);
         LocalDate fecha1 = convertToLocalDateViaInstant(fechaVencimientoCM);
         return fecha1;
@@ -319,6 +359,7 @@ public class ContratoController {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
+
     public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
         return java.sql.Date.valueOf(dateToConvert);
     }

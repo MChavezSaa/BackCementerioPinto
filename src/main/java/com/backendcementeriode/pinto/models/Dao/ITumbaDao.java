@@ -17,4 +17,5 @@ public interface ITumbaDao extends JpaRepository<Tumba, Long> {
     @Query("select t from Tumba t where t.estado_Tumba= 'Reservado' ")
     public List<Tumba> findReservadotumbs();
 
+
 }

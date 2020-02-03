@@ -4,21 +4,20 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.ElementCollection;
 
 @Data
 @Entity
 @Table(name = "contratov2")
 public class contratov2 {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_contrato2;
-    //atributos para armar contrato, pago derecho y pago mantencion
-
-
 
     private LocalDate fecha_Ingreso_Venta;
-
-
 
     private LocalDate fecha_Pago;
 
@@ -49,9 +48,16 @@ public class contratov2 {
             name = "id_Patio", referencedColumnName = "id_Patio")
     private Patio patio;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Tumba"))
-    private Tumba tumba;
+
+  /*
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(foreignKey = @ForeignKey(name = "id_Tumba"),
+            name = "id_Tumba", referencedColumnName = "id_Tumba")
+    private List<Tumba> tumba;
+  */
+
+
+    private String tumba ;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_TipoTumba"))

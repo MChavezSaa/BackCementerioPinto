@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -53,10 +55,15 @@ public class Contrato implements Serializable {
             name = "id_Patio", referencedColumnName = "id_Patio")
     private Patio patio;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+   /*
+   *  @ManyToMany(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Tumba"),
             name = "id_Tumba", referencedColumnName = "id_Tumba")
-    private Tumba tumba;
+    private List<Tumba> tumba;
+   * */
+
+
+    private String tumba ;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_TipoTumba"),

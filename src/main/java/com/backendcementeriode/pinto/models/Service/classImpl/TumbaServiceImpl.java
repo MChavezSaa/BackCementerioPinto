@@ -35,7 +35,7 @@ public class TumbaServiceImpl implements ITumbaService {
 
     @Transactional
     public Tumba findById(long id) {
-        return tumbaDao.findById(id).orElse(null);
+        return tumbaDao.findById(id).get();
     }
 
     @Transactional
