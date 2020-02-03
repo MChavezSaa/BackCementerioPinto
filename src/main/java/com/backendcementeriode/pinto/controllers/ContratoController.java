@@ -224,24 +224,11 @@ public class ContratoController {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            // contrato1.setId_contrato(contrato.getId_contrato());
-            contrato1.setCementerio(contrato.getCementerio());
-            contrato1.setTerreno(contrato.getTerreno());
-            contrato1.setPatio(contrato.getPatio());
-            contrato1.setTumba(contrato.getTumba());
-            contrato1.setTipoTumba(contrato.getTipoTumba());
-            contrato1.setCliente(contrato.getCliente());
-            contrato1.setFuncionario(contrato.getFuncionario());
-
-            contrato1.setFecha_Ingreso_Venta(contrato.getFecha_Ingreso_Venta());
             contrato1.setFecha_Pago(contrato.getFecha_Pago());
+            contrato1.setCliente(contrato.getCliente());
             contrato1.setMedio_Pago(contrato.getMedio_Pago());
-            contrato1.setValor_Terreno(contrato.getValor_Terreno());
-            contrato1.setPagoInicial(contrato.getPagoInicial());
-            contrato1.setN_Cuotas(contrato.getN_Cuotas());
-            contrato1.setVCuotas(contrato.getVCuotas());
-
             contrato2 = contratoService.save(contrato1);
+
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al actualizar el contrato en la base de datos");
