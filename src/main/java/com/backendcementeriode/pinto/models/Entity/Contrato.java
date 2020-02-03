@@ -39,6 +39,8 @@ public class Contrato implements Serializable {
 
     private float VCuotas;
 
+    private boolean estado_Contrato;
+
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Cementerio"),

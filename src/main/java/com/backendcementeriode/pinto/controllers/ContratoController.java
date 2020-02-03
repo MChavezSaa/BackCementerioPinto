@@ -55,6 +55,7 @@ public class ContratoController {
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Contrato contrato) {
         //seteamos el valor de la cuota
+        contrato.setEstado_Contrato(true);
         float nC = contrato.getN_Cuotas();
         float vT = contrato.getValor_Terreno();
         float pie = contrato.getPagoInicial();
@@ -275,6 +276,58 @@ public class ContratoController {
         }
 
         return new ResponseEntity(contrato, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/DeleteContrato/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Contrato contratoB = contratoService.findById(id);
+        Contrato contrato2 = null;
+
+        Map<String, Object> response = new HashMap<String, Object>();
+        try {
+            contratoB.setEstado_Contrato(false);
+            contrato2= contratoService.save(contratoB);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al deshabilitar el contrato de la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El contrato fue deshabilitado con éxito!");
+        response.put("Contrato: ", contrato2);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+
+    }
+
+
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value = "/CambiarEstadoContrato/{id}")
+    public ResponseEntity<?> darAlta(@RequestBody Contrato contrato, @PathVariable Long id) {
+        Contrato contratoActual = contratoService.findById(id);
+        contratoActual.setEstado_Contrato(true);
+        Contrato contratoUpdate = null;
+
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        if (contratoActual == null) {
+            response.put("mensaje", "No se pudo cambiar el estado del contrato con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+        }
+        try {
+            contratoUpdate = contratoService.save(contratoActual);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al cambiar el estado del contrato en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El contrato ha cambiado su estado con éxito!");
+        response.put("Contrato", contratoUpdate);
+
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+
     }
 
 

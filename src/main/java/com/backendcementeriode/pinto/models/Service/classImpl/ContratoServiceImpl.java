@@ -41,5 +41,18 @@ public class ContratoServiceImpl implements IContratoService {
         return contratoDao.findById(id).orElse(null);
     }
 
+    @Transactional
+    public void delete(Contrato contrato) {
+        contrato.setEstado_Contrato(false);
+        contratoDao.save(contrato);
+    }
+
+    @Transactional
+    public void deletebyID(long id) {
+        Contrato contratoBuscado = contratoDao.findById(id).get();
+        contratoBuscado.setEstado_Contrato(false);
+        contratoDao.save(contratoBuscado);
+    }
+
 
 }
