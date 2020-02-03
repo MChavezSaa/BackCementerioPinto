@@ -17,6 +17,7 @@ public class Tumba {
     private String orientacion_Tumba;
     private float largo;
     private float ancho;
+    private int nivel;
 
     /*
     * @ManyToOne(cascade = CascadeType.MERGE)
