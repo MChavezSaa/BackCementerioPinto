@@ -22,6 +22,9 @@ public class Tumba_Difunto {
     @JoinColumn(name = "id_Tumba")
     Tumba tumba;
 
+    @ManyToOne
+    @JoinColumn(name = "id_Contrato")
+    Contrato contrato;
 
     private Date fecha_Entierro_TD;
 
