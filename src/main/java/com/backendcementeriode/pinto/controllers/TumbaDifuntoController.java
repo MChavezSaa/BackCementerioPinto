@@ -1,8 +1,10 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.Terreno;
+import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Entity.Tumba_Difunto;
 import com.backendcementeriode.pinto.models.Service.classImpl.TumbaDifuntoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.TumbaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,9 @@ public class TumbaDifuntoController {
 
     @Autowired
     private TumbaDifuntoServiceImpl tumbaDifuntoService;
+
+    @Autowired
+    private TumbaServiceImpl tumbaService;
 
     @RequestMapping(value = "/listTumbaDifunto", method = RequestMethod.GET)
     public List<Tumba_Difunto> findAll() {
@@ -59,7 +64,11 @@ public class TumbaDifuntoController {
         Map<String, Object> response = new HashMap<String, Object>();
 
         try {
+            Tumba tumba = tumbaDifunto.getTumba();
+            tumba.setEstado_Tumba("Ocupado");
+            tumbaService.save(tumba);
             tumbaDifunto1 = tumbaDifuntoService.save(tumbaDifunto);
+
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar el insert en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
