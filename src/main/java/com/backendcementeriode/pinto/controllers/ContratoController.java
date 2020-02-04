@@ -275,6 +275,20 @@ public class ContratoController {
         try {
             contratoB.setEstado_Contrato(false);
             contrato2= contratoService.save(contratoB);
+            if(contratoB.getTipoTumba().getNombretipo_tumba().equalsIgnoreCase("Doble")){
+                String tumbas[] = contratoB.getTumba().split("-");
+                Tumba tumba1 = tumbaService.findById(Long.parseLong(tumbas[0]));
+                Tumba tumba2 = tumbaService.findById(Long.parseLong(tumbas[1]));
+                tumba1.setEstado_Tumba("Disponible");
+                tumba2.setEstado_Tumba("Disponible");
+
+                tumbaService.save(tumba1);
+                tumbaService.save(tumba2);
+            }else{
+                Tumba tumba = tumbaService.findById(Long.parseLong(contratoB.getTumba()));
+                tumba.setEstado_Tumba("Disponible");
+                tumbaService.save(tumba);
+            }
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al deshabilitar el contrato de la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
