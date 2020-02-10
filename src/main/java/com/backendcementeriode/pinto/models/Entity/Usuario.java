@@ -18,7 +18,7 @@ public class Usuario implements Serializable {
     @Column(unique = true, length = 20)
     private String username;
 
-    @Column(length = 60)
+
     private String password;
 
     @Column(length = 60)
@@ -31,11 +31,11 @@ public class Usuario implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"),
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","role_id"})})
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id", "role_id"})})
     private List<Role> roles;
 
 
-    private static final long serialVersionUID =1L;
+    private static final long serialVersionUID = 1L;
 
 
 }

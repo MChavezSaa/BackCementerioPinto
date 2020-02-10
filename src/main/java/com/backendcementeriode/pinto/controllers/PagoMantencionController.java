@@ -2,10 +2,10 @@ package com.backendcementeriode.pinto.controllers;
 
 
 import com.backendcementeriode.pinto.models.Entity.Contrato;
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
+import com.backendcementeriode.pinto.models.Entity.CuotasMantencion;
 import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
-import com.backendcementeriode.pinto.models.Entity.TipoTumba;
 import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.CuotasMantencionServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosMantencionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -14,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.HttpStatus.CREATED;
 
 
 @CrossOrigin(value = "http://localhost:4200")
@@ -36,6 +32,8 @@ public class PagoMantencionController {
     public PagosMantencionServiceImpl pagosMantencionService;
     @Autowired
     public ContratoServiceImpl contratoService;
+    @Autowired
+    public CuotasMantencionServiceImpl cuotasMantencionService;
 
     @RequestMapping(value = "/listPagosMantencion", method = RequestMethod.GET )
     public List<PagosMantencion> findAll() {
@@ -78,7 +76,13 @@ public class PagoMantencionController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
+            if(pagosMantencion.getId_PagosMantencion()%12 ==0){
+                CuotasMantencion cuotasMantencion = pagosMantencion.getCuotasMantencion();
+                cuotasMantencion.setEstadoCM(true);
+                cuotasMantencionService.save(cuotasMantencion);
+            }
             PagosActual.setEstadoCuota_Mantencion(true);
+            PagosActual.setFechaPago_Mantencion(LocalDate.now());
             PagosUpdated= pagosMantencionService.save(PagosActual);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el pago en la base de datos");

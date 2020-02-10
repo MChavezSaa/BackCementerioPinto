@@ -41,6 +41,9 @@ public class Contrato implements Serializable {
 
     private boolean estado_Contrato;
 
+    @Column(name = "perpetuidad")
+    private int perpetuidad;
+
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "id_Cementerio"),

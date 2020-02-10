@@ -1,7 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Usuario;
-import com.backendcementeriode.pinto.models.Entity.cambioPass;
+import com.backendcementeriode.pinto.models.Entity.*;
+import com.backendcementeriode.pinto.models.Service.classImpl.RoleServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -12,7 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -23,39 +26,34 @@ public class UsuarioController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Secured({"ROLE_ADMIN"})
-    @PutMapping("/cambioPass/{id}")
-    public ResponseEntity<?> cambiarPass(@RequestBody cambioPass cambioPass, @PathVariable Long id) {
-        Usuario user2 = usuarioService.findById(id);
+    @Autowired
+    private RoleServiceImpl roleService;
+
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value = "/cambioPass")
+    @ResponseStatus(value = CREATED)
+    public ResponseEntity<?> create(@RequestBody Usuario user) {
+
+        Usuario user1 = null;
         Map<String, Object> response = new HashMap<String, Object>();
 
         try {
-            if (passwordEncoder.matches(cambioPass.getAntigua(), user2.getPassword()) ){
-                user2.setPassword(passwordEncoder.encode(cambioPass.getNueva()));
-                updateuser(user2);
-            }
+            Usuario user2 = user;
 
-
+            user1 = usuarioService.save(user2);
         } catch (DataAccessException e) {
-            response.put("mensaje", "Error al actualizar contraseña");
+            response.put("mensaje", "Error al realizar el insert en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
         }
 
+        response.put("mensaje", "El usuario ha sido actualizado con éxito!");
+        response.put("Usuario", user1);
 
-        response.put("mensaje", "El funcionario ha sido actualizado con éxito!");
-        response.put("funcionario", response);
-
-        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-
-
-    }
-    public void updateuser(Usuario user){
-        usuarioService.save(user);
+        return new ResponseEntity<Map<String, Object>>(response, OK);
     }
 
 
 
 }
-
-

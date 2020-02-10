@@ -67,6 +67,7 @@ public class ContratoController {
 
 
         try {
+            contrato.setPerpetuidad(20);
             if (contrato.getTipoTumba().getNombretipo_tumba().equalsIgnoreCase("Doble")) {
                 String tumba[] = contrato.getTumba().split("-");
                 Tumba tumba1 = tumbaService.findById(Integer.parseInt(tumba[0]));
@@ -366,7 +367,6 @@ public class ContratoController {
             return fecha3;
         }
     }
-
 
     private LocalDate crearFechaVencimientoCM(LocalDate fechaIngreso) throws ParseException {
         Date d1 = convertToDateViaSqlDate(fechaIngreso);

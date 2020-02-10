@@ -56,8 +56,8 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
 
     @Override
     @Transactional
-    public void save(Usuario us) {
-        usuarioDao.save(us);
+    public Usuario save(Usuario us) {
+        return usuarioDao.save(us);
     }
 
     @Override

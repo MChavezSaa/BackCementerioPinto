@@ -28,4 +28,6 @@ public class CuotasMantencion {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_Contrato")
     private Contrato contrato;
+
+    private boolean estadoCM;
 }
