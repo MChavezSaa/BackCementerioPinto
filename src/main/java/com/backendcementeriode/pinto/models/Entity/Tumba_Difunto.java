@@ -3,11 +3,11 @@ package com.backendcementeriode.pinto.models.Entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
-@Entity
-@Table(name = "Tumba_Difunto")
+@Entity(name = "Tumba_Difunto")
 public class Tumba_Difunto {
 
     @Id
@@ -24,6 +24,6 @@ public class Tumba_Difunto {
     @JoinColumn(name = "id_Contrato")
     Contrato contrato;
 
-    private Date fecha_Entierro_TD;
+    private LocalDate fecha_Entierro_TD;
 
 }

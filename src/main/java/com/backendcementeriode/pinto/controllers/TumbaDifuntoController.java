@@ -18,6 +18,8 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
 public class TumbaDifuntoController {
 
 
@@ -34,31 +36,29 @@ public class TumbaDifuntoController {
     }
 
     @Secured({"ROLE_ADMIN"})
-    @GetMapping("/findTerreno/{id}")
+    @GetMapping("/findTumbaDifunto/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
-        Tumba_Difunto tumbaDifunto=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Tumba_Difunto tumbaDifunto = null;
+        Map<String, Object> response = new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
 
         try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
-            tumbaDifunto= tumbaDifuntoService.findOne(id).get();
-        }catch(DataAccessException e){
-            response.put("mensaje","Error al realizar la consulta en la base de datos");
-            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            tumbaDifunto = tumbaDifuntoService.findOne(id).get();
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al realizar la consulta en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
         }
 
-        if(tumbaDifunto==null) {
-            response.put("mensaje","El registro con ID: ".concat(id.toString().concat(" no existe en la base de datos")));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        if (tumbaDifunto == null) {
+            response.put("mensaje", "El registro con ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity(tumbaDifunto,HttpStatus.OK);
+        return new ResponseEntity(tumbaDifunto, HttpStatus.OK);
     }
 
 
-    @Secured("ROLE_ADMIN")
-    @PostMapping(value = "/saveTumbaDifunto")
-    @ResponseStatus(value = CREATED)
+    @RequestMapping(value = "/saveTumbaDifunto", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Tumba_Difunto tumbaDifunto) {
         Tumba_Difunto tumbaDifunto1 = null;
         Map<String, Object> response = new HashMap<String, Object>();
@@ -78,21 +78,21 @@ public class TumbaDifuntoController {
         response.put("mensaje", "El registro ha sido creado con éxito!");
         response.put("Registro", tumbaDifunto1);
 
-        return new ResponseEntity<Map<String, Object>>(response, OK);
+        return new ResponseEntity<Map<String, Object>>(response, CREATED);
     }
 
 
     @Secured("ROLE_ADMIN")
-    @PutMapping(value ="/updateTumbaDifunto/{id}")
+    @PutMapping(value = "/updateTumbaDifunto/{id}")
     public ResponseEntity<?> update(@RequestBody Tumba_Difunto tumbaDifunto, @PathVariable Long id) {
-        Tumba_Difunto tumbaDifunto1= tumbaDifuntoService.findOne(id).get();
-        Tumba_Difunto tumbaDifunto2=null;
+        Tumba_Difunto tumbaDifunto1 = tumbaDifuntoService.findOne(id).get();
+        Tumba_Difunto tumbaDifunto2 = null;
 
-        Map<String,Object> response =new HashMap<String, Object>();
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        if(tumbaDifunto1==null) {
-            response.put("mensaje","No se pudo editar, el registro con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
-            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        if (tumbaDifunto1 == null) {
+            response.put("mensaje", "No se pudo editar, el registro con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
             //tumbaDifunto1.setId_Cementerio(tumbaDifunto.getId_Cementerio());
@@ -101,21 +101,20 @@ public class TumbaDifuntoController {
             tumbaDifunto1.setFecha_Entierro_TD(tumbaDifunto.getFecha_Entierro_TD());
             //tumbaDifunto1.setEstado_Patio(tumbaDifunto.isEstado_Patio());
 
-            tumbaDifunto2= tumbaDifuntoService.save(tumbaDifunto1);
+            tumbaDifunto2 = tumbaDifuntoService.save(tumbaDifunto1);
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
-        }catch(DataAccessException e) {
-            response.put("mensaje","Error al actualizar el registro en la base de datos");
-            response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al actualizar el registro en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("mensaje","El registro ha sido actualizado con éxito!");
-        response.put("tumbaDifunto",tumbaDifunto2);
+        response.put("mensaje", "El registro ha sido actualizado con éxito!");
+        response.put("tumbaDifunto", tumbaDifunto2);
 
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
-
 
 
 }

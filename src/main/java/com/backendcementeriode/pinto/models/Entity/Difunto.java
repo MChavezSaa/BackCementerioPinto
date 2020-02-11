@@ -45,7 +45,4 @@ public class Difunto {
     private boolean fotocopia_Carnet;
 
     private String estadoDifunto;
-
-    @OneToMany(mappedBy = "difunto")
-    Set<Tumba_Difunto> tumba_difunto;
 }
