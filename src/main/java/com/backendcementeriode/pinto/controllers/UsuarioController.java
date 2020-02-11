@@ -26,34 +26,35 @@ public class UsuarioController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private RoleServiceImpl roleService;
-
 
     @Secured("ROLE_ADMIN")
     @PutMapping(value = "/cambioPass")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Usuario user) {
-
-        Usuario user1 = null;
         Map<String, Object> response = new HashMap<String, Object>();
-
+        //traemos usuario antiguo para cambiar password
+        Usuario userBDD = usuarioService.findById(user.getId_Usuario());
         try {
-            Usuario user2 = user;
-
-            user1 = usuarioService.save(user2);
+            /*verificar igualdad de password antigua(guardada en BDD) y la antigua pasada por el front*/
+            if (passwordEncoder.matches(user.getPassword(), userBDD.getPassword())) {
+                userBDD.setPassword(passwordEncoder.encode(user.getPassword()));
+                usuarioService.save(userBDD);
+            }
         } catch (DataAccessException e) {
-            response.put("mensaje", "Error al realizar el insert en la base de datos");
+
+            response.put("mensaje", "Error al actualizar contraseña");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
+
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
 
-        response.put("mensaje", "El usuario ha sido actualizado con éxito!");
-        response.put("Usuario", user1);
+        response.put("mensaje", "El funcionario ha sido actualizado con éxito!");
+        response.put("funcionario", response);
 
-        return new ResponseEntity<Map<String, Object>>(response, OK);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+
     }
-
 
 
 }
