@@ -48,6 +48,13 @@ public class ContratoController {
         return all;
     }
 
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/ListDistinct", method = RequestMethod.GET)
+    public List<Object> findDistinct() {
+        List<Object> all = contratoService.distincCliente();
+        return all;
+    }
+
 
     ////-------------- Guardar contrato ---------------------////
     @Secured("ROLE_ADMIN")

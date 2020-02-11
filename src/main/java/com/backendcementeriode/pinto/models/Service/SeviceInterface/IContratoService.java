@@ -12,4 +12,5 @@ public interface IContratoService {
     Contrato findById(long id);
     void delete(Contrato contrato);
     void deletebyID(long id);
+    List<Object>distincCliente();
 }

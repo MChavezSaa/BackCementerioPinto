@@ -54,5 +54,10 @@ public class ContratoServiceImpl implements IContratoService {
         contratoDao.save(contratoBuscado);
     }
 
+    @Override
+    public List<Object> distincCliente() {
+        return contratoDao.distincCliente();
+    }
+
 
 }
