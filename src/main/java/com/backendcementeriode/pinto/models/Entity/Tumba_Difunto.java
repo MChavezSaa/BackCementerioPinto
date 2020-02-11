@@ -18,9 +18,7 @@ public class Tumba_Difunto {
     @JoinColumn(name = "id_Difunto")
     Difunto difunto;
 
-    @ManyToOne
-    @JoinColumn(name = "id_Tumba")
-    Tumba tumba;
+    String tumba;
 
     @ManyToOne
     @JoinColumn(name = "id_Contrato")

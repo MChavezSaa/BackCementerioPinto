@@ -64,10 +64,10 @@ public class TumbaDifuntoController {
         Map<String, Object> response = new HashMap<String, Object>();
 
         try {
-            Tumba tumba = tumbaDifunto.getTumba();
+            tumbaDifunto1 = tumbaDifuntoService.save(tumbaDifunto);
+            Tumba tumba = tumbaService.findById(Long.parseLong(tumbaDifunto.getTumba()));
             tumba.setEstado_Tumba("Ocupado");
             tumbaService.save(tumba);
-            tumbaDifunto1 = tumbaDifuntoService.save(tumbaDifunto);
 
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar el insert en la base de datos");

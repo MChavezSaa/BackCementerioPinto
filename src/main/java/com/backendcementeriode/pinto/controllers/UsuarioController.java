@@ -27,7 +27,7 @@ public class UsuarioController {
     private BCryptPasswordEncoder passwordEncoder;
 
 
-    @Secured("ROLE_ADMIN")
+    //@Secured("ROLE_ADMIN")
     @PutMapping(value = "/cambioPass")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Usuario user) {
@@ -36,10 +36,10 @@ public class UsuarioController {
         Usuario userBDD = usuarioService.findById(user.getId_Usuario());
         try {
             /*verificar igualdad de password antigua(guardada en BDD) y la antigua pasada por el front*/
-            if (passwordEncoder.matches(user.getPassword(), userBDD.getPassword())) {
+
                 userBDD.setPassword(passwordEncoder.encode(user.getPassword()));
                 usuarioService.save(userBDD);
-            }
+
         } catch (DataAccessException e) {
 
             response.put("mensaje", "Error al actualizar contraseña");
