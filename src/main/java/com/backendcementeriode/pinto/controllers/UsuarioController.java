@@ -1,7 +1,6 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.*;
-import com.backendcementeriode.pinto.models.Service.classImpl.RoleServiceImpl;
+import com.backendcementeriode.pinto.models.Entity.Usuario;
 import com.backendcementeriode.pinto.models.Service.classImpl.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,13 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static org.springframework.http.HttpStatus.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -27,31 +26,19 @@ public class UsuarioController {
     private BCryptPasswordEncoder passwordEncoder;
 
 
-    //@Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_CLIENT", "ROLE_EMPLEADO"})
     @PutMapping(value = "/cambioPass")
-    @ResponseStatus(value = CREATED)
-    public ResponseEntity<?> create(@RequestBody Usuario user) {
+    public ResponseEntity<?> cambiopass(@RequestBody Usuario user) {
         Map<String, Object> response = new HashMap<String, Object>();
         //traemos usuario antiguo para cambiar password
-        Usuario userBDD = usuarioService.findById(user.getId_Usuario());
+        Usuario userBDD = usuarioService.findByUsername(user.getUsername());
         try {
-            /*verificar igualdad de password antigua(guardada en BDD) y la antigua pasada por el front*/
-
-                userBDD.setPassword(passwordEncoder.encode(user.getPassword()));
-                usuarioService.save(userBDD);
+            userBDD.setPassword(passwordEncoder.encode(user.getPassword()));
+            usuarioService.save(userBDD);
 
         } catch (DataAccessException e) {
-
-            response.put("mensaje", "Error al actualizar contraseña");
-            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
-
-        response.put("mensaje", "El funcionario ha sido actualizado con éxito!");
-        response.put("funcionario", response);
-
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
