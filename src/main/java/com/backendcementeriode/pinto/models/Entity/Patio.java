@@ -15,6 +15,7 @@ public class Patio {
     private int capacidad_Patio;
     private String nombre_Patio;
     private boolean estado_Patio;
+    private  String nombreTT;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_Terreno")

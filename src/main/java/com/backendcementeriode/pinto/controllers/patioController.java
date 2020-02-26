@@ -46,6 +46,7 @@ public class patioController {
         try {
             patio1 = patioService.save(patio);
             Tumba tumba;
+            int cont=1;
             for (int i = 1; i <=patio.getCapacidad_Patio() ; i++) {
                 tumba = new Tumba();
                 tumba.setNumero_Tumba(i);
@@ -57,6 +58,16 @@ public class patioController {
                 tumba.setTipo_Tumba(null);
                 tumba.setCliente(null);
                 tumba.setEstado_Tumba("Disponible");
+                if(patio.getNombreTT().equalsIgnoreCase("Sector Nichos")) {
+                    tumba.setNivel(cont);
+                    cont++;
+                }else{
+                    tumba.setNivel(0);
+                }
+
+                if(cont>=4){
+                    cont =1;
+                }
                 tumbaService.save(tumba);
             }
         } catch (DataAccessException e) {
