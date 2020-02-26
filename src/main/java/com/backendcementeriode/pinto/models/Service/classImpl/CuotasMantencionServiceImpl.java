@@ -33,6 +33,12 @@ public class CuotasMantencionServiceImpl implements ICuotasMantencion {
     }
 
     @Transactional
+    public void delete(CuotasMantencion cuotasMantencion) {
+        cuotasMantencion.setEstadoCM(true);
+        cuotasMantencionDao.save(cuotasMantencion);
+    }
+
+    @Transactional
     public Optional<CuotasMantencion> findById(long id) {
         return cuotasMantencionDao.findById(id);
     }

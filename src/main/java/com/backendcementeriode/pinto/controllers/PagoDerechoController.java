@@ -1,8 +1,8 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.Contrato;
+import com.backendcementeriode.pinto.models.Entity.Derecho;
 import com.backendcementeriode.pinto.models.Entity.PagosDerecho;
-import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
@@ -79,7 +79,6 @@ public class PagoDerechoController {
         try {
             pagosDerecho1.setEstadoCuota_Derecho(true);
             PagosUpdated = pagosDerechoService.save(pagosDerecho1);
-            List<PagosDerecho> pagosTotales = pagosDerechoService.findByDerecho(pagosDerecho.getDerecho().getId_Derecho());
         } catch(DataAccessException e) {
             response.put("mensaje","Error al pagar la cuota");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

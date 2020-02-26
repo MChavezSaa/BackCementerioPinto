@@ -1,6 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.*;
+import com.backendcementeriode.pinto.models.Entity.Varios.IntervaloFecha;
 import com.backendcementeriode.pinto.models.Service.classImpl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -53,6 +54,17 @@ public class ContratoController {
     public List<Object> findDistinct() {
         List<Object> all = contratoService.distincCliente();
         return all;
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_EMPLEADO"})
+    @RequestMapping(value = "/getContratoFechas", method = RequestMethod.POST)
+    public List<Object>getContratoFechas(@RequestBody IntervaloFecha fechas){
+        LocalDate localDate1 = LocalDate.parse(fechas.getFechaInicio());
+        LocalDate localDate2 = LocalDate.parse(fechas.getFechaFin());
+
+        List<Object>contratos = contratoService.getContratoFechas(localDate1,
+                localDate2);
+        return contratos;
     }
 
 
@@ -217,7 +229,6 @@ public class ContratoController {
         return new ResponseEntity<Map<String, Object>>(response, OK);
 
     }
-
 
     @Secured("ROLE_ADMIN")
     @PutMapping(value = "/updateContrato/{id}")
