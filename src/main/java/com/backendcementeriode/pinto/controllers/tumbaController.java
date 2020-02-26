@@ -52,11 +52,13 @@ public class    tumbaController {
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Tumba tumba) {
         if(tumba!= null){
+
             tumba.setEstado_Tumba("Disponible");
             Tumba tumba1;
             Map<String, Object> response = new HashMap<>();
 
             try {
+
                 tumba1 = tumbaService.save(tumba);
             } catch (DataAccessException e) {
                 response.put("mensaje", "Error al realizar el insert en la base de datos");
