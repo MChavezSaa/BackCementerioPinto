@@ -1,11 +1,10 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Contrato;
-import com.backendcementeriode.pinto.models.Entity.Derecho;
-import com.backendcementeriode.pinto.models.Entity.PagosDerecho;
+import com.backendcementeriode.pinto.models.Entity.*;
 import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.contratov2ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -35,6 +34,9 @@ public class PagoDerechoController {
 
     @Autowired
     public ContratoServiceImpl contratoService;
+
+    @Autowired
+    public contratov2ServiceImpl contratov2Service;
 
     @RequestMapping(value = "/listPagosDerecho", method = RequestMethod.GET )
     public List<PagosDerecho> findAll() {
@@ -174,4 +176,74 @@ public class PagoDerechoController {
         return all;
     }
     /*------------------------------------*/
+
+    //@Secured("ROLE_ADMIN")
+    @PostMapping(value = "/renovarCuotaDerechopor10anios/{id}")
+    public ResponseEntity<?> renovarCuotasDerecho(@PathVariable Long id) {
+        Contrato contrato = contratoService.findById(id);
+        contratov2 contratov2 = contratov2Service.findOne(id).get();
+        int valorRenovado10= 100000;
+        int valCuotasRenovadas = valorRenovado10/contrato.getN_Cuotas();
+
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        try {
+            int numeroCuotas = contrato.getN_Cuotas();
+            for (int i = 0; i < numeroCuotas; i++) {
+               PagosDerecho pagosDerecho = new PagosDerecho();
+               pagosDerecho.setDerecho(contratov2.getDerecho());
+               pagosDerecho.setEstadoCuota_Derecho(false);
+               pagosDerecho.setFechaPago_Derecho(null);
+               pagosDerecho.setFechaVencimiento_Derecho(contrato.getFecha_Pago());
+               pagosDerecho.setValorCuota_Derecho(valCuotasRenovadas);
+               pagosDerechoService.save(pagosDerecho);
+            }
+            contrato.setPerpetuidad(10);
+            contratoService.save(contrato);
+
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al realizar el insert en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El pago de derecho ha sido pagado con éxito!");
+
+        return new ResponseEntity<Map<String, Object>>(response, OK);
+    }
+    //@Secured("ROLE_ADMIN")
+    @PostMapping(value = "/renovarCuotaDerechopor20anios/{id}")
+    public ResponseEntity<?> renovarCuotasDerecho2(@PathVariable Long id) {
+        Contrato contrato = contratoService.findById(id);
+        contratov2 contratov2 = contratov2Service.findOne(id).get();
+        int valorRenovado20= 200000;
+        int valCuotasRenovadas = valorRenovado20/contrato.getN_Cuotas();
+
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        try {
+            int numeroCuotas = contrato.getN_Cuotas();
+            for (int i = 0; i < numeroCuotas; i++) {
+                PagosDerecho pagosDerecho = new PagosDerecho();
+                pagosDerecho.setDerecho(contratov2.getDerecho());
+                pagosDerecho.setEstadoCuota_Derecho(false);
+                pagosDerecho.setFechaPago_Derecho(null);
+                pagosDerecho.setFechaVencimiento_Derecho(contrato.getFecha_Pago());
+                pagosDerecho.setValorCuota_Derecho(valCuotasRenovadas);
+                pagosDerechoService.save(pagosDerecho);
+            }
+            contrato.setPerpetuidad(20);
+            contratoService.save(contrato);
+
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al realizar el insert en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El pago de derecho ha sido pagado con éxito!");
+
+        return new ResponseEntity<Map<String, Object>>(response, OK);
+    }
+
 }

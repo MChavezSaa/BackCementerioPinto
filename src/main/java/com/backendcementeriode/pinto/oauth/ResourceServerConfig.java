@@ -23,11 +23,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/listTerrenos").permitAll()
                 .antMatchers(HttpMethod.GET,"/listFreeTumbas").permitAll()
                 .antMatchers(HttpMethod.POST, "/renovarCuotaMantencion/**").permitAll()
-                /*.antMatchers(HttpMethod.POST,"/saveTerrenos").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/deleteTerreno/**").hasRole("ADMIN")
-                //agregar todas las rutas faltantes...
-                //si tiene mas de un rol seria .hasAnyRole*/
-                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.POST, "/renovarCuotaDerechopor20anios/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/renovarCuotaDerechopor10anios/**").permitAll()
+                //.anyRequest().authenticated()
                 .and().cors().configurationSource(corsConfigurationSource());
 
     }
