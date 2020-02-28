@@ -16,7 +16,7 @@ import java.util.Map;
 import static org.springframework.http.HttpStatus.*;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 public class tipoTumbaController {
 
