@@ -22,6 +22,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/listTerrenos").permitAll()
                 .antMatchers(HttpMethod.GET,"/listFreeTumbas").permitAll()
+               // .antMatchers(HttpMethod.GET,"/listTumbas").permitAll()
                 .antMatchers(HttpMethod.POST, "/renovarCuotaMantencion/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/renovarCuotaDerechopor20anios/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/renovarCuotaDerechopor10anios/**").permitAll()
