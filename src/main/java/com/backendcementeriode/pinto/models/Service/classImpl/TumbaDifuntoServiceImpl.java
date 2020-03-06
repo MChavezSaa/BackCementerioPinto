@@ -2,6 +2,7 @@ package com.backendcementeriode.pinto.models.Service.classImpl;
 
 
 import com.backendcementeriode.pinto.models.Dao.ITumbaDifuntoDao;
+import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.Tumba_Difunto;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.ITumbaDifuntoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,10 @@ public class TumbaDifuntoServiceImpl implements ITumbaDifuntoService {
     @Transactional
     public Optional<Tumba_Difunto> findById(long id) {
         return tumbaDifuntoDao.findById(id);
+    }
+
+    @Transactional
+    public Tumba_Difunto contratoPorDifunto(long id) {
+        return tumbaDifuntoDao.contratoPorDifunto(id);
     }
 }

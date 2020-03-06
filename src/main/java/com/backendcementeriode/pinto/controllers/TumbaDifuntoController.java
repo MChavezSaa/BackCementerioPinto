@@ -1,5 +1,6 @@
 package com.backendcementeriode.pinto.controllers;
 
+import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.Terreno;
 import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Entity.Tumba_Difunto;
@@ -115,6 +116,14 @@ public class TumbaDifuntoController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
+
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/findContratoPorDifunto/{id}")
+    public Tumba_Difunto findContratoPorDifunto(@PathVariable Long id) {
+        Tumba_Difunto contratoBuscado= tumbaDifuntoService.contratoPorDifunto(id);
+        return contratoBuscado;
+    }
+
 
 
 }

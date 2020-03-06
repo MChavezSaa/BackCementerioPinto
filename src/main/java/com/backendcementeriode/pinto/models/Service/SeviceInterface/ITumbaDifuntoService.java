@@ -1,5 +1,6 @@
 package com.backendcementeriode.pinto.models.Service.SeviceInterface;
 
+import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.Tumba_Difunto;
 
 import java.util.List;
@@ -13,5 +14,6 @@ public interface ITumbaDifuntoService {
    // void delete(Tumba_Difunto difunto);
    // void deletebyID(long id);
     Optional<Tumba_Difunto> findById(long id);
+    Tumba_Difunto contratoPorDifunto(long id);
 
 }

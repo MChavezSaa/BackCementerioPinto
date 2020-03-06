@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Data
-@Entity(name = "Tumba_Difunto")
+@Entity(name = "tumba_difunto")
 public class Tumba_Difunto {
 
     @Id
@@ -21,7 +21,7 @@ public class Tumba_Difunto {
     String tumba;
 //lalala
     @ManyToOne
-    @JoinColumn(name = "id_Contrato")
+    @JoinColumn(name = "id_contrato")
     Contrato contrato;
 
     private LocalDate fecha_Entierro_TD;
