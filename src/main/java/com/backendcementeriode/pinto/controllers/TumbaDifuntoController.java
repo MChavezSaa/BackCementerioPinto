@@ -1,7 +1,5 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Contrato;
-import com.backendcementeriode.pinto.models.Entity.Terreno;
 import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Entity.Tumba_Difunto;
 import com.backendcementeriode.pinto.models.Service.classImpl.TumbaDifuntoServiceImpl;
@@ -17,7 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @CrossOrigin(origins = "*")
 @RestController

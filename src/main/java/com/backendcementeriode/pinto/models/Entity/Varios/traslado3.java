@@ -1,16 +1,14 @@
-package com.backendcementeriode.pinto.models.Entity;
+package com.backendcementeriode.pinto.models.Entity.Varios;
 
+import com.backendcementeriode.pinto.models.Entity.Contrato;
+import com.backendcementeriode.pinto.models.Entity.Difunto;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
-@Entity(name = "traslado")
-public class Traslado {
-
+public class traslado3 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_Traslado;
@@ -18,25 +16,11 @@ public class Traslado {
     private String nombreC_Solicitante;
     private String rut_Solicitante;
     private String direccion_Solicitante;
-
     private LocalDate fecha_Traslado;
-
-
     private String tipoDeCambio;//interno-externo
     private String lugarviejo;
-    private String lugarnuevo;
-
+    private Contrato lugarnuevo;
     private String observaciones;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Difunto"),
-            name = "id_Difunto", referencedColumnName = "id_Difunto")
     private Difunto difunto;
-
-
-
-
-
-
 
 }
