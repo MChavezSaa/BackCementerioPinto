@@ -50,4 +50,9 @@ public class DifuntoServiceImpl implements IDifuntoService {
     public Difunto findById(long id) {
         return difuntoDao.findById(id).orElse(null);
     }
+
+    @Transactional
+    public List<Object> difuntosNotIn() {
+        return difuntoDao.difuntosNotIn();
+    }
 }

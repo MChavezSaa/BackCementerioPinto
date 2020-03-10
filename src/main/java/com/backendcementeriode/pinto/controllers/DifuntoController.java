@@ -48,6 +48,13 @@ public class DifuntoController {
         List<Difunto> all = difuntoService.findAll();
         return all;
     }
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/distincDifunto", method = RequestMethod.GET)
+    public List<Object> distincDifunto(){
+        List<Object> all = difuntoService.difuntosNotIn();
+        System.out.println(all.toString());
+        return all;
+    }
 
     ////-------------- Guardar Clientes ---------------------////
     @Secured("ROLE_ADMIN")

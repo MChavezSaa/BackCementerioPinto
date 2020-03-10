@@ -13,4 +13,5 @@ public interface IDifuntoService {
     void delete(Difunto difunto);//deshabilitar difunto
     void deletebyID(long id);//deshabilitar difunto
     Difunto findById(long id);
+    List<Object>difuntosNotIn();
 }
