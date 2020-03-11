@@ -65,5 +65,10 @@ public class ContratoServiceImpl implements IContratoService {
         return contratoDao.getContratoFechas(f1, f2);
     }
 
+    @Transactional
+    public List<Contrato> contratosPorUsernameequalRut(String rut) {
+        return contratoDao.contratosPorUsernameequalRut(rut);
+    }
+
 
 }

@@ -42,7 +42,7 @@ public class DifuntoController {
 
 
     ////-------------- Listar Difuntos ---------------------////
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listDifuntos", method = RequestMethod.GET)
     public List<Difunto> findAll(){
         List<Difunto> all = difuntoService.findAll();

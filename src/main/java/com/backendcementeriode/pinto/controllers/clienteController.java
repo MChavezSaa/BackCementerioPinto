@@ -38,7 +38,7 @@ public class clienteController {
 
     List<Role> rolesList ;
     ////-------------- Listar Clientes ---------------------////
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listClientes", method = RequestMethod.GET)
     public List<Cliente> findAll(){
         List<Cliente> all = clienteService.findAll();
@@ -63,8 +63,7 @@ public class clienteController {
             us.setPassword(psEncoder2);
             us.setUsername(cliente.getRut_Cliente());
             us.setEnable(true);
-            System.out.println(us.toString());
-            System.out.println(rolesList.get(1).toString());
+            us.setNombre(cliente.getNombres_Cliente());
             usuarioService.save(us);
             usuarioService.saveUsuario_Roles(us.getId_Usuario(),rolesList.get(1).getId_Role() );
 

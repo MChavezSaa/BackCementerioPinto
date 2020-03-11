@@ -42,7 +42,7 @@ public class ContratoController {
 
 
     ////-------------- Listar Clientes ---------------------////
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listContratos", method = RequestMethod.GET)
     public List<Contrato> findAll() {
         List<Contrato> all = contratoService.findAll();
@@ -56,6 +56,20 @@ public class ContratoController {
         return all;
     }
 
+    @Secured("ROLE_CLIENT")
+    @RequestMapping(value = "/ContratosByUsername/{username}", method = RequestMethod.GET)
+    public List<Contrato> ContratosByUsername(@PathVariable String username) {
+        List<Contrato> all = contratoService.contratosPorUsernameequalRut(username);
+        return all;
+    }
+   /*
+   *  @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/ListDistinct", method = RequestMethod.GET)
+    public List<Object> findContratosPorIdUsuario() {
+        List<Object> all = contratoService.distincCliente();
+        return all;
+    }
+   * */
     @Secured({"ROLE_ADMIN", "ROLE_EMPLEADO"})
     @RequestMapping(value = "/getContratoFechas", method = RequestMethod.POST)
     public List<Object>getContratoFechas(@RequestBody IntervaloFecha fechas){
@@ -262,7 +276,7 @@ public class ContratoController {
 
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @GetMapping("/findContrato/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Contrato contrato = null;

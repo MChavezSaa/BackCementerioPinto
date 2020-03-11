@@ -119,7 +119,7 @@ public class    tumbaController {
 
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @GetMapping("/findTumba/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Tumba tumba=null;

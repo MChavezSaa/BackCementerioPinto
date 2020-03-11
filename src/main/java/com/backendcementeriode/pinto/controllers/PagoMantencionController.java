@@ -134,7 +134,7 @@ public class PagoMantencionController {
     }
 
     /*------------------------------------*/
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listCuotasPorIDClienteEnContrato/{id}", method = RequestMethod.GET)
     public List<PagosMantencion> findCuotasPorContratoPorIdCliente(@PathVariable Long id) {
         Contrato c1 = contratoService.findOne(id).get();

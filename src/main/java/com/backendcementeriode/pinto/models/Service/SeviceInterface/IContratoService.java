@@ -15,4 +15,5 @@ public interface IContratoService {
     void deletebyID(long id);
     List<Object>distincCliente();
     List<Object>getContratoFechas(LocalDate f1 , LocalDate f2);
+    public List<Contrato> contratosPorUsernameequalRut(String rut);
 }
