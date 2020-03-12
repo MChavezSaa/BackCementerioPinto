@@ -15,5 +15,6 @@ public interface ITumbaDifuntoService {
    // void deletebyID(long id);
     Optional<Tumba_Difunto> findById(long id);
     Tumba_Difunto contratoPorDifunto(long id);
+    List<Object>ListaValidacionTraslado(String idTumba);
 
 }
