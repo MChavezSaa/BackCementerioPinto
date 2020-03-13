@@ -123,6 +123,11 @@ public class TumbaDifuntoController {
         return contratoBuscado;
     }
 
-
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/mostrarDifunto/{id}")
+    public List<Object> mostrarDifunto(@PathVariable String id) {
+        List<Object> difuntoBuscado= tumbaDifuntoService.ListaValidacionTraslado(id);
+        return difuntoBuscado;
+    }
 
 }
