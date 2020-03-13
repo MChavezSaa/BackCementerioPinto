@@ -19,11 +19,13 @@ public class Tumba_Difunto {
     Difunto difunto;
 
     String tumba;
-//lalala
+    //lalala
     @ManyToOne
     @JoinColumn(name = "id_contrato")
     Contrato contrato;
 
     private LocalDate fecha_Entierro_TD;
+
+    private boolean estadoTumbaDifunto;
 
 }

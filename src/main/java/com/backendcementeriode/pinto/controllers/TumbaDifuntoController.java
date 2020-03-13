@@ -64,9 +64,11 @@ public class TumbaDifuntoController {
         Map<String, Object> response = new HashMap<String, Object>();
 
         try {
+            tumbaDifunto.setEstadoTumbaDifunto(true);
             tumbaDifunto1 = tumbaDifuntoService.save(tumbaDifunto);
             Tumba tumba = tumbaService.findById(Long.parseLong(tumbaDifunto.getTumba()));
             tumba.setEstado_Tumba("Ocupado");
+
             tumbaService.save(tumba);
 
         } catch (DataAccessException e) {
@@ -96,10 +98,11 @@ public class TumbaDifuntoController {
         }
         try {
             //tumbaDifunto1.setId_Cementerio(tumbaDifunto.getId_Cementerio());
-            tumbaDifunto1.setDifunto(tumbaDifunto.getDifunto());
-            tumbaDifunto1.setTumba(tumbaDifunto.getTumba());
-            tumbaDifunto1.setFecha_Entierro_TD(tumbaDifunto.getFecha_Entierro_TD());
+            //tumbaDifunto1.setDifunto(tumbaDifunto.getDifunto());
+            //tumbaDifunto1.setTumba(tumbaDifunto.getTumba());
+            //tumbaDifunto1.setFecha_Entierro_TD(tumbaDifunto.getFecha_Entierro_TD());
             //tumbaDifunto1.setEstado_Patio(tumbaDifunto.isEstado_Patio());
+            tumbaDifunto1.setEstadoTumbaDifunto(false);
 
             tumbaDifunto2 = tumbaDifuntoService.save(tumbaDifunto1);
             //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
@@ -125,8 +128,8 @@ public class TumbaDifuntoController {
 
     @Secured({"ROLE_ADMIN"})
     @GetMapping("/mostrarDifunto/{id}")
-    public List<Object> mostrarDifunto(@PathVariable String id) {
-        List<Object> difuntoBuscado= tumbaDifuntoService.ListaValidacionTraslado(id);
+    public List<Tumba_Difunto> mostrarDifunto(@PathVariable String id) {
+        List<Tumba_Difunto> difuntoBuscado= tumbaDifuntoService.ListaValidacionTraslado(id);
         return difuntoBuscado;
     }
 
