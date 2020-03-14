@@ -1,10 +1,10 @@
 package com.backendcementeriode.pinto.controllers;
 
 
-import com.backendcementeriode.pinto.models.Entity.Cliente;
-import com.backendcementeriode.pinto.models.Entity.Difunto;
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
+import com.backendcementeriode.pinto.models.Entity.*;
 import com.backendcementeriode.pinto.models.Service.classImpl.DifuntoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.TumbaDifuntoServiceImpl;
+import com.backendcementeriode.pinto.models.Service.classImpl.TumbaServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +18,14 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -37,6 +35,10 @@ public class DifuntoController {
 
     @Autowired
     private DifuntoServiceImpl difuntoService;
+    @Autowired
+    private TumbaDifuntoServiceImpl tumbaDifuntoService;
+    @Autowired
+    private TumbaServiceImpl tumbaService;
 
     private final Logger log = LoggerFactory.getLogger(DifuntoController.class);
 
@@ -155,9 +157,39 @@ public class DifuntoController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteDifunto/{id}",  method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
-
+        Difunto difuntoBuscado = difuntoService.findById(id);
+        Tumba_Difunto tumbaDifuntoAnterior = tumbaDifuntoService.prueba(id);
+        List<Tumba_Difunto> validacion = tumbaDifuntoService.ListaValidacion2(id);
+        System.out.println("VALIDACION LIST");
+        System.out.println(validacion.toString());
+        System.out.println(validacion.size());
+        List<Tumba_Difunto> validacionAux = new ArrayList<>();
         Map<String,Object> response =new HashMap<String, Object>();
         try {
+            for (int i = 0; i < validacion.size() ; i++) {
+                if(validacion.get(i).isEstadoTumbaDifunto()== true
+                        &&
+                          validacion.get(i).getDifunto().getId_Difunto()
+                                  !=difuntoBuscado.getId_Difunto()
+                ){
+                    validacionAux.add(validacion.get(i));
+                }
+            }
+            System.out.println("tumbaDifuntoAnterior ");
+            System.out.println(tumbaDifuntoAnterior.toString());
+            System.out.println("VALIDACCION AUX");
+            System.out.println(validacionAux.toString());
+            System.out.println(validacionAux.size());
+            if(validacionAux.size() != 0){
+                Tumba tumba = tumbaService.findById(Long.parseLong(tumbaDifuntoAnterior.getTumba()));
+                tumba.setEstado_Tumba("Ocupado");
+                tumbaService.save(tumba);
+            }else{
+                Tumba tumba = tumbaService.findById(Long.parseLong(tumbaDifuntoAnterior.getTumba()));
+                tumba.setEstado_Tumba("Reservado");
+                tumbaService.save(tumba);
+            }
+
             difuntoService.deletebyID(id);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al reduccir el difunto de la base de datos");

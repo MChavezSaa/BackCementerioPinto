@@ -116,7 +116,7 @@ public class TrasladoController {
                     validacionAux.add(validacion.get(i));
                 }
             }
-            System.out.println(traslado.toString());
+
 
             if (validacionAux.size()!=0){
                 System.out.println("ENTRO != 0");
@@ -151,7 +151,7 @@ public class TrasladoController {
                 traslado1= trasladoService.save(trasladoConstruido);
 
             }else{
-                System.out.println("ENTRO ELSE");
+
                 trasladoConstruido.setDifunto(traslado.getDifunto());
                 trasladoConstruido.setDireccion_Solicitante(traslado.getDireccion_Solicitante());
                 trasladoConstruido.setFecha_Traslado(traslado.getFecha_Traslado());
@@ -180,8 +180,6 @@ public class TrasladoController {
                 //tumba anterior como Reservado
                 Tumba tumba = tumbaService.findById(Long.parseLong(tumba_Difunto_Anterior.getTumba()));
                 tumba.setEstado_Tumba("Reservado");
-                System.out.println("TUMBA ANTERIOR ABAJO");
-                System.out.println(tumba.toString());
                 tumbaService.save(tumba);
 
                 //marcamos el tumba difunto anterior como false
