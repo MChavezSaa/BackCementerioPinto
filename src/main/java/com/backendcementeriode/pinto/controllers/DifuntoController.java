@@ -160,9 +160,6 @@ public class DifuntoController {
         Difunto difuntoBuscado = difuntoService.findById(id);
         Tumba_Difunto tumbaDifuntoAnterior = tumbaDifuntoService.prueba(id);
         List<Tumba_Difunto> validacion = tumbaDifuntoService.ListaValidacion2(id);
-        System.out.println("VALIDACION LIST");
-        System.out.println(validacion.toString());
-        System.out.println(validacion.size());
         List<Tumba_Difunto> validacionAux = new ArrayList<>();
         Map<String,Object> response =new HashMap<String, Object>();
         try {
@@ -175,11 +172,6 @@ public class DifuntoController {
                     validacionAux.add(validacion.get(i));
                 }
             }
-            System.out.println("tumbaDifuntoAnterior ");
-            System.out.println(tumbaDifuntoAnterior.toString());
-            System.out.println("VALIDACCION AUX");
-            System.out.println(validacionAux.toString());
-            System.out.println(validacionAux.size());
             if(validacionAux.size() != 0){
                 Tumba tumba = tumbaService.findById(Long.parseLong(tumbaDifuntoAnterior.getTumba()));
                 tumba.setEstado_Tumba("Ocupado");
