@@ -49,4 +49,9 @@ public class TumbaDifuntoServiceImpl implements ITumbaDifuntoService {
     public List<Tumba_Difunto> ListaValidacionTraslado(String idTumba) {
         return tumbaDifuntoDao.ListaValidacionTraslado(idTumba);
     }
+
+    @Transactional
+    public Tumba_Difunto prueba(long idDifunto) {
+        return tumbaDifuntoDao.prueba(idDifunto);
+    }
 }

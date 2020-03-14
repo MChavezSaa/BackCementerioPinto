@@ -16,4 +16,7 @@ public interface ITumbaDifuntoDao extends JpaRepository<Tumba_Difunto, Long> {
 
     @Query(value = "select h from tumba_difunto h where h.tumba = ?1 and h.difunto.estadoDifunto='Activo'")
     List<Tumba_Difunto> ListaValidacionTraslado(String tumbaID);
+
+    @Query(value = "select h from tumba_difunto h where h.difunto.id_Difunto = ?1 and h.estadoTumbaDifunto=true")
+    Tumba_Difunto prueba(long difuntoid);
 }

@@ -16,5 +16,6 @@ public interface ITumbaDifuntoService {
     Optional<Tumba_Difunto> findById(long id);
     Tumba_Difunto contratoPorDifunto(long id);
     List<Tumba_Difunto>ListaValidacionTraslado(String idTumba);
+    Tumba_Difunto prueba(long idDifunto);
 
 }

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,8 +76,8 @@ public class TrasladoController {
 
         try {
 
-              difuntoService.save(traslado.getDifunto());
-              traslado1 = this.trasladoService.save(traslado);
+            difuntoService.save(traslado.getDifunto());
+            traslado1 = this.trasladoService.save(traslado);
 
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar el insert en la base de datos");
@@ -96,34 +97,99 @@ public class TrasladoController {
     public ResponseEntity<?> createTraslado(@RequestBody traslado3 traslado) {
         Traslado traslado1 = null;
         Traslado trasladoConstruido = new Traslado();
+        Tumba_Difunto tumba_Difunto_Anterior = tumbaDifuntoService.prueba
+                (traslado.getDifunto().getId_Difunto());
+
         Map<String, Object> response = new HashMap<String, Object>();
 
         try {
-            trasladoConstruido.setDifunto(traslado.getDifunto());
-            trasladoConstruido.setDireccion_Solicitante(traslado.getDireccion_Solicitante());
-            trasladoConstruido.setFecha_Traslado(traslado.getFecha_Traslado());
-            trasladoConstruido.setLugarnuevo(traslado.getLugarnuevo().getTumba());
-            trasladoConstruido.setNombreC_Solicitante(traslado.getLugarnuevo().getCliente().getNombres_Cliente()
-                    +" "+ traslado.getLugarnuevo().getCliente().getApellidoP_Cliente()+" "+
-                    traslado.getLugarnuevo().getCliente().getApellidoM_Cliente());
-            trasladoConstruido.setLugarviejo(traslado.getLugarviejo());
-            trasladoConstruido.setObservaciones(traslado.getObservaciones());
-            trasladoConstruido.setRut_Solicitante(traslado.getLugarnuevo().getCliente().getRut_Cliente());
-            traslado.setTipoDeCambio(traslado.getTipoDeCambio());
+            List<Tumba_Difunto> validacion = tumbaDifuntoService.ListaValidacionTraslado(
+                    tumba_Difunto_Anterior.getTumba());
 
-            Tumba_Difunto tumbaDifunto1 = new Tumba_Difunto();
-            tumbaDifunto1.setDifunto(traslado.getDifunto());
-            tumbaDifunto1.setContrato(traslado.getLugarnuevo());
-            tumbaDifunto1.setTumba(traslado.getLugarnuevo().getTumba());
-            tumbaDifunto1.setFecha_Entierro_TD(traslado.getFecha_Traslado());
-            tumbaDifuntoService.save(tumbaDifunto1);
+            List<Tumba_Difunto>validacionAux = new ArrayList<>();
 
-            Tumba tumba = tumbaService.findById(Long.parseLong(tumbaDifunto1.getTumba()));
-            tumba.setEstado_Tumba("Ocupado");
-            tumbaService.save(tumba);
+            for (int i = 0; i < validacion.size() ; i++) {
+                if(validacion.get(i).isEstadoTumbaDifunto()== true
+                        &&
+                        traslado.getDifunto().getId_Difunto() !=
+                                validacion.get(i).getDifunto().getId_Difunto()){
+                    validacionAux.add(validacion.get(i));
+                }
+            }
+            System.out.println(traslado.toString());
 
-            traslado1= trasladoService.save(trasladoConstruido);
+            if (validacionAux.size()!=0){
+                System.out.println("ENTRO != 0");
+                trasladoConstruido.setDifunto(traslado.getDifunto());
+                trasladoConstruido.setDireccion_Solicitante(traslado.getDireccion_Solicitante());
+                trasladoConstruido.setFecha_Traslado(traslado.getFecha_Traslado());
+                trasladoConstruido.setLugarnuevo(traslado.getLugarnuevo().getTumba());
+                trasladoConstruido.setNombreC_Solicitante(traslado.getLugarnuevo().getCliente().getNombres_Cliente()
+                        +" "+ traslado.getLugarnuevo().getCliente().getApellidoP_Cliente()+" "+
+                        traslado.getLugarnuevo().getCliente().getApellidoM_Cliente());
+                trasladoConstruido.setLugarviejo(traslado.getLugarviejo());
+                trasladoConstruido.setObservaciones(traslado.getObservaciones());
+                trasladoConstruido.setRut_Solicitante(traslado.getLugarnuevo().getCliente().getRut_Cliente());
+                traslado.setTipoDeCambio(traslado.getTipoDeCambio());
 
+                Tumba_Difunto tumbaDifunto1 = new Tumba_Difunto();
+                tumbaDifunto1.setDifunto(traslado.getDifunto());
+                tumbaDifunto1.setContrato(traslado.getLugarnuevo());
+                tumbaDifunto1.setTumba(traslado.getLugarnuevo().getTumba());
+                tumbaDifunto1.setFecha_Entierro_TD(traslado.getFecha_Traslado());
+                tumbaDifuntoService.save(tumbaDifunto1);
+
+                //tumba anterior como Ocupado
+                Tumba tumba = tumbaService.findById(Long.parseLong(tumba_Difunto_Anterior.getTumba()));
+                tumba.setEstado_Tumba("Ocupado");
+                tumbaService.save(tumba);
+                //Tumba actual como Ocupada
+                Tumba tumba2 = tumbaService.findById(Long.parseLong(traslado.getLugarnuevo().getTumba()));
+                tumba2.setEstado_Tumba("Ocupado");
+                tumbaService.save(tumba2);
+
+                traslado1= trasladoService.save(trasladoConstruido);
+
+            }else{
+                System.out.println("ENTRO ELSE");
+                trasladoConstruido.setDifunto(traslado.getDifunto());
+                trasladoConstruido.setDireccion_Solicitante(traslado.getDireccion_Solicitante());
+                trasladoConstruido.setFecha_Traslado(traslado.getFecha_Traslado());
+                trasladoConstruido.setLugarnuevo(traslado.getLugarnuevo().getTumba());
+                trasladoConstruido.setNombreC_Solicitante(traslado.getLugarnuevo().getCliente().getNombres_Cliente()
+                        +" "+ traslado.getLugarnuevo().getCliente().getApellidoP_Cliente()+" "+
+                        traslado.getLugarnuevo().getCliente().getApellidoM_Cliente());
+                trasladoConstruido.setLugarviejo(traslado.getLugarviejo());
+                trasladoConstruido.setObservaciones(traslado.getObservaciones());
+                trasladoConstruido.setRut_Solicitante(traslado.getLugarnuevo().getCliente().getRut_Cliente());
+                traslado.setTipoDeCambio(traslado.getTipoDeCambio());
+
+                //tumbaDifunto nueva
+                Tumba_Difunto tumbaDifunto1 = new Tumba_Difunto();
+                tumbaDifunto1.setDifunto(traslado.getDifunto());
+                tumbaDifunto1.setContrato(traslado.getLugarnuevo());
+                tumbaDifunto1.setTumba(traslado.getLugarnuevo().getTumba());
+                tumbaDifunto1.setFecha_Entierro_TD(traslado.getFecha_Traslado());
+                tumbaDifunto1.setEstadoTumbaDifunto(true);
+                tumbaDifuntoService.save(tumbaDifunto1);
+                //Tumba actual como Ocupada
+                Tumba tumba2 = tumbaService.findById(Long.parseLong(traslado.getLugarnuevo().getTumba()));
+                tumba2.setEstado_Tumba("Ocupado");
+                tumbaService.save(tumba2);
+
+                //tumba anterior como Reservado
+                Tumba tumba = tumbaService.findById(Long.parseLong(tumba_Difunto_Anterior.getTumba()));
+                tumba.setEstado_Tumba("Reservado");
+                System.out.println("TUMBA ANTERIOR ABAJO");
+                System.out.println(tumba.toString());
+                tumbaService.save(tumba);
+
+                //marcamos el tumba difunto anterior como false
+                tumba_Difunto_Anterior.setEstadoTumbaDifunto(false);
+                tumbaDifuntoService.save(tumba_Difunto_Anterior);
+
+                traslado1= trasladoService.save(trasladoConstruido);
+            }
 
 
         } catch (DataAccessException e) {
@@ -140,10 +206,3 @@ public class TrasladoController {
 
 
 }
-/*
-*    if (traslado.getTipoDeCambio().equalsIgnoreCase("Interno")){
-
-
-          }else{
-*
-* */
