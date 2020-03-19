@@ -1,16 +1,10 @@
 package com.backendcementeriode.pinto.models.Entity;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -20,8 +14,6 @@ public class Contrato implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_contrato;
-    //atributos para armar contrato, pago derecho y pago mantencion
-
 
     private LocalDate fecha_Ingreso_Venta;
 
@@ -60,14 +52,6 @@ public class Contrato implements Serializable {
             name = "id_Patio", referencedColumnName = "id_Patio")
     private Patio patio;
 
-   /*
-   *  @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Tumba"),
-            name = "id_Tumba", referencedColumnName = "id_Tumba")
-    private List<Tumba> tumba;
-   * */
-
-
     private String tumba ;
 
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -89,16 +73,3 @@ public class Contrato implements Serializable {
 }
 
 
-/*
-  *
-   @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Derecho"),
-            name = "id_Derecho", referencedColumnName = "id_Derecho")
-    private Derecho derecho;
-    *
-    *
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_PagosDerecho"),
-            name = "id_PagosDerecho", referencedColumnName = "id_PagosDerecho")
-    private PagosDerecho pagosDerecho;
-  * */

@@ -1,6 +1,5 @@
 package com.backendcementeriode.pinto.models.Service.SeviceInterface;
 
-import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 
 import java.util.List;

@@ -49,14 +49,14 @@ public class TrasladoController {
     @GetMapping("/findTraslado/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Traslado traslado=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             traslado=trasladoService.findOne(id);
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(traslado==null) {
@@ -139,11 +139,9 @@ public class TrasladoController {
                 tumbaDifunto1.setFecha_Entierro_TD(traslado.getFecha_Traslado());
                 tumbaDifuntoService.save(tumbaDifunto1);
 
-                //tumba anterior como Ocupado
                 Tumba tumba = tumbaService.findById(Long.parseLong(tumba_Difunto_Anterior.getTumba()));
                 tumba.setEstado_Tumba("Ocupado");
                 tumbaService.save(tumba);
-                //Tumba actual como Ocupada
                 Tumba tumba2 = tumbaService.findById(Long.parseLong(traslado.getLugarnuevo().getTumba()));
                 tumba2.setEstado_Tumba("Ocupado");
                 tumbaService.save(tumba2);
@@ -164,7 +162,6 @@ public class TrasladoController {
                 trasladoConstruido.setRut_Solicitante(traslado.getLugarnuevo().getCliente().getRut_Cliente());
                 traslado.setTipoDeCambio(traslado.getTipoDeCambio());
 
-                //tumbaDifunto nueva
                 Tumba_Difunto tumbaDifunto1 = new Tumba_Difunto();
                 tumbaDifunto1.setDifunto(traslado.getDifunto());
                 tumbaDifunto1.setContrato(traslado.getLugarnuevo());
@@ -172,17 +169,14 @@ public class TrasladoController {
                 tumbaDifunto1.setFecha_Entierro_TD(traslado.getFecha_Traslado());
                 tumbaDifunto1.setEstadoTumbaDifunto(true);
                 tumbaDifuntoService.save(tumbaDifunto1);
-                //Tumba actual como Ocupada
                 Tumba tumba2 = tumbaService.findById(Long.parseLong(traslado.getLugarnuevo().getTumba()));
                 tumba2.setEstado_Tumba("Ocupado");
                 tumbaService.save(tumba2);
 
-                //tumba anterior como Reservado
                 Tumba tumba = tumbaService.findById(Long.parseLong(tumba_Difunto_Anterior.getTumba()));
                 tumba.setEstado_Tumba("Reservado");
                 tumbaService.save(tumba);
 
-                //marcamos el tumba difunto anterior como false
                 tumba_Difunto_Anterior.setEstadoTumbaDifunto(false);
                 tumbaDifuntoService.save(tumba_Difunto_Anterior);
 

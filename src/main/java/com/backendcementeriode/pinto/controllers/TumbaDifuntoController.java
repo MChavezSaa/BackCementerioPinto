@@ -39,14 +39,14 @@ public class TumbaDifuntoController {
     @GetMapping("/findTumbaDifunto/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Tumba_Difunto tumbaDifunto = null;
-        Map<String, Object> response = new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             tumbaDifunto = tumbaDifuntoService.findOne(id).get();
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar la consulta en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (tumbaDifunto == null) {
@@ -97,15 +97,8 @@ public class TumbaDifuntoController {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            //tumbaDifunto1.setId_Cementerio(tumbaDifunto.getId_Cementerio());
-            //tumbaDifunto1.setDifunto(tumbaDifunto.getDifunto());
-            //tumbaDifunto1.setTumba(tumbaDifunto.getTumba());
-            //tumbaDifunto1.setFecha_Entierro_TD(tumbaDifunto.getFecha_Entierro_TD());
-            //tumbaDifunto1.setEstado_Patio(tumbaDifunto.isEstado_Patio());
             tumbaDifunto1.setEstadoTumbaDifunto(false);
-
             tumbaDifunto2 = tumbaDifuntoService.save(tumbaDifunto1);
-            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al actualizar el registro en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

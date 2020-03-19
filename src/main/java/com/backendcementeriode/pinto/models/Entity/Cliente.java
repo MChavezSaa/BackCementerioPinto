@@ -20,7 +20,6 @@ public class Cliente {
     private String genero_Cliente;
     private int telefono_Cliente;
     private String direccion_Cliente;
-    /*----------FAMILIAR---------*/
     private String rut_Familiar;
     private String nombres_Familiar;
     private String apellidoP_Familiar;

@@ -30,7 +30,6 @@ public class UsuarioController {
     @PutMapping(value = "/cambioPass")
     public ResponseEntity<?> cambiopass(@RequestBody Usuario user) {
         Map<String, Object> response = new HashMap<String, Object>();
-        //traemos usuario antiguo para cambiar password
         Usuario userBDD = usuarioService.findByUsername(user.getUsername());
         try {
             userBDD.setPassword(passwordEncoder.encode(user.getPassword()));

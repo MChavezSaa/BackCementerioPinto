@@ -10,6 +10,5 @@ public interface ICuotasMantencion {
     CuotasMantencion save(CuotasMantencion cuotasMantencion);
     Optional<CuotasMantencion> findOne(long id);
     void delete(CuotasMantencion cuotasMantencion);
-    //void deletebyID(long id);
     Optional<CuotasMantencion> findById(long id);
 }

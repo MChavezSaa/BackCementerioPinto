@@ -19,7 +19,7 @@ public class Tumba_Difunto {
     Difunto difunto;
 
     String tumba;
-    //lalala
+
     @ManyToOne
     @JoinColumn(name = "id_contrato")
     Contrato contrato;

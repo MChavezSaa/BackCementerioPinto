@@ -1,7 +1,6 @@
 package com.backendcementeriode.pinto.controllers;
 
 
-import com.backendcementeriode.pinto.models.Entity.Cementerio;
 import com.backendcementeriode.pinto.models.Entity.Patio;
 import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Service.classImpl.PatioServiceImpl;
@@ -137,14 +136,14 @@ public class patioController {
     @GetMapping("/findPatio/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Patio patio=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             patio=patioService.findOne(id).get();
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(patio==null) {
@@ -168,16 +167,10 @@ public class patioController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            //patio1.setId_Cementerio(patio.getId_Cementerio());
             patio1.setCapacidad_Patio(patio.getCapacidad_Patio());
             patio1.setNombre_Patio(patio.getNombre_Patio());
             patio1.setTerreno(patio.getTerreno());
-            //patio1.setEstado_Patio(patio.isEstado_Patio());
-
-
-
             patio2=patioService.save(patio1);
-            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar la patio en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

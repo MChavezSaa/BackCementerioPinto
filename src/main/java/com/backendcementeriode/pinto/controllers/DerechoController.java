@@ -1,9 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 
-import com.backendcementeriode.pinto.models.Entity.Cementerio;
 import com.backendcementeriode.pinto.models.Entity.Derecho;
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -35,14 +33,14 @@ public class DerechoController {
     @GetMapping("/findDerecho/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Derecho derecho=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             derecho=derechoService.findById(id);
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(derecho==null) {
@@ -103,7 +101,6 @@ public class DerechoController {
 
 
             derecho2=derechoService.save(derecho1);
-            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el derecho en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

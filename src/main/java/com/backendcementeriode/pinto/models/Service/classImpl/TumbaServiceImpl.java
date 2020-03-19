@@ -1,7 +1,6 @@
 package com.backendcementeriode.pinto.models.Service.classImpl;
 
 import com.backendcementeriode.pinto.models.Dao.ITumbaDao;
-import com.backendcementeriode.pinto.models.Entity.Derecho;
 import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.ITumbaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-
 public class TumbaServiceImpl implements ITumbaService {
 
     @Autowired(required = true)

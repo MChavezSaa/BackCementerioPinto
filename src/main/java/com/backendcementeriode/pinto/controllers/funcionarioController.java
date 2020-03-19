@@ -4,7 +4,6 @@ package com.backendcementeriode.pinto.controllers;
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.Role;
 import com.backendcementeriode.pinto.models.Entity.Usuario;
-import com.backendcementeriode.pinto.models.Entity.cambioPass;
 import com.backendcementeriode.pinto.models.Service.classImpl.FuncionarioServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.RoleServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.UsuarioService;
@@ -38,9 +37,7 @@ public class funcionarioController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
     List<Role> rolesList;
-    List<Role> rolParaUsuario;
 
 
     @Secured("ROLE_ADMIN")
@@ -90,9 +87,9 @@ public class funcionarioController {
             us2.setPassword(psEncoder2);
             us2.setEnable(true);
             us2.setNombre(funcionario.getNombres_Funcionario());
-            usuarioService.save(us2);//se guarda usuario sin roles
+            usuarioService.save(us2);
             usuarioService.saveUsuario_Roles(us2.getId_Usuario(),
-                    rolesList1.get(0).getId_Role());//se guarda en tabla intermedia rol del usuario
+                    rolesList1.get(0).getId_Role());
         }
 
         if (expression.equalsIgnoreCase("Párroco")) {
@@ -103,9 +100,9 @@ public class funcionarioController {
             us2.setPassword(psEncoder2);
             us2.setEnable(true);
             us2.setNombre(funcionario.getNombres_Funcionario());
-            usuarioService.save(us2);//se guarda usuario sin roles
+            usuarioService.save(us2);
             usuarioService.saveUsuario_Roles(us2.getId_Usuario(),
-                    rolesList1.get(0).getId_Role());//se guarda en tabla intermedia rol del usuario
+                    rolesList1.get(0).getId_Role());
         }
         if (expression.equalsIgnoreCase("Consejo Económico")) {
             Usuario us2 = new Usuario();
@@ -115,9 +112,9 @@ public class funcionarioController {
             us2.setPassword(psEncoder2);
             us2.setEnable(true);
             us2.setNombre(funcionario.getNombres_Funcionario());
-            usuarioService.save(us2);//se guarda usuario sin roles
+            usuarioService.save(us2);
             usuarioService.saveUsuario_Roles(us2.getId_Usuario(),
-                    rolesList1.get(2).getId_Role());//se guarda en tabla intermedia rol del usuario
+                    rolesList1.get(2).getId_Role());
         }
 
 
@@ -133,7 +130,6 @@ public class funcionarioController {
         try {
             funcionarioBuscado.setEstado_funcionario(false);
             funcionario2 = funcionarioService.save(funcionarioBuscado);
-            //funcionarioService.deletebyID(id);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al eliminar el funcionario de la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -189,13 +185,11 @@ public class funcionarioController {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            // funcionarioActual.setId_funcionario(funcionario.getId_funcionario());
             funcionarioActual.setRut_Funcionario(funcionario.getRut_Funcionario());
             funcionarioActual.setNombres_Funcionario(funcionario.getNombres_Funcionario());
             funcionarioActual.setApellidoP_Funcionario(funcionario.getApellidoP_Funcionario());
             funcionarioActual.setApellidoM_Funcionario(funcionario.getApellidoM_Funcionario());
             funcionarioActual.setCargo_Funcionario(funcionario.getCargo_Funcionario());
-            //funcionarioActual.setEstado_funcionario(funcionario.isEstado_funcionario());
             funcionarioUpdated = funcionarioService.save(funcionarioActual);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al actualizar el funcionario en la base de datos");
@@ -214,9 +208,9 @@ public class funcionarioController {
     @GetMapping("/findFuncionario/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Funcionario funcionario = null;
-        Map<String, Object> response = new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             funcionario = funcionarioService.findById(id);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar la consulta en la base de datos");
@@ -236,14 +230,14 @@ public class funcionarioController {
     @GetMapping("/findByRutFuncionario/{id}")
     public ResponseEntity<?> findByRut(@PathVariable String rut) {
         Funcionario funcionario = null;
-        Map<String, Object> response = new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             funcionario = funcionarioService.findByRut(rut);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar la consulta en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (funcionario == null) {
@@ -257,42 +251,3 @@ public class funcionarioController {
 
 
 }
-
-/*
-*else{
-                if(funcionario.getCargo_Funcionario().toLowerCase() == "párroco"){
-                    Usuario us = new Usuario();
-                    us.setUsername(funcionario.getRut_Funcionario());
-                    String pass ="12345";
-                    String psEncoder = passwordEncoder.encode(pass);
-                    us.setPassword(psEncoder);
-                    us.setEnable(true);
-                    for (int i = 0; i <rolesList.size()-1 ; i++) {
-                        if(rolesList.get(i).getNombre() =="ROLE_ADMIN"){
-                            rolParaUsuario.add(rolesList.get(i));
-                            us.setRoles(rolParaUsuario);
-                            break;
-                        }
-                    }
-                    Usuario us2 = usuarioService.save(us);
-                }else{
-                    if(funcionario.getCargo_Funcionario().toLowerCase() == "consejo económico"){
-                        Usuario us = new Usuario();
-                        us.setUsername(funcionario.getRut_Funcionario());
-                        String pass ="12345";
-                        String psEncoder = passwordEncoder.encode(pass);
-                        us.setPassword(psEncoder);
-                        us.setEnable(true);
-                        for (int i = 0; i <rolesList.size()-1 ; i++) {
-                            if(rolesList.get(i).getNombre() =="ROLE_EMPLEADO"){
-                                rolParaUsuario.add(rolesList.get(i));
-                                us.setRoles(rolParaUsuario);
-                                break;
-                            }
-                        }
-                        Usuario us2 = usuarioService.save(us);
-                    }
-                }
-            }
-*
-* */

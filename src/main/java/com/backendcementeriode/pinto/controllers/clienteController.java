@@ -2,7 +2,6 @@ package com.backendcementeriode.pinto.controllers;
 
 
 import com.backendcementeriode.pinto.models.Entity.Cliente;
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.Role;
 import com.backendcementeriode.pinto.models.Entity.Usuario;
 import com.backendcementeriode.pinto.models.Service.classImpl.ClienteServiceImpl;
@@ -37,7 +36,6 @@ public class clienteController {
     private BCryptPasswordEncoder passwordEncoder;
 
     List<Role> rolesList ;
-    ////-------------- Listar Clientes ---------------------////
     @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listClientes", method = RequestMethod.GET)
     public List<Cliente> findAll(){
@@ -45,7 +43,6 @@ public class clienteController {
         return all;
     }
 
-    ////-------------- Guardar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveCliente")
     @ResponseStatus(value = CREATED)
@@ -82,7 +79,6 @@ public class clienteController {
 
     }
 
-    ////---------------Actualizar Clientes -------------------////
     @Secured("ROLE_ADMIN")
     @PutMapping(value ="/updateCliente/{id}")
     public ResponseEntity<?> update(@RequestBody Cliente cliente, @PathVariable Long id) {
@@ -96,7 +92,6 @@ public class clienteController {
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
         }
         try {
-            // clienteActual.setId_Cliente(cliente.getId_Cliente());
             clienteActual.setRut_Cliente(cliente.getRut_Cliente());
             clienteActual.setNombres_Cliente(cliente.getNombres_Cliente());
             clienteActual.setApellidoP_Cliente(cliente.getApellidoP_Cliente());
@@ -105,13 +100,11 @@ public class clienteController {
             clienteActual.setTelefono_Cliente(cliente.getTelefono_Cliente());
             clienteActual.setDireccion_Cliente(cliente.getDireccion_Cliente());
 
-            /////Familiar
             clienteActual.setRut_Familiar(cliente.getRut_Familiar());
             clienteActual.setNombres_Familiar(cliente.getNombres_Familiar());
             clienteActual.setApellidoP_Familiar(cliente.getApellidoP_Familiar());
             clienteActual.setApellidoM_Familiar(cliente.getApellidoM_Familiar());
             clienteActual.setTelefono_Familiar(cliente.getTelefono_Familiar());
-            //clienteActual.setEstadoCliente(cliente.isEstadoCliente());
             clienteUpdated=clienteService.save(clienteActual);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el cliente en la base de datos");
@@ -127,7 +120,6 @@ public class clienteController {
     }
 
 
-    ////-------------- Eliminar Clientes ---------------------////
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/DeleteCliente/{id}",  method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) {
@@ -150,14 +142,14 @@ public class clienteController {
     @GetMapping("/findCliente/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Cliente cliente=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             cliente=clienteService.findById(id).get();
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(cliente==null) {

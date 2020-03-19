@@ -17,7 +17,7 @@ public class traslado3 {
     private String rut_Solicitante;
     private String direccion_Solicitante;
     private LocalDate fecha_Traslado;
-    private String tipoDeCambio;//interno-externo
+    private String tipoDeCambio;
     private String lugarviejo;
     private Contrato lugarnuevo;
     private String observaciones;

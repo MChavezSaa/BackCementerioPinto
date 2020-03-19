@@ -1,7 +1,6 @@
 package com.backendcementeriode.pinto.models.Service.classImpl;
 
 import com.backendcementeriode.pinto.models.Dao.IDifuntoDao;
-import com.backendcementeriode.pinto.models.Entity.Derecho;
 import com.backendcementeriode.pinto.models.Entity.Difunto;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.IDifuntoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class DifuntoServiceImpl implements IDifuntoService {
         return difuntoDao.findById(id);
     }
 
-    @Transactional//delete sera para reduccion
+    @Transactional
     public void delete(Difunto difunto) {
         Difunto difuntoADesactivar = difunto;
         difuntoADesactivar.setEstadoDifunto("Reduccion");

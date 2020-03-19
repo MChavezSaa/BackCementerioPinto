@@ -20,7 +20,7 @@ public class Terreno {
     @JoinColumn(name = "id_Cementerio")
     private Cementerio cementerio;
 
-    private boolean estado_Terreno;//lleno o ocupable...
+    private boolean estado_Terreno;
     private String nombre_Terreno;
 
 

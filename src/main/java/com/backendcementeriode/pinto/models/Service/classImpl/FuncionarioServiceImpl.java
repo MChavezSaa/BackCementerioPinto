@@ -2,7 +2,6 @@ package com.backendcementeriode.pinto.models.Service.classImpl;
 
 
 import com.backendcementeriode.pinto.models.Dao.IFuncionarioDao;
-import com.backendcementeriode.pinto.models.Entity.Derecho;
 import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.IFuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;

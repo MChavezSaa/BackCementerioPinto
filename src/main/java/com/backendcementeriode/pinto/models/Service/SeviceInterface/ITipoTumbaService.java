@@ -1,10 +1,8 @@
 package com.backendcementeriode.pinto.models.Service.SeviceInterface;
 
-import com.backendcementeriode.pinto.models.Entity.Patio;
 import com.backendcementeriode.pinto.models.Entity.TipoTumba;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ITipoTumbaService {
 

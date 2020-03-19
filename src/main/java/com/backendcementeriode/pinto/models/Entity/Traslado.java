@@ -22,7 +22,7 @@ public class Traslado {
     private LocalDate fecha_Traslado;
 
 
-    private String tipoDeCambio;//interno-externo
+    private String tipoDeCambio;
     private String lugarviejo;
     private String lugarnuevo;
 

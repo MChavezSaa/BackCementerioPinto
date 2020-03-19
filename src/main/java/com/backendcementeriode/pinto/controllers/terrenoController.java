@@ -1,7 +1,5 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
-import com.backendcementeriode.pinto.models.Entity.Patio;
 import com.backendcementeriode.pinto.models.Entity.Terreno;
 import com.backendcementeriode.pinto.models.Service.classImpl.TerrenoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +32,14 @@ public class terrenoController {
     @GetMapping("/findTerreno/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Terreno terreno=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             terreno=terrenoService.findOne(id).get();
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(terreno==null) {
@@ -141,16 +139,11 @@ public class terrenoController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            //terreno1.setId_Cementerio(terreno.getId_Cementerio());
             terreno1.setCapacidad_Terreno(terreno.getCapacidad_Terreno());
             terreno1.setCementerio(terreno.getCementerio());
             terreno1.setNombre_Terreno(terreno.getNombre_Terreno());
-            //terreno1.setEstado_Patio(terreno.isEstado_Patio());
-
-
-
             terreno2=terrenoService.save(terreno1);
-            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
+
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el terreno en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

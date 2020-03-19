@@ -1,6 +1,5 @@
 package com.backendcementeriode.pinto.models.Dao;
 
-import com.backendcementeriode.pinto.models.Entity.Contrato;
 import com.backendcementeriode.pinto.models.Entity.PagosMantencion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

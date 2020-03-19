@@ -48,15 +48,6 @@ public class contratov2 {
             name = "id_Patio", referencedColumnName = "id_Patio")
     private Patio patio;
 
-
-  /*
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinColumn(foreignKey = @ForeignKey(name = "id_Tumba"),
-            name = "id_Tumba", referencedColumnName = "id_Tumba")
-    private List<Tumba> tumba;
-  */
-
-
     private String tumba ;
 
     @ManyToOne(cascade = CascadeType.MERGE)

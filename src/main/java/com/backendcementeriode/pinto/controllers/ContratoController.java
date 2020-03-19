@@ -27,13 +27,11 @@ public class ContratoController {
     private DechoServiceImpl derechoService;
     @Autowired
     private PagosDerechoServiceImpl pagosDerechoService;
-    /*CUOTAS MANTENCION*/
     @Autowired
     private CuotasMantencionServiceImpl cuotasMantencionService;
     @Autowired
     private PagosMantencionServiceImpl pagosMantencionService;
 
-    /*Arreglucho*/
     @Autowired
     private contratov2ServiceImpl contratov2Service;
 
@@ -41,7 +39,6 @@ public class ContratoController {
     private TumbaServiceImpl tumbaService;
 
 
-    ////-------------- Listar Clientes ---------------------////
     @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listContratos", method = RequestMethod.GET)
     public List<Contrato> findAll() {
@@ -62,14 +59,7 @@ public class ContratoController {
         List<Contrato> all = contratoService.contratosPorUsernameequalRut(username);
         return all;
     }
-   /*
-   *  @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/ListDistinct", method = RequestMethod.GET)
-    public List<Object> findContratosPorIdUsuario() {
-        List<Object> all = contratoService.distincCliente();
-        return all;
-    }
-   * */
+
     @Secured({"ROLE_ADMIN", "ROLE_EMPLEADO"})
     @RequestMapping(value = "/getContratoFechas", method = RequestMethod.POST)
     public List<Object>getContratoFechas(@RequestBody IntervaloFecha fechas){
@@ -82,23 +72,18 @@ public class ContratoController {
     }
 
 
-    ////-------------- Guardar contrato ---------------------////
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/saveContrato")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<?> create(@RequestBody Contrato contrato) {
-        //seteamos el valor de la cuota
         contrato.setEstado_Contrato(true);
         float nC = contrato.getN_Cuotas();
         float vT = contrato.getValor_Terreno();
         float pie = contrato.getPagoInicial();
         float valCuota = (vT - pie) / nC;
         contrato.setVCuotas(valCuota);
-
         Contrato contrato1 = null;
         Map<String, Object> response = new HashMap<String, Object>();
-
-
         try {
             contrato.setPerpetuidad(20);
             if (contrato.getTipoTumba().getNombretipo_tumba().equalsIgnoreCase("Doble")) {
@@ -149,7 +134,6 @@ public class ContratoController {
                 }
             }
             contrato1 = contratoService.save(contrato);
-            /*CREAMOS DERECHO*/
             Derecho derecho = new Derecho();
             derecho.setFecha_Inscripcion_Derecho(contrato.getFecha_Ingreso_Venta());
             derecho.setFecha_Pago_Derecho(contrato.getFecha_Pago());
@@ -179,55 +163,34 @@ public class ContratoController {
             c2.setVCuotas(contrato.getVCuotas());
             contratov2Service.save(c2);
 
-            /*CREAMOS REGISTRO PARA PAGOS DE DERECHO*/
             for (int i = 0; i < (int) nC; i++) {
                 PagosDerecho pagosDerecho = new PagosDerecho();
-                //fecha de pago derecho alusion a cuando pago la persona.
                 pagosDerecho.setFechaPago_Derecho(null);
-                //fecha estimada de pago
                 pagosDerecho.setFechaVencimiento_Derecho(fechaVencimientoPD(i + 1,
                         contrato.getFecha_Pago()));
-                //valor de la cuota del derecho viene del calculo anterior
                 pagosDerecho.setValorCuota_Derecho(derecho.getValor_Cuota_Derecho());
-                //false para sin pagar true pagado
                 pagosDerecho.setEstadoCuota_Derecho(false);
                 pagosDerecho.setDerecho(derecho);
                 pagosDerechoService.save(pagosDerecho);
-
-
             }
 
-            /*CREAMOS LAS CUOTAS MANTENCION*/
             CuotasMantencion cuotasMantencion = new CuotasMantencion();
-            //revisar como va fecha pago cm
             cuotasMantencion.setFecha_Pago_CM(null);
-            //fecha estimada de termino de pago (anio +1)
             cuotasMantencion.setFecha_Vencimiento_CM(crearFechaVencimientoCM(contrato.getFecha_Ingreso_Venta()));
             cuotasMantencion.setNumero_Cuotas_CM(12);
             cuotasMantencion.setValor_Cuota_CM(500);
             cuotasMantencion.setContrato(contrato);
-            //guardamos cuota
             cuotasMantencionService.save(cuotasMantencion);
-
-            /*CREAMOS LOS REGISTROS PARA LOS PAGOS DE CM*/
             for (int i = 0; i < 12; i++) {
-
-                // Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
                 PagosMantencion pagosMantencion = new PagosMantencion();
-                //inicia null por que no se ha pagado
                 pagosMantencion.setFechaPago_Mantencion(null);
-                //fecha estimada de pago de mantencion (mes+1)
                 pagosMantencion.setFechaVencimiento_Mantencion(
                         fechaVencimientoPD(i + 1,
                                 contrato.getFecha_Ingreso_Venta()));
                 pagosMantencion.setValorCuota_Mantencion(500);
-                //false no pago true pago...
                 pagosMantencion.setEstadoCuota_Mantencion(false);
                 pagosMantencion.setCuotasMantencion(cuotasMantencion);
-                //se guarda el registro
                 pagosMantencionService.save(pagosMantencion);
-
             }
 
 
@@ -262,7 +225,6 @@ public class ContratoController {
             contrato1.setMedio_Pago(contrato.getMedio_Pago());
             contrato2 = contratoService.save(contrato1);
 
-            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al actualizar el contrato en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -280,14 +242,14 @@ public class ContratoController {
     @GetMapping("/findContrato/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Contrato contrato = null;
-        Map<String, Object> response = new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             contrato = contratoService.findById(id);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar la consulta en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (contrato == null) {

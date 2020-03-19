@@ -34,14 +34,14 @@ public class tipoTumbaController {
     @GetMapping("/findTipoTumba/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         TipoTumba tipoTumba=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             tipoTumba=tipoTumbaService.findById(id);
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(tipoTumba==null) {
@@ -89,10 +89,8 @@ public class tipoTumbaController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-           // tipoTumbaActual.setId_TipoTumba(tipoTumba.getId_TipoTumba());
             tipoTumbaActual.setCapacidad_tipo_tumba(tipoTumba.getCapacidad_tipo_tumba());
             tipoTumbaActual.setNombretipo_tumba(tipoTumba.getNombretipo_tumba());
-            //tipoTumbaActual.setEstado_tipo_tumba(tipoTumba.isEstado_tipo_tumba());
             tipoTumbaUpdated=tipoTumbaService.save(tipoTumbaActual);
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar el funcionario en la base de datos");

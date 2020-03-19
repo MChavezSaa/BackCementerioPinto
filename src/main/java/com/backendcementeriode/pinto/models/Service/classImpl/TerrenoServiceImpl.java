@@ -42,9 +42,6 @@ public  class TerrenoServiceImpl implements ITerrenoService {
 
     @Transactional
     public void deletebyID(long id) {
-       // Optional<Terreno> terreno = terrenoDao.findById(id);
-       // terreno.get().setEstado_Terreno(false);
-       // terrenoDao.save(terreno.get());
         Terreno terrenoB = terrenoDao.findById(id).get();
         terrenoB.setEstado_Terreno(false);
         terrenoDao.save(terrenoB);

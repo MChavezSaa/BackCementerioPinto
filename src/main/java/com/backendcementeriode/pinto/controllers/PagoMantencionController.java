@@ -115,14 +115,14 @@ public class PagoMantencionController {
     @GetMapping("/findPM/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         PagosMantencion pagosMantencion = null;
-        Map<String, Object> response = new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             pagosMantencion = pagosMantencionService.findById(id).get();
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar la consulta en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (pagosMantencion == null) {
@@ -133,7 +133,6 @@ public class PagoMantencionController {
         return new ResponseEntity(pagosMantencion, HttpStatus.OK);
     }
 
-    /*------------------------------------*/
     @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listCuotasPorIDClienteEnContrato/{id}", method = RequestMethod.GET)
     public List<PagosMantencion> findCuotasPorContratoPorIdCliente(@PathVariable Long id) {
@@ -142,7 +141,6 @@ public class PagoMantencionController {
         List<PagosMantencion> all = pagosMantencionService.cuotasPorIdClienteEnContrato(c1.getId_contrato());
         return all;
     }
-    /*------------------------------------*/
 
     @Secured("ROLE_ADMIN")
     @PutMapping(value = "/pagarPM/{id}")
@@ -167,7 +165,6 @@ public class PagoMantencionController {
         return new ResponseEntity<Map<String, Object>>(response, OK);
     }
 
-    //@Secured("ROLE_ADMIN")
     @PostMapping(value = "/renovarCuotaMantencion/{id}")
     public ResponseEntity<?> renovarCuotaMantencion(@PathVariable Long id) {
         Contrato contrato = contratoService.findById(id);

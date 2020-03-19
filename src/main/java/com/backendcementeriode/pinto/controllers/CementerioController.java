@@ -33,15 +33,14 @@ public class CementerioController {
     @GetMapping("/Cementerio/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         Cementerio cementerio=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             cementerio=cementerioService.forceFind(id);
-            System.out.println(cementerio.toString());
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(cementerio==null) {
@@ -87,15 +86,11 @@ public class CementerioController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            //cementerio1.setId_Cementerio(cementerio.getId_Cementerio());
             cementerio1.setCapacidad_Terrenos(cementerio.getCapacidad_Terrenos());
             cementerio1.setDireccion_Cementerio(cementerio.getDireccion_Cementerio());
             cementerio1.setNombre_Cementerio(cementerio.getNombre_Cementerio());
             cementerio1.setTelefono_Cementerio(cementerio.getTelefono_Cementerio());
-
-
             cementerio2=cementerioService.save(cementerio1);
-            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar la cementerio en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

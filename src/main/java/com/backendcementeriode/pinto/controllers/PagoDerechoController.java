@@ -1,6 +1,7 @@
 package com.backendcementeriode.pinto.controllers;
 
 import com.backendcementeriode.pinto.models.Entity.*;
+import com.backendcementeriode.pinto.models.Entity.*;
 import com.backendcementeriode.pinto.models.Service.classImpl.ContratoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.DechoServiceImpl;
 import com.backendcementeriode.pinto.models.Service.classImpl.PagosDerechoServiceImpl;
@@ -97,14 +98,14 @@ public class PagoDerechoController {
     @GetMapping("/findPD/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         PagosDerecho pagosDerecho=null;
-        Map<String,Object> response =new HashMap<String, Object>();  //Map para guardar los mensajes de error y enviarlos, Map es la interfaz y HashMap es la implementacion
+        Map<String,Object> response =new HashMap<String, Object>();
 
-        try {                                      //se maneja el error de manera mas completa con try catch, en caso de que no pueda acceder a la base de datos
+        try {
             pagosDerecho=pagosDerechoService.findById(id).get();
         }catch(DataAccessException e){
             response.put("mensaje","Error al realizar la consulta en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR); //el tipo de error es porque se produce en la base de datos y no es not_found
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(pagosDerecho==null) {
@@ -115,10 +116,8 @@ public class PagoDerechoController {
         return new ResponseEntity(pagosDerecho,HttpStatus.OK);
     }
     void crearNuevaCuota(PagosDerecho pagosDerecho) throws ParseException {
-        //se crea cuota siguiente
         PagosDerecho nuevaCuota = new PagosDerecho();
         nuevaCuota.setValorCuota_Derecho(pagosDerecho.getValorCuota_Derecho());
-        /*manejo de la fecha de vencimiento*//*revisar fecha vencimiento de nueva cuota*/
         LocalDate fechaV = pagosDerecho.getFechaVencimiento_Derecho();
         int dia = fechaV.getDayOfMonth();
         int mes = fechaV.getMonthValue();
@@ -133,10 +132,8 @@ public class PagoDerechoController {
         String dateString = anio+"-"+mes+"-"+dia;
         Date fechaV2 = sdf.parse(dateString);
         LocalDate fv3 = convertToLocalDateViaInstant(fechaV2);
-        /*Fin manejo de fecha venciminento*/
 
         nuevaCuota.setFechaVencimiento_Derecho(fv3);
-        /*manejo de la fecha de pago*/
         LocalDate fechaP = pagosDerecho.getFechaPago_Derecho();
         int diaP = fechaP.getDayOfMonth();
         int mesP = fechaP.getMonthValue();
@@ -151,11 +148,10 @@ public class PagoDerechoController {
         String dateString2 = anioP+"-"+mesP+"-"+diaP;
         Date fechaP2 = sdf2.parse(dateString2);
         LocalDate fv4 = convertToLocalDateViaInstant(fechaP2);
-        /*Fin manejo de fecha venciminento*/
 
         nuevaCuota.setFechaPago_Derecho(fv4);
         nuevaCuota.setEstadoCuota_Derecho(false);
-        nuevaCuota.setDerecho(pagosDerecho.getDerecho());//lalalalal
+        nuevaCuota.setDerecho(pagosDerecho.getDerecho());
         pagosDerechoService.save(nuevaCuota);
     }
 
@@ -165,7 +161,6 @@ public class PagoDerechoController {
                 .toLocalDate();
     }
 
-    /*------------------------------------*/
     @Secured({"ROLE_ADMIN","ROLE_CLIENT"})
     @RequestMapping(value = "/listCuotasDerecho/{id}", method = RequestMethod.GET)
     public List<PagosDerecho> findCuotasPorContratoPorIdCliente(@PathVariable Long id){
@@ -175,9 +170,7 @@ public class PagoDerechoController {
 
         return all;
     }
-    /*------------------------------------*/
 
-    //@Secured("ROLE_ADMIN")
     @PostMapping(value = "/renovarCuotaDerechopor10anios/{id}")
     public ResponseEntity<?> renovarCuotasDerecho(@PathVariable Long id) {
         Contrato contrato = contratoService.findById(id);
@@ -211,7 +204,7 @@ public class PagoDerechoController {
 
         return new ResponseEntity<Map<String, Object>>(response, OK);
     }
-    //@Secured("ROLE_ADMIN")
+
     @PostMapping(value = "/renovarCuotaDerechopor20anios/{id}")
     public ResponseEntity<?> renovarCuotasDerecho2(@PathVariable Long id) {
         Contrato contrato = contratoService.findById(id);

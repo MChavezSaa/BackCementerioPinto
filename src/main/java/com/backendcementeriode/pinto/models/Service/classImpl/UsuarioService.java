@@ -1,7 +1,6 @@
 package com.backendcementeriode.pinto.models.Service.classImpl;
 
 import com.backendcementeriode.pinto.models.Dao.IUsuarioDao;
-import com.backendcementeriode.pinto.models.Entity.Role;
 import com.backendcementeriode.pinto.models.Entity.Usuario;
 import com.backendcementeriode.pinto.models.Service.SeviceInterface.IUsuarioService;
 import org.slf4j.Logger;

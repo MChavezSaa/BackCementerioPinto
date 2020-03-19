@@ -1,6 +1,5 @@
 package com.backendcementeriode.pinto.controllers;
 
-import com.backendcementeriode.pinto.models.Entity.Funcionario;
 import com.backendcementeriode.pinto.models.Entity.Tumba;
 import com.backendcementeriode.pinto.models.Service.classImpl.TumbaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,19 +92,16 @@ public class    tumbaController {
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-           // tumba1.setId_tumba(tumba.getId_tumba());
             tumba1.setNumero_Tumba(tumba.getNumero_Tumba());
             tumba1.setAncho(tumba.getAncho());
             tumba1.setCliente(tumba.getCliente());
             tumba1.setEstado_Tumba(tumba.getEstado_Tumba());
-            //tumba1.setFuncionario(tumba.getFuncionario());
             tumba1.setLargo(tumba.getLargo());
             tumba1.setOrientacion_Tumba(tumba.getOrientacion_Tumba());
             tumba1.setPatio(tumba.getPatio());
             tumba1.setTipo_Tumba(tumba.getTipo_Tumba());
             tumba1.setValor_Tumba(tumba.getValor_Tumba());
             tumba2=tumbaService.save(tumba1);
-            //llamar al service de tumbadifunto para poder generar el "entierro del muertito"
         }catch(DataAccessException e) {
             response.put("mensaje","Error al actualizar la tumba en la base de datos");
             response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
